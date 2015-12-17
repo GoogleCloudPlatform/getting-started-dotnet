@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HelloWorld", "HelloWorld.xproj", "{4A3B006F-1738-4BC5-AF90-72CB902230EA}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "1-hello-world", "1-hello-world\1-hello-world.xproj", "{4A3B006F-1738-4BC5-AF90-72CB902230EA}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "2-structered-data", "2-structured-data\2-structered-data.xproj", "{5FD369E8-4E97-4C57-AA3D-E89E8852918B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4A3B006F-1738-4BC5-AF90-72CB902230EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A3B006F-1738-4BC5-AF90-72CB902230EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A3B006F-1738-4BC5-AF90-72CB902230EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD369E8-4E97-4C57-AA3D-E89E8852918B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD369E8-4E97-4C57-AA3D-E89E8852918B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD369E8-4E97-4C57-AA3D-E89E8852918B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD369E8-4E97-4C57-AA3D-E89E8852918B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

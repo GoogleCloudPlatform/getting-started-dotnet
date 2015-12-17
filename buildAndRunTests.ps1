@@ -16,7 +16,7 @@ dnvm use 1.0.0-rc1-final -r coreclr
 
 # Recursively retrieve all the files in a directory that match one of the
 # masks.
-function GetFiles($path = $pwd, [string[]]$masks = '*')
+function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=0)
 {
     foreach ($item in Get-ChildItem $path)
     {
@@ -24,9 +24,13 @@ function GetFiles($path = $pwd, [string[]]$masks = '*')
         {
             $item
         }
-        if (Test-Path $item.FullName -PathType Container)
+        if ($maxDepth -gt 0 -and $depth -ge $maxDepth)
         {
-            GetFiles $item.FullName $masks
+            # We have reached the max depth.  Do not recurse.
+        }
+        elseif (Test-Path $item.FullName -PathType Container)
+        {
+            GetFiles $item.FullName $masks $maxDepth ($depth + 1)
         }
     }
 }
@@ -53,7 +57,7 @@ filter BuildAndRunLocalTest {
 $originalDir = Get-Location
 Try
 {
-    GetFiles -masks '*test.js' | BuildAndRunLocalTest
+    GetFiles -masks '*test.js' -maxDepth 2 | BuildAndRunLocalTest
 }
 Finally
 {
