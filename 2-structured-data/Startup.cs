@@ -12,24 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+using GoogleCloudSamples.Models;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using GoogleCloudSamples.Models;
+using System;
+using System.Diagnostics;
 
 namespace GoogleCloudSamples
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        private ILoggerFactory _loggerFactory;
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            _loggerFactory = loggerFactory;
+
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", 
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
                 optional: true);
 
             if (env.IsDevelopment())
@@ -41,43 +46,88 @@ namespace GoogleCloudSamples
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            _loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            _loggerFactory.AddDebug();
         }
 
         public IConfigurationRoot Configuration { get; set; }
 
-        // This method gets called by the runtime. 
+        // This method gets called by the runtime.
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            var entityFramework = services.AddEntityFramework();
-            // Choose a database based on configuration.
-            string sqlserverConnectionString;
-            string npgsqlConnectionString;
-            if (!string.IsNullOrWhiteSpace(npgsqlConnectionString =
-                Configuration["Data:Npgsql:ConnectionString"]))
+            var logger = _loggerFactory.CreateLogger("ConfigureServices");
+            services.AddAntiforgery();
+            // Choose a a backend to store the books.
+            switch (Configuration["Data:BookStore"]?.ToLower())
             {
-                entityFramework.AddNpgsql()
-                    .AddDbContext<ApplicationDbContext>(options =>
-                        options.UseNpgsql(npgsqlConnectionString));
-                services.Add(new ServiceDescriptor(typeof(IBookStore),
-                    typeof(DbBookStore), ServiceLifetime.Scoped));
-            }
-            else if (!string.IsNullOrWhiteSpace(sqlserverConnectionString =
-                Configuration["Data:SqlServer:ConnectionString"]))
-            {
-                entityFramework.AddSqlServer()
-                    .AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(sqlserverConnectionString));
-                services.Add(new ServiceDescriptor(typeof(IBookStore),
-                    typeof(DbBookStore), ServiceLifetime.Scoped));
-            }
-            else
-            {
-                throw new System.Exception(
-                    "Please set a database connection string.");
+                case "sqlserver":
+                    AddSqlServer(services);
+                    logger.LogInformation("Storing book data in SQL Server.");
+                    break;
+
+                case "postgres":
+                    AddPostgres(services);
+                    logger.LogInformation("Storing book data in PostgreSql.");
+                    break;
+
+                case "datastore":
+                    AddDatastore(services);
+                    logger.LogInformation("Storing book data in Datastore.");
+                    break;
+
+                default:
+                    Halt("No bookstore backend selected.\n" +
+                        "Set the configuration variable Data:BookStore to " +
+                        "one of the following: sqlserver, postgres, datastore.");
+                    break;
             }
             services.AddMvc();
+        }
+
+        public void Halt(string message)
+        {
+            var logger = _loggerFactory.CreateLogger("Halt");
+            logger.LogCritical(message);
+            if (Debugger.IsAttached)
+                Debugger.Break();
+            Environment.Exit(-1);
+        }
+
+        private void AddDatastore(IServiceCollection services)
+        {
+            string projectId = Configuration["GOOGLE_PROJECT_ID"];
+            if (string.IsNullOrWhiteSpace(projectId))
+                Halt("Set the configuration variable GOOGLE_PROJECT_ID.");
+            services.Add(new ServiceDescriptor(typeof(IBookStore),
+                (x) => new DatastoreBookStore(projectId),
+                ServiceLifetime.Singleton));
+        }
+
+        private void AddSqlServer(IServiceCollection services)
+        {
+            var entityFramework = services.AddEntityFramework();
+            string sqlserverConnectionString =
+                Configuration["Data:SqlServer:ConnectionString"];
+            if (string.IsNullOrWhiteSpace(sqlserverConnectionString))
+                Halt("Set the configuration variable Data:SqlServer:ConnectionString.");
+            entityFramework.AddSqlServer()
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(sqlserverConnectionString));
+            services.AddScoped(typeof(IBookStore), typeof(DbBookStore));
+        }
+
+        private void AddPostgres(IServiceCollection services)
+        {
+            var entityFramework = services.AddEntityFramework();
+            string npgsqlConnectionString =
+                Configuration["Data:Npgsql:ConnectionString"];
+            if (string.IsNullOrWhiteSpace(npgsqlConnectionString))
+                Halt("Set the configuration variable Data:Npgsql:ConnectionString.");
+            entityFramework.AddNpgsql()
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql(npgsqlConnectionString));
+            services.AddScoped(typeof(IBookStore), typeof(DbBookStore));
         }
 
         // This method gets called by the runtime. Use this method to configure
@@ -123,7 +173,7 @@ namespace GoogleCloudSamples
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => 
+        public static void Main(string[] args) =>
             WebApplication.Run<Startup>(args);
     }
 }

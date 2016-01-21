@@ -16,34 +16,31 @@
 }
 @model GoogleCloudSamples.ViewModels.Books.Form
 
-<h3>@(Model.action == GoogleCloudSamples.ViewModels.Books.Form.Action.CREATE ?
-        "Create" : "Edit") book</h3>
+<h3>@Model.Action book</h3>
 
-<form method="POST" id="book-form" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
-
+@if (!Model.IsValid)
+{
+    <div class= "alert alert-danger" asp-validation-summary="ValidationSummary.All"></div>
+}
+<form asp-controller="Books" asp-action="@Model.FormAction" id="book-form">
     <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title" value="@Model.book.Title"
-               class="form-control" />
+        <label asp-for="Book.Title"></label>
+        <input asp-for="Book.Title" class="form-control" />
     </div>
 
     <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" name="author" id="author" value="@Model.book.Author" 
-               class="form-control" />
+        <label asp-for="Book.Author"></label>
+        <input asp-for="Book.Author"  class="form-control" />
     </div>
 
     <div class="form-group">
-        <label for="publishedDate">Date Published</label>
-        <input type="text" name="publishedDate" id="publishedDate" 
-               value="@Model.book.PublishedDate" class="form-control" />
+        <label asp-for="Book.PublishedDate"></label>
+        <input type=text asp-for="Book.PublishedDate" class="form-control">
     </div>
 
     <div class="form-group">
-        <label for="description">Description</label>
-        <textarea name="description" id="description" 
-                  class="form-control">@Model.book.Description</textarea>
+        <label asp-for="Book.Description"></label>
+        <textarea asp-for="Book.Description" class="form-control"></textarea>
     </div>
 
     <button type="submit" class="btn btn-success">Save</button>

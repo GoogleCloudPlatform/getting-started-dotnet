@@ -12,11 +12,11 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-dnvm use 1.0.0-rc1-final -r coreclr
+dnvm use 1.0.0-rc1-final -r clr
 
 # Recursively retrieve all the files in a directory that match one of the
 # masks.
-function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=0)
+function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=-1)
 {
     foreach ($item in Get-ChildItem $path)
     {
@@ -24,7 +24,7 @@ function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=0)
         {
             $item
         }
-        if ($maxDepth -gt 0 -and $depth -ge $maxDepth)
+        if ($maxDepth -ge 0 -and $depth -ge $maxDepth)
         {
             # We have reached the max depth.  Do not recurse.
         }
@@ -37,7 +37,6 @@ function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=0)
 
 # Given a *test.js file, build the project and run the test on localhost.
 filter BuildAndRunLocalTest {
-    Set-Location $_.Directory
     dnu restore
     dnu build
     $webProcess = Start-Process dnx web -PassThru
@@ -53,11 +52,19 @@ filter BuildAndRunLocalTest {
     }
 }
 
+filter RunTestScript {
+    Set-Location $_.Directory
+    Invoke-Expression $_.FullName
+    $LASTEXITCODE
+}
+
 # Leave the user in the same directory as they started.
 $originalDir = Get-Location
 Try
 {
-    GetFiles -masks '*test.js' -maxDepth 2 | BuildAndRunLocalTest
+    # Use Where-Object to avoid infinitely recursing, because this script
+    # matches the mask.
+    GetFiles -masks '*runtests.ps1' -maxDepth 2 | Where-Object FullName -ne $PSCommandPath | RunTestScript
 }
 Finally
 {

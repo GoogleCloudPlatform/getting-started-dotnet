@@ -28,10 +28,10 @@ casper.thenOpen(host + '/Books', function (response) {
 casper.thenClick('#add-book', function () {
     console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
     this.fill('form#book-form', {
-        'title': 'test.js',
-        'author': 'test.js',
-        'publishedDate': '2000-01-01',
-        'description': 'Automatically added by test.js'
+        'Book.Title': 'test.js',
+        'Book.Author': 'test.js',
+        'Book.PublishedDate': '2000-01-01',
+        'Book.Description': 'Automatically added by test.js'
     }, false);
     console.log('Filled form.');
 });

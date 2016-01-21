@@ -16,8 +16,22 @@ namespace GoogleCloudSamples.ViewModels.Books
 {
     public class Form
     {
-        public Models.Book book;
-        public enum Action { CREATE, EDIT };
-        public Action action;
+        /// <summary>
+        /// The book to be displayed in the form.
+        /// </summary>
+        public Models.Book Book;
+        /// <summary>
+        /// The string displayed to the user.  Either "Edit" or "Create".
+        /// </summary>
+        public string Action;
+        /// <summary>
+        /// False when the user tried entering a bad field value.  For example, they entered
+        /// "yesterday" for Date Published.
+        /// </summary>
+        public bool IsValid;
+        /// <summary>
+        ///  The target of submit form.  Fills asp-action="".
+        /// </summary>
+        public string FormAction;
     }
 }

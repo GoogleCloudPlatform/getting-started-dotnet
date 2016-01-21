@@ -14,21 +14,21 @@
 //
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GoogleCloudSamples.Models
 {
-    [Table("Books")]
     public class Book
     {
-        [Required]
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
+        [Required]
         public string Title { get; set; }
 
         public string Author { get; set; }
 
+        [Display(Name = "Date Published")]
+        [DataType(DataType.Date)]
         public DateTime? PublishedDate { get; set; }
 
         public string ImageUrl { get; set; }

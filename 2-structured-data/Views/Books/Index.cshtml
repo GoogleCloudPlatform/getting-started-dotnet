@@ -17,14 +17,14 @@
 @model GoogleCloudSamples.ViewModels.Books.Index
 
 <h3>Books</h3>
-<a href="/Books/Create" class="btn btn-success btn-sm" id="add-book">
+<a  asp-controller="Books" asp-action="Create" class="btn btn-success btn-sm" id="add-book">
     <i class="glyphicon glyphicon-plus"></i>
     Add book
 </a>
 
-@foreach (var book in Model.books) {
+@foreach (var book in Model.BookList.Books) {
 <div class="media">
-    <a href="/Books/Details/@book.Id">
+    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
         <div class="media-left">
             @if (!String.IsNullOrEmpty(book.ImageUrl)) {
                 <img src="@book.ImageUrl">
@@ -40,16 +40,16 @@
 </div>
 }
 
-@if (Model.books.Count() == 0) {
+@if (Model.BookList.Books.Count() == 0) {
 <p>No books found</p>
 }
 
 
-@if (null != Model.nextPageToken)
+@if (null != Model.BookList.NextPageToken)
 {
 <nav>
     <ul class="pager">
-        <li><a href="?nextPageToken=@Model.nextPageToken">More</a></li>
+        <li><a href="?nextPageToken=@Model.BookList.NextPageToken">More</a></li>
     </ul>
 </nav>
 }

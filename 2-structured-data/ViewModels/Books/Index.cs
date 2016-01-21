@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-using System.Collections.Generic;
+using GoogleCloudSamples.Models;
 
 namespace GoogleCloudSamples.ViewModels.Books
 {
     public class Index
     {
-        public IEnumerable<Models.Book> books;
-        public string nextPageToken;
+        public BookList BookList;
     }
 }

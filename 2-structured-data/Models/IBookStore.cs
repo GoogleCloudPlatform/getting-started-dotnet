@@ -26,9 +26,9 @@ namespace GoogleCloudSamples.Models
         /// function returns.
         /// </summary>
         void Create(Book book);
-        Book Read(int id);
+        Book Read(long id);
         void Update(Book book);
-        void Delete(int id);
-        ViewModels.Books.Index List(int pageSize, string nextPageToken);
+        void Delete(long id);
+        BookList List(int pageSize, string nextPageToken);
     }
 }

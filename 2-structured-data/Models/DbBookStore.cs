@@ -35,14 +35,14 @@ namespace GoogleCloudSamples.Models
             book.Id = trackBook.Entity.Id;
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             Book book = _dbcontext.Books.Single(m => m.Id == id);
             _dbcontext.Books.Remove(book);
             _dbcontext.SaveChanges();
         }
 
-        public ViewModels.Books.Index List(int pageSize, string nextPageToken)
+        public BookList List(int pageSize, string nextPageToken)
         {
             var pageOfBooks = (null == nextPageToken ?
                 (from book in _dbcontext.Books orderby book.Id select book) :
@@ -51,15 +51,15 @@ namespace GoogleCloudSamples.Models
                  orderby book.Id
                  select book)).Take(pageSize + 1);
             var bookArray = pageOfBooks.ToArray();
-            return new ViewModels.Books.Index()
+            return new BookList()
             {
-                books = bookArray.Take(pageSize),
-                nextPageToken = bookArray.Count() > pageSize ?
+                Books = bookArray.Take(pageSize),
+                NextPageToken = bookArray.Count() > pageSize ?
                     bookArray[pageSize - 1].Id.ToString() : null
             };
         }
 
-        public Book Read(int id)
+        public Book Read(long id)
         {
             return _dbcontext.Books.Single(m => m.Id == id);
         }
