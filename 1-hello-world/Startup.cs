@@ -11,7 +11,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
+// [START sample]
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -35,3 +35,4 @@ namespace GoogleCloudSamples
             WebApplication.Run<Startup>(args);
     }
 }
+// [END sample]
