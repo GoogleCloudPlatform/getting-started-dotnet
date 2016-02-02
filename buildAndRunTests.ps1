@@ -12,8 +12,6 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-dnvm use 1.0.0-rc1-final -r clr
-
 # Recursively retrieve all the files in a directory that match one of the
 # masks.
 function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=-1)
@@ -35,6 +33,19 @@ function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=-1
     }
 }
 
+# Run inner runTests.ps1 scripts.
+filter RunTestScript {
+    Set-Location $_.Directory
+    echo $_.FullName
+    Invoke-Expression (".\" + $_.Name)
+    $LASTEXITCODE
+}
+
+##############################################################################
+# aspnet-core tests.
+
+dnvm use 1.0.0-rc1-final -r clr
+
 # Given a *test.js file, build the project and run the test on localhost.
 filter BuildAndRunLocalTest {
     dnu restore
@@ -52,12 +63,54 @@ filter BuildAndRunLocalTest {
     }
 }
 
-filter RunTestScript {
-    Set-Location $_.Directory
-    Invoke-Expression $_.FullName
-    $LASTEXITCODE
+
+##############################################################################
+# aspnet tests.
+cd aspnet
+$env:GETTING_STARTED_DOTNET = pwd
+$env:APPLICATIONHOST_CONFIG =  Get-ChildItem .\applicationhost.config
+nuget restore
+msbuild
+cd ..
+
+# Given the name of a website in our ./applicationhost.config, return its port number.
+function GetPortNumber($sitename) {
+    $node = Select-Xml -Path $env:APPLICATIONHOST_CONFIG `
+        -XPath "/configuration/system.applicationHost/sites/site[@name='$sitename']/bindings/binding" | 
+        Select-Object -ExpandProperty Node
+    $chunks = $node.bindingInformation -split ':'
+    $chunks[1]
 }
 
+# Run the the website, as configured in our ./applicationhost.config file.
+function RunIISExpress($sitename) {
+    $argList = ('/config:"' + $env:APPLICATIONHOST_CONFIG + '"'), ("/site:" + $sitename), "/apppool:Clr4IntegratedAppPool"
+    Start-Process iisexpress.exe  -ArgumentList $argList -PassThru
+}
+
+# Run the website, then run the test javascript file with casper.
+# Called by inner runTests.
+function RunIISExpressTest($sitename = '', $testjs = 'test.js') {
+    if ($sitename -eq '') 
+    {
+        $sitename = (get-item -Path ".\").Name
+    }
+    $port = GetPortNumber $sitename
+    $webProcess = RunIISExpress $sitename
+    Try
+    {
+        Start-Sleep -Seconds 4  # Wait for web process to start up.
+        casperjs $testjs http://localhost:$port
+        $LASTEXITCODE
+    }
+    Finally
+    {
+        Stop-Process $webProcess
+    }
+}
+
+##############################################################################
+# main
 # Leave the user in the same directory as they started.
 $originalDir = Get-Location
 Try
