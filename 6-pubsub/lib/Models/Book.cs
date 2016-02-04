@@ -12,13 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-using System.Collections.Generic;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoogleCloudSamples.Models
 {
-    public class BookList
+    public class Book
     {
-        public IEnumerable<Book> Books;
-        public string NextPageToken;
+        [Key]
+        public long Id { get; set; }
+
+        [Required]
+        public string Title { get; set; }
+
+        public string Author { get; set; }
+
+        [Display(Name = "Date Published")]
+        [DataType(DataType.Date)]
+        public DateTime? PublishedDate { get; set; }
+
+        public string ImageUrl { get; set; }
+
+        public string Description { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public string CreatedById { get; set; }
     }
 }

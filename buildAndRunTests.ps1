@@ -44,7 +44,7 @@ filter RunTestScript {
 ##############################################################################
 # aspnet-core tests.
 
-dnvm use 1.0.0-rc1-final -r clr
+dnvm use 1.0.0-rc1-update1 -r clr
 
 # Given a *test.js file, build the project and run the test on localhost.
 filter BuildAndRunLocalTest {
@@ -62,7 +62,6 @@ filter BuildAndRunLocalTest {
         Stop-Process $webProcess
     }
 }
-
 
 ##############################################################################
 # aspnet tests.
