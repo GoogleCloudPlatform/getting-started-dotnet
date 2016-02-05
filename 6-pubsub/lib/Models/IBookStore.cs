@@ -12,13 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-using System.Collections.Generic;
 
+/// <summary>
+/// An interface for storing books.  Can be implemented by a database,
+/// Google Datastore, etc.
+/// </summary>
 namespace GoogleCloudSamples.Models
 {
-    public class BookList
+    public interface IBookStore
     {
-        public IEnumerable<Book> Books;
-        public string NextPageToken;
+        /// <summary>
+        /// Creates a new book.  The Id of the book will be filled when the
+        /// function returns.
+        /// </summary>
+        void Create(Book book);
+        Book Read(long id);
+        void Update(Book book);
+        void Delete(long id);
+        BookList List(int pageSize, string nextPageToken);
     }
 }

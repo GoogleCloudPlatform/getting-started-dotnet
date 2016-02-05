@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-using System.Collections.Generic;
+using Microsoft.Data.Entity;
 
 namespace GoogleCloudSamples.Models
 {
-    public class BookList
+    public class ApplicationDbContext : DbContext
     {
-        public IEnumerable<Book> Books;
-        public string NextPageToken;
+        public DbSet<GoogleCloudSamples.Models.Book> Books { get; set; }
     }
 }

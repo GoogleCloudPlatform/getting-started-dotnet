@@ -1,0 +1,47 @@
+@{
+// Copyright 2015 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+}
+@model GoogleCloudSamples.ViewModels.Books.Form
+
+<h3>@Model.Action book</h3>
+
+@if (!Model.IsValid)
+{
+    <div class= "alert alert-danger" asp-validation-summary="ValidationSummary.All"></div>
+}
+<form asp-controller="Books" asp-action="@Model.FormAction" id="book-form">
+    <div class="form-group">
+        <label asp-for="Book.Title"></label>
+        <input asp-for="Book.Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Author"></label>
+        <input asp-for="Book.Author"  class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.PublishedDate"></label>
+        <input type=text asp-for="Book.PublishedDate" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Description"></label>
+        <textarea asp-for="Book.Description" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</form>

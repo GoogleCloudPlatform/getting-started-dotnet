@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "web": {
+      "commandName": "web",
+      "environmentVariables": {
+        "Data:BookStore": "datastore",
+        "Hosting:Environment": "Development"
+      }
+    }
+  }
+}

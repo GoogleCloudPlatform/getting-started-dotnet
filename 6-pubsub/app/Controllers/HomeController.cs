@@ -12,13 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-using System.Collections.Generic;
+using Microsoft.AspNet.Mvc;
 
-namespace GoogleCloudSamples.Models
+namespace GoogleCloudSamples.Controllers
 {
-    public class BookList
+    public class HomeController : Controller
     {
-        public IEnumerable<Book> Books;
-        public string NextPageToken;
+        public IActionResult Index()
+        {
+            return LocalRedirect("/Books");
+        }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }
