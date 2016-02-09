@@ -22,7 +22,7 @@ namespace GoogleCloudSamples.Models
     /// </summary>
     public class DbBookStore : IBookStore
     {
-        private ApplicationDbContext _dbcontext;
+        private readonly ApplicationDbContext _dbcontext;
 
         public DbBookStore(ApplicationDbContext dbcontext)
         {

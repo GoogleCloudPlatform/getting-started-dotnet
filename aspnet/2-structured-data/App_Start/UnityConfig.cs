@@ -16,14 +16,26 @@ using GoogleCloudSamples.Models;
 using Microsoft.Practices.Unity;
 using System;
 using System.Configuration;
+using System.Data.Entity;
+using System.Runtime.Serialization;
 
-namespace GoogleCloudSamples.App_Start
+namespace GoogleCloudSamples
 {
-    public class ConfigurationException : Exception
+    public class ConfigurationException : Exception, ISerializable
     {
         public ConfigurationException(string message) : base(message)
         {
         }
+    }
+
+    /// <summary>
+    /// We can store the book data in different places.  This flag tells us where we to store
+    /// the book data.
+    /// </summary>
+    public enum BookStoreFlag
+    {
+        MySql,
+        Datastore
     }
 
     /// <summary>
@@ -63,13 +75,44 @@ namespace GoogleCloudSamples.App_Start
             return value;
         }
 
+        public static BookStoreFlag ChooseBookStoreFromConfig()
+        {
+            string bookStore = GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
+            switch (bookStore)
+            {
+                case "datastore":
+                    return BookStoreFlag.Datastore;
+
+                case "mysql":
+                    DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
+                    return BookStoreFlag.MySql;
+
+                default:
+                    throw new ConfigurationException(
+                         "Set the configuration variable GoogleCloudSamples:BookStore " +
+                         "to datastore or mysql.");
+            }
+        }
+
         /// <summary>Registers the type mappings with the Unity container.</summary>
         /// <param name="container">The unity container to configure.</param>
         public static void RegisterTypes(IUnityContainer container)
         {
-            // TODO: Read config variables and use SQL backends.
-            container.RegisterInstance<IBookStore>(
-                new DatastoreBookStore(GetConfigVariable("GOOGLE_PROJECT_ID")));
+            ApplicationDbContextFactory factory;
+            switch (ChooseBookStoreFromConfig())
+            {
+                case BookStoreFlag.Datastore:
+                    container.RegisterInstance<IBookStore>(
+                        new DatastoreBookStore(GetConfigVariable("GoogleCloudSamples:ProjectId")));
+                    break;
+
+                case BookStoreFlag.MySql:
+                    factory = new ApplicationDbContextFactory();
+                    container.RegisterType<ApplicationDbContext>(
+                        new InjectionFactory((x) => factory.Create()));
+                    container.RegisterType<IBookStore, DbBookStore>();
+                    break;
+            }
         }
     }
 }
