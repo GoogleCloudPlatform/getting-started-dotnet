@@ -12,12 +12,29 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using System.Data.Common;
 using System.Data.Entity;
 
 namespace GoogleCloudSamples.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<GoogleCloudSamples.Models.Book> Books { get; set; }
+        /// <summary>
+        /// Needed to instantiate ApplicationDbContext with a connection string
+        /// pulled from an environment variable.
+        /// </summary>
+        /// <param name="connection"></param>
+        internal ApplicationDbContext(DbConnection connection) : base(connection, true)
+        {
+        }
+
+        /// <summary>
+        /// Pulls connection string from Web.config.
+        /// </summary>
+        internal ApplicationDbContext()
+        {
+        }
+
+        public DbSet<Book> Books { get; set; }
     }
 }

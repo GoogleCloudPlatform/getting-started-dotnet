@@ -222,7 +222,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602082144583_Initial.cs" />
+    <Compile Include="Migrations\201602082144583_Initial.Designer.cs">
+      <DependentUpon>201602082144583_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ApplicationDbContextFactory.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\BookList.cs" />
     <Compile Include="Models\DatastoreBookStore.cs" />
@@ -261,6 +267,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201602082144583_Initial.resx">
+      <DependentUpon>201602082144583_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

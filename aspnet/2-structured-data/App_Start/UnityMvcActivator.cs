@@ -16,10 +16,10 @@ using Microsoft.Practices.Unity.Mvc;
 using System.Linq;
 using System.Web.Mvc;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(GoogleCloudSamples.App_Start.UnityWebActivator), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(GoogleCloudSamples.App_Start.UnityWebActivator), "Shutdown")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(GoogleCloudSamples.UnityWebActivator), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(GoogleCloudSamples.UnityWebActivator), "Shutdown")]
 
-namespace GoogleCloudSamples.App_Start
+namespace GoogleCloudSamples
 {
     /// <summary>Provides the bootstrapping for integrating Unity with ASP.NET MVC.</summary>
     public static class UnityWebActivator
