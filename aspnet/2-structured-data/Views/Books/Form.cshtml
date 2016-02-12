@@ -17,7 +17,7 @@
 @model GoogleCloudSamples.ViewModels.Books.Form
 
 <h3>@Model.Action book</h3>
-
+<!-- [START form] -->
 <form action="/Books/@Model.FormAction/@Model.Book.Id" method="post" id="book-form">
     @Html.AntiForgeryToken()
     <div class="form-group">
@@ -46,3 +46,4 @@
 
     <button type="submit" class="btn btn-success">Save</button>
 </form>
+<!-- [END form] -->

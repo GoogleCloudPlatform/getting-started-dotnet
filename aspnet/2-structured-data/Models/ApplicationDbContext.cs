@@ -17,8 +17,12 @@ using System.Data.Entity;
 
 namespace GoogleCloudSamples.Models
 {
+    // [START dbset]
     public class ApplicationDbContext : DbContext
     {
+        public DbSet<Book> Books { get; set; }
+        // [END dbset]
+
         /// <summary>
         /// Needed to instantiate ApplicationDbContext with a connection string
         /// pulled from an environment variable.
@@ -34,7 +38,5 @@ namespace GoogleCloudSamples.Models
         internal ApplicationDbContext()
         {
         }
-
-        public DbSet<Book> Books { get; set; }
     }
 }

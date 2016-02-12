@@ -57,6 +57,7 @@ namespace GoogleCloudSamples.Controllers
             return View(book);
         }
 
+        // [START create]
         // GET: Books/Create
         public ActionResult Create()
         {
@@ -75,6 +76,7 @@ namespace GoogleCloudSamples.Controllers
             }
             return ViewForm("Create", "Create", book);
         }
+        // [END create]
 
         /// <summary>
         /// Dispays the common form used for the Edit and Create pages.

@@ -28,14 +28,14 @@ namespace GoogleCloudSamples.Models
         {
             _dbcontext = dbcontext;
         }
-
+        // [START create]
         public void Create(Book book)
         {
             var trackBook = _dbcontext.Books.Add(book);
             _dbcontext.SaveChanges();
             book.Id = trackBook.Id;
         }
-
+        // [END create]
         public void Delete(long id)
         {
             Book book = _dbcontext.Books.Single(m => m.Id == id);
