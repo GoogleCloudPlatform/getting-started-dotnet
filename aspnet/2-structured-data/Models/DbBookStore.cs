@@ -46,18 +46,17 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var pageOfBooks = (null == nextPageToken ?
-                (from book in _dbcontext.Books orderby book.Id select book) :
-                (from book in _dbcontext.Books
-                 where book.Id > Int32.Parse(nextPageToken)
-                 orderby book.Id
-                 select book)).Take(pageSize + 1);
-            var bookArray = pageOfBooks.ToArray();
+            IQueryable<Book> query = _dbcontext.Books.OrderBy(book => book.Id);
+            if (nextPageToken != null)
+            {
+                long previousBookId = long.Parse(nextPageToken);
+                query = query.Where(book => book.Id > previousBookId);
+            }
+            var books = query.Take(pageSize).ToArray();
             return new BookList()
             {
-                Books = bookArray.Take(pageSize),
-                NextPageToken = bookArray.Count() > pageSize ?
-                    bookArray[pageSize - 1].Id.ToString() : null
+                Books = books,
+                NextPageToken = books.Count() == pageSize ? books.Last().Id.ToString() : null
             };
         }
         // [END list]
