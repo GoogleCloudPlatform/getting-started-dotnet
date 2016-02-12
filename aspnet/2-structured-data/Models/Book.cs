@@ -17,6 +17,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GoogleCloudSamples.Models
 {
+    // [START book]
     public class Book
     {
         [Key]
@@ -40,4 +41,5 @@ namespace GoogleCloudSamples.Models
 
         public string CreatedById { get; set; }
     }
+    // [END book]
 }
