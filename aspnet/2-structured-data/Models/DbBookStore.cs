@@ -43,6 +43,7 @@ namespace GoogleCloudSamples.Models
             _dbcontext.SaveChanges();
         }
 
+        // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
             var pageOfBooks = (null == nextPageToken ?
@@ -59,6 +60,7 @@ namespace GoogleCloudSamples.Models
                     bookArray[pageSize - 1].Id.ToString() : null
             };
         }
+        // [END list]
 
         public Book Read(long id)
         {
