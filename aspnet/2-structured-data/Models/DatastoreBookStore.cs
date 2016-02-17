@@ -79,6 +79,7 @@ namespace GoogleCloudSamples.Models
         /// </summary>
         /// <param name="book">The book to store in datastore.</param>
         /// <returns>A datastore entity.</returns>
+        /// [START toentity]
         public static Entity ToEntity(this Book book)
         {
             // TODO: Use reflection so we don't have to modify the code every time we add or drop
@@ -96,6 +97,7 @@ namespace GoogleCloudSamples.Models
             entity.Properties["CreateById"] = NewProperty(book.CreatedById);
             return entity;
         }
+        // [END toentity]
 
         /// <summary>
         /// Unpack a book from a datastore entity.
@@ -145,6 +147,16 @@ namespace GoogleCloudSamples.Models
             });
         }
 
+        // [START create]
+        public void Create(Book book)
+        {
+            var result = CommitMutation(new Mutation()
+            {
+                InsertAutoId = new Entity[] { book.ToEntity() }
+            });
+            book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
+        }
+
         /// <summary>
         /// A convenience function which commits a mutation to datastore.
         /// Use this function to avoid a lot of boilerplate.
@@ -161,14 +173,7 @@ namespace GoogleCloudSamples.Models
             return _datastore.Datasets.Commit(commitRequest, _projectId)
                 .Execute();
         }
-
-        public void Create(Book book)
-        {
-            book.Id = (long)CommitMutation(new Mutation()
-            {
-                InsertAutoId = new Entity[] { book.ToEntity() }
-            }).MutationResult.InsertAutoIdKeys.First().Path.First().Id;
-        }
+        // [END create]
 
         public void Delete(long id)
         {
@@ -178,6 +183,7 @@ namespace GoogleCloudSamples.Models
             });
         }
 
+        // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
             var query = new Query()
@@ -206,6 +212,7 @@ namespace GoogleCloudSamples.Models
                     ? response.Batch.EndCursor : null,
             };
         }
+        // [END list]
 
         public Book Read(long id)
         {
