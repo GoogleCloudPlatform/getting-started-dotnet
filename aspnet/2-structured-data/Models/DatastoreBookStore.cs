@@ -147,22 +147,13 @@ namespace GoogleCloudSamples.Models
             });
         }
 
-        // [START create]
-        public void Create(Book book)
-        {
-            var result = CommitMutation(new Mutation()
-            {
-                InsertAutoId = new Entity[] { book.ToEntity() }
-            });
-            book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
-        }
-
         /// <summary>
         /// A convenience function which commits a mutation to datastore.
         /// Use this function to avoid a lot of boilerplate.
         /// </summary>
         /// <param name="mutation">The change to make to datastore.</param>
         /// <returns>The result of commiting the change.</returns>
+        // [START commitmutation]
         private CommitResponse CommitMutation(Mutation mutation)
         {
             var commitRequest = new CommitRequest()
@@ -172,6 +163,17 @@ namespace GoogleCloudSamples.Models
             };
             return _datastore.Datasets.Commit(commitRequest, _projectId)
                 .Execute();
+        }
+        // [END commitmutation]
+
+        // [START create]
+        public void Create(Book book)
+        {
+            var result = CommitMutation(new Mutation()
+            {
+                InsertAutoId = new Entity[] { book.ToEntity() }
+            });
+            book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
         }
         // [END create]
 
