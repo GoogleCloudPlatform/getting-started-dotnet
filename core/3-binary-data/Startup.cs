@@ -86,7 +86,7 @@ namespace GoogleCloudSamples
             }
             services.AddMvc();
             services.AddImageUploader(Configuration.GetOrThrow("GoogleCloudSamples:BucketName"),
-                Configuration["GoogleCloudSamples:ApplicationName"] ?? "GettingStarted.Net"));
+                Configuration["GoogleCloudSamples:ApplicationName"] ?? "GettingStarted.Net");
         }
 
         public void Halt(string message)
