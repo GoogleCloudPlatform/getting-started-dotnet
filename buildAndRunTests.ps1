@@ -33,6 +33,12 @@ function GetFiles($path = $pwd, [string[]]$masks = '*', $maxDepth = 0, $depth=-1
     }
 }
 
+function GetScriptDirectory
+{
+    $Invocation = (Get-Variable MyInvocation -Scope 1).Value
+    Split-Path $Invocation.MyCommand.Path
+}
+
 # Run inner runTests.ps1 scripts.
 filter RunTestScript {
     Set-Location $_.Directory
@@ -65,12 +71,13 @@ filter BuildAndRunLocalTest {
 
 ##############################################################################
 # aspnet tests.
-cd aspnet
+$curDir = pwd
+cd (Join-Path (GetScriptDirectory) "aspnet")
 $env:GETTING_STARTED_DOTNET = pwd
 $env:APPLICATIONHOST_CONFIG =  Get-ChildItem .\applicationhost.config
 nuget restore
-msbuild
-cd ..
+msbuild /p:Configuration=Debug
+cd $curDir
 
 # Given the name of a website in our ./applicationhost.config, return its port number.
 function GetPortNumber($sitename) {
@@ -83,7 +90,7 @@ function GetPortNumber($sitename) {
 
 # Run the the website, as configured in our ./applicationhost.config file.
 function RunIISExpress($sitename) {
-    $argList = ('/config:"' + $env:APPLICATIONHOST_CONFIG + '"'), ("/site:" + $sitename), "/apppool:Clr4IntegratedAppPool"
+    $argList = ('/config:"' + $env:APPLICATIONHOST_CONFIG + '"'), "/site:$sitename", "/apppool:Clr4IntegratedAppPool"
     Start-Process iisexpress.exe  -ArgumentList $argList -PassThru
 }
 
