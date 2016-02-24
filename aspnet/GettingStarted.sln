@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-pubsub", "6-pubsub", "{16
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib", "6-pubsub\lib\lib.csproj", "{EBC6B984-FE87-4B65-88D4-6AC584910FD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "app", "6-pubsub\app\app.csproj", "{296B6F2A-25A6-41D8-B684-475DFE918695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bookshelf", "6-pubsub\bookshelf\bookshelf.csproj", "{296B6F2A-25A6-41D8-B684-475DFE918695}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "worker", "6-pubsub\worker\worker.csproj", "{4328B4D9-C8A8-4B8E-8790-96B1B225B22E}"
 EndProject
