@@ -39,10 +39,12 @@ namespace GoogleCloudSamples
         /// <summary>
         /// We json-encode this message and publish it to the topic.
         /// </summary>
+        // [START queuemessage]
         private class QueueMessage
         {
             public long BookId;
         };
+        // [END queuemessage]
 
         public class Options
         {
@@ -53,8 +55,10 @@ namespace GoogleCloudSamples
         public BookDetailLookup(string projectId, Options options = null)
         {
             options = options ?? new Options();
+            // [START pubsubpaths]
             _topicPath = $"projects/{projectId}/topics/{options.TopicName}";
             _subscriptionPath = $"projects/{projectId}/subscriptions/{options.SubscriptionName}";
+            // [END pubsubpaths]
             var credentials = Google.Apis.Auth.OAuth2.GoogleCredential.GetApplicationDefaultAsync()
                 .Result;
             credentials = credentials.CreateScoped(new[] { PubsubService.Scope.Pubsub });
@@ -78,6 +82,7 @@ namespace GoogleCloudSamples
         /// Creates the topic and subscription, if they don't already exist.  You should call this
         /// once at the beginning of your app.
         /// </summary>
+        // [START createtopicandsubscription]
         public void CreateTopicAndSubscription()
         {
             try
@@ -108,6 +113,7 @@ namespace GoogleCloudSamples
                     throw;
             }
         }
+        // [END createtopicandsubscription]
 
         public Task StartPullLoop(IBookStore bookStore, CancellationToken cancellationToken)
         {
@@ -143,6 +149,7 @@ namespace GoogleCloudSamples
         /// <summary>
         /// Makes one call to PubSub.Pull to pull some books from the subscription.
         /// </summary>
+        // [START pullonce]
         private void PullOnce(Action<long> callback, CancellationToken cancellationToken)
         {
             Logger.LogVerbose("Pulling messages from subscription...");
@@ -182,10 +189,12 @@ namespace GoogleCloudSamples
             _pubsub.Projects.Subscriptions.Acknowledge(new AcknowledgeRequest() { AckIds = ackIds },
                 _subscriptionPath).Execute();
         }
+        // [END pullonce]
 
         /// <summary>
         /// Publish a message asking for a book to be processed.
         /// </summary>
+        // [START enqueuebook]
         public void EnqueueBook(long bookId)
         {
             var message = new QueueMessage() { BookId = bookId };
@@ -197,6 +206,7 @@ namespace GoogleCloudSamples
                 Messages = new[] { new PubsubMessage() { Data = base64 } },
             }, _topicPath).Execute();
         }
+        // [END enqueuebook]
 
         /// <summary>
         /// Look up a book in Google's Books API.  Update the book in the book store.
@@ -204,6 +214,7 @@ namespace GoogleCloudSamples
         /// <param name="bookStore">Where the book is stored.</param>
         /// <param name="bookId">The id of the book to look up.</param>
         /// <returns></returns>
+        // [START processbook]
         public static void ProcessBook(IBookStore bookStore, long bookId)
         {
             var book = bookStore.Read(bookId);
@@ -221,5 +232,6 @@ namespace GoogleCloudSamples
             // TODO: update image.
             bookStore.Update(book);
         }
+        // [END processbook]
     }
 }
