@@ -174,7 +174,7 @@ namespace GoogleCloudSamples
                     byte[] json = Convert.FromBase64String(message.Message.Data);
                     var qmessage = JsonConvert.DeserializeObject<QueueMessage>(
                         Encoding.UTF8.GetString(json));
-                    // Invoke the callback.
+                    // Invoke ProcessBook().
                     callback(qmessage.BookId);
                 }
                 catch (Exception e)
