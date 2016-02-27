@@ -14,10 +14,13 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace GoogleCloudSamples.Models
 {
     // [START book]
+    [Bind(Include = "Title, Author, PublishedDate, Description")]
+
     public class Book
     {
         [Key]
