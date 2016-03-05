@@ -127,11 +127,15 @@ namespace GoogleCloudSamples.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Book book, long id)
+        public async Task<ActionResult> Edit(Book book, long id, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
                 book.Id = id;
+                if (image != null)
+                {
+                    book.ImageUrl = await _imageUploader.UploadImage(image, book.Id);
+                }
                 _store.Update(book);
                 return RedirectToAction("Details", new { id = book.Id });
             }
