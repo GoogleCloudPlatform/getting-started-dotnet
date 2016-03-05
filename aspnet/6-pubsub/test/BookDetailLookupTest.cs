@@ -73,9 +73,9 @@ namespace GoogleCloudSamples
 
         static BookDetailLookupTest()
         {
-            s_projectId = System.Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
+            s_projectId = System.Environment.GetEnvironmentVariable("GoogleCloudSamples:ProjectId");
             Assert.False(string.IsNullOrWhiteSpace(s_projectId), "Set the environment variable " +
-                "GOOGLE_PROJECT_ID to your google project id.");
+                "GoogleCloudSamples:ProjectId to your google project id.");
         }
 
         [Fact]
