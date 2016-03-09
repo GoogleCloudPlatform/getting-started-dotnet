@@ -12,5 +12,5 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
- ..\..\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\Debug\test.dll
+ ..\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\Debug\test.dll
  $LASTEXITCODE

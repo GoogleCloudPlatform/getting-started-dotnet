@@ -17,7 +17,7 @@ RunIISExpressTest
 $failed = $LASTEXITCODE
 $env:GoogleCloudSamples:BookStore = "mysql"
 # Update the database before running the test.
-cp ..\packages\EntityFramework.*\tools\migrate.exe bin\.
+cp packages\EntityFramework.*\tools\migrate.exe bin\.
 cd bin
 .\migrate.exe 2-structured-data.dll /startupConfigurationFile="..\Web.config"
 $failed += $LASTEXITCODE
