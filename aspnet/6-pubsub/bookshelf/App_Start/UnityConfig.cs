@@ -48,7 +48,9 @@ namespace GoogleCloudSamples.App_Start
         public static void RegisterTypes(IUnityContainer container)
         {
             LibUnityConfig.RegisterTypes(container);
-            container.RegisterInstance<BookDetailLookup>(new BookDetailLookup(LibUnityConfig.ProjectId));
+            var bookDetailLookup = new BookDetailLookup(LibUnityConfig.ProjectId);
+            bookDetailLookup.CreateTopicAndSubscription();
+            container.RegisterInstance<BookDetailLookup>(bookDetailLookup);
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
