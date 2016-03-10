@@ -26,6 +26,7 @@ namespace GoogleCloudSamples
 {
     public static class WebApiConfig
     {
+        // [START sample]
         /// <summary>
         /// The simplest possible HTTP Handler that just returns "Hello World."
         /// </summary>
@@ -48,5 +49,6 @@ namespace GoogleCloudSamples
             config.Routes.MapHttpRoute("index", "", emptyDictionary, emptyDictionary,
                 new HelloWorldHandler());
         }
+        // [END sample]
     }
 }
