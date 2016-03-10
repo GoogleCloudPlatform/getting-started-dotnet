@@ -12,16 +12,3 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 BuildSolution
-$env:GoogleCloudSamples:BookStore = "datastore"
-RunIISExpressTest
-$failed = $LASTEXITCODE
-$env:GoogleCloudSamples:BookStore = "mysql"
-# Update the database before running the test.
-cp ..\packages\EntityFramework.*\tools\migrate.exe bin\.
-cd bin
-.\migrate.exe 2-structured-data.dll /startupConfigurationFile="..\Web.config"
-$failed += $LASTEXITCODE
-cd ..
-RunIISExpressTest
-$failed += $LASTEXITCODE
-$failed

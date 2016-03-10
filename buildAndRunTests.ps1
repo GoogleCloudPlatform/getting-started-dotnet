@@ -75,8 +75,6 @@ $curDir = pwd
 cd (Join-Path (GetScriptDirectory) "aspnet")
 $env:GETTING_STARTED_DOTNET = pwd
 $env:APPLICATIONHOST_CONFIG =  Get-ChildItem .\applicationhost.config
-nuget restore
-msbuild /p:Configuration=Debug
 cd $curDir
 
 # Given the name of a website in our ./applicationhost.config, return its port number.
@@ -113,6 +111,11 @@ function RunIISExpressTest($sitename = '', $testjs = 'test.js') {
     {
         Stop-Process $webProcess
     }
+}
+
+function BuildSolution() {
+    nuget restore
+    msbuild /p:Configuration=Debug
 }
 
 ##############################################################################
