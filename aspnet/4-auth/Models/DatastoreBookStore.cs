@@ -94,7 +94,7 @@ namespace GoogleCloudSamples.Models
             entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
             entity.Properties["Description"] = NewProperty(book.Description);
             entity.Properties["CreatedBy"] = NewProperty(book.CreatedBy);
-            entity.Properties["CreateById"] = NewProperty(book.CreatedById);
+            entity.Properties["CreatedById"] = NewProperty(book.CreatedById);
             return entity;
         }
         // [END toentity]
@@ -186,7 +186,7 @@ namespace GoogleCloudSamples.Models
         }
 
         // [START list]
-        public BookList List(int pageSize, string nextPageToken)
+        public BookList List(int pageSize, string nextPageToken, string userId = null)
         {
             var query = new Query()
             {
@@ -196,6 +196,19 @@ namespace GoogleCloudSamples.Models
 
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = nextPageToken;
+
+            if (userId != null)
+            {
+                query.Filter = new Filter()
+                {
+                    PropertyFilter = new PropertyFilter()
+                    {
+                        Property = new PropertyReference() { Name = "CreatedById" },
+                        Operator__ = "equal",
+                        Value = new Value() { StringValue = userId }
+                    }
+                };
+            }
 
             var datastoreRequest = _datastore.Datasets.RunQuery(
                 datasetId: _projectId,

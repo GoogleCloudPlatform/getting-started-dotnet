@@ -18,11 +18,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("_3_binary_data")]
+[assembly: AssemblyTitle("_4_auth")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Google Inc")]
-[assembly: AssemblyProduct("_3_binary_data")]
+[assembly: AssemblyProduct("_4_auth")]
 [assembly: AssemblyCopyright("Copyright \u00A9 Google Inc 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

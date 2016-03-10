@@ -25,6 +25,8 @@ casper.thenOpen(host + '/Books', function (response) {
     this.test.assertEquals(response.status, 200);
 });
 
+casper.assertExists({ type: 'xpath', path: "//a[text()='Login']" });
+
 casper.thenClick('#add-book', function () {
     console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
     this.test.assertExists({ type: 'xpath', path: '//input[@type="file"]' },

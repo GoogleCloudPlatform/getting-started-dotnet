@@ -30,6 +30,8 @@ namespace GoogleCloudSamples.Controllers
         private readonly IBookStore _store;
         private readonly ImageUploader _imageUploader;
 
+        public User CurrentUser => new User(this.User);
+
         public BooksController(IBookStore store, ImageUploader imageUploader)
         {
             _store = store;
@@ -42,6 +44,15 @@ namespace GoogleCloudSamples.Controllers
             return View(new ViewModels.Books.Index()
             {
                 BookList = _store.List(_pageSize, nextPageToken)
+            });
+        }
+
+        // GET: Books/Mine
+        public ActionResult Mine(string nextPageToken)
+        {
+            return View("Index", new ViewModels.Books.Index()
+            {
+                BookList = _store.List(_pageSize, nextPageToken, userId: CurrentUser?.UserId)
             });
         }
 
@@ -76,6 +87,11 @@ namespace GoogleCloudSamples.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (Request.IsAuthenticated)
+                {
+                    book.CreatedById = CurrentUser.UserId;
+                }
+
                 _store.Create(book);
                 // If book cover image submitted, save image to Cloud Storage
                 if (image != null)

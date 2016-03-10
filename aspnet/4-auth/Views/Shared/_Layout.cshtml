@@ -30,7 +30,26 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="/Books">Books</a></li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Mine", "Mine", "Books")</li>
+                }
             </ul>
+            <p class="navbar-text navbar-right">
+                @if (Request.IsAuthenticated)
+                {
+                    <img src="@CurrentUser.ProfileUrl" class="img-circle" width="24">
+                    <span>
+                        @CurrentUser.Name
+                        &nbsp;
+                        @Html.ActionLink("(logout)", "Logout", "Session")
+                    </span>
+                }
+                else
+                {
+                    @Html.ActionLink("Login", "Login", "Session")
+                }
+            </p>
         </div>
     </div>
     <div class="container">

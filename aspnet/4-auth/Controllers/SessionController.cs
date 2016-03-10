@@ -12,21 +12,29 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.Helpers;
-using System.Security.Claims;
+using Microsoft.Owin.Security;
 
-namespace GoogleCloudSamples
+namespace GoogleCloudSamples.Controllers
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class SessionController : Controller
     {
-        protected void Application_Start()
+        // GET: Session/Login
+        public ActionResult Login()
         {
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            HttpContext.GetOwinContext().Authentication.Challenge(
+                new AuthenticationProperties { RedirectUri = "/" },
+                "Google"
+            );
+            return new HttpUnauthorizedResult();
+        }
+
+        // GET: Session/Logout
+        public ActionResult Logout()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
+            return Redirect("/");
         }
     }
 }

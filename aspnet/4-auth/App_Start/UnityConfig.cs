@@ -63,22 +63,9 @@ namespace GoogleCloudSamples
 
         #endregion Unity Container
 
-        /// <summary>
-        /// Looks for variable in environment and app settings.
-        /// Throws an exception of the key is not in the configuration.
-        /// </summary>
-        public static string GetConfigVariable(string key)
-        {
-            string value = Environment.GetEnvironmentVariable(key) ??
-                ConfigurationManager.AppSettings[key];
-            if (value == null)
-                throw new ConfigurationException($"You must set the configuration variable {key}.");
-            return value;
-        }
-
         public static BookStoreFlag ChooseBookStoreFromConfig()
         {
-            string bookStore = GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
+            string bookStore = Config.GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
             switch (bookStore)
             {
                 case "datastore":
@@ -104,7 +91,7 @@ namespace GoogleCloudSamples
             {
                 case BookStoreFlag.Datastore:
                     container.RegisterInstance<IBookStore>(
-                        new DatastoreBookStore(GetConfigVariable("GoogleCloudSamples:ProjectId")));
+                        new DatastoreBookStore(Config.GetConfigVariable("GoogleCloudSamples:ProjectId")));
                     break;
 
                 case BookStoreFlag.MySql:
@@ -117,8 +104,8 @@ namespace GoogleCloudSamples
 
             container.RegisterInstance<ImageUploader>(
                 new ImageUploader(
-                  GetConfigVariable("GoogleCloudSamples:BucketName"),
-                  GetConfigVariable("GoogleCloudSamples:ApplicationName")
+                  Config.GetConfigVariable("GoogleCloudSamples:BucketName"),
+                  Config.GetConfigVariable("GoogleCloudSamples:ApplicationName")
                 )
             );
         }
