@@ -54,6 +54,7 @@ namespace GoogleCloudSamples.Models
             }
             if (userId != null)
             {
+                // Query for books created by the user
                 query = query.Where(book => book.CreatedById == userId);
             }
             var books = query.Take(pageSize).ToArray();

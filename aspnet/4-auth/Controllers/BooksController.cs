@@ -50,10 +50,18 @@ namespace GoogleCloudSamples.Controllers
         // GET: Books/Mine
         public ActionResult Mine(string nextPageToken)
         {
-            return View("Index", new ViewModels.Books.Index()
+            if (Request.IsAuthenticated)
             {
-                BookList = _store.List(_pageSize, nextPageToken, userId: CurrentUser?.UserId)
-            });
+                return View("Index", new ViewModels.Books.Index()
+                {
+                    // Fetch books created by the logged in user
+                    BookList = _store.List(_pageSize, nextPageToken, userId: CurrentUser.UserId)
+                });
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Books/Details/5

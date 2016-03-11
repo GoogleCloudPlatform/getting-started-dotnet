@@ -199,6 +199,7 @@ namespace GoogleCloudSamples.Models
 
             if (userId != null)
             {
+                // Query for books created by the user
                 query.Filter = new Filter()
                 {
                     PropertyFilter = new PropertyFilter()
