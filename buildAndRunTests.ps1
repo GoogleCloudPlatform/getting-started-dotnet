@@ -16,19 +16,17 @@
 # masks.
 function GetFiles($path = $null, [string[]]$masks = '*', $maxDepth = 0, $depth=-1)
 {
-    if (!$path) { $path = Get-Location }
-    $root = Get-Item $path
-    foreach ($item in $root.GetFiles())
+    foreach ($item in Get-ChildItem $path | Sort-Object -Property Mode)
     {
-        if ($masks | Where {$item -like $_}) { $item }
-    }
-    if ($maxDepth -ge 0 -and $depth -ge $maxDepth)
-    {
-        # We have reached the max depth.  Do not recurse.
-    }
-    else 
-    {
-        foreach ($item in $root.GetDirectories()) 
+        if ($masks | Where {$item -like $_})
+        {
+            $item
+        }
+        if ($maxDepth -ge 0 -and $depth -ge $maxDepth)
+        {
+            # We have reached the max depth.  Do not recurse.
+        }
+        elseif (Test-Path $item.FullName -PathType Container)
         {
             GetFiles $item.FullName $masks $maxDepth ($depth + 1)
         }
