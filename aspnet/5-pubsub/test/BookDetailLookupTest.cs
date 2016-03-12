@@ -121,5 +121,17 @@ namespace GoogleCloudSamples
             cancel.CancelAfter(100);
             pullTask.Wait();
         }
+
+        [Fact]
+        public void TestParseBook()
+        {
+            var json = System.IO.File.ReadAllText(@"testdata\RedFern.json");
+            Book book = new Book();
+            BookDetailLookup.ParseBook(json, ref book);
+            Assert.Equal("Where the Red Fern Grows", book.Title);
+            Assert.Equal("Wilson Rawls", book.Author);
+            Assert.Equal(new DateTime(1978, 1, 1), book.PublishedDate);
+            Assert.Contains("Ozarks", book.Description);
+        }
     }
 }

@@ -1,0 +1,727 @@
+﻿{
+  "kind": "books#volumes",
+  "totalItems": 798,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "G4AHnwEACAAJ",
+      "etag": "ib3Vz0eAPdU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/G4AHnwEACAAJ",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "subtitle": "The Story of Two Dogs and a Boy ; with Connections",
+        "authors": [
+          "Wilson Rawls"
+        ],
+        "publishedDate": "2002",
+        "description": "A young boy living in the Ozarks achieves his heart's desire when he becomes the owner of two redbone hounds and teaches them to be champion hunters.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "OCLC:49888382"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 288,
+        "printType": "BOOK",
+        "categories": [
+          "Dogs"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 1774,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=G4AHnwEACAAJ&dq=where+the+red+fern+grows&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=G4AHnwEACAAJ&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=G4AHnwEACAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=G4AHnwEACAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "A young boy living in the Ozarks achieves his heart&#39;s desire when he becomes the owner of two redbone hounds and teaches them to be champion hunters."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "-ddvPQAACAAJ",
+      "etag": "E4CAx0+mwEQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/-ddvPQAACAAJ",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "subtitle": "The Story of Two Dogs and a Boy : with Connections",
+        "authors": [
+          "Wilson Rawls",
+          "Holt Mcdougal"
+        ],
+        "publisher": "Holt McDougal",
+        "publishedDate": "1998-09-01",
+        "description": "A young boy living in the Ozarks achieves his heart's desire when he becomes the owner of two redbone hounds and teaches them to be champion hunters.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0030547741"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780030547744"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 288,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 1775,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=-ddvPQAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=-ddvPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=-ddvPQAACAAJ&dq=where+the+red+fern+grows&hl=&cd=2&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=-ddvPQAACAAJ&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=-ddvPQAACAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=-ddvPQAACAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Glory and victory were coming to them, but sadness waited too. Where the Red Fern Grows is an exciting tale of love and adventure you&#39;ll never forget."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "-cxGPgAACAAJ",
+      "etag": "TpR3DCWi6C8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/-cxGPgAACAAJ",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "subtitle": "The Story of Two Dogs and a Boy",
+        "authors": [
+          "Wilson Rawls"
+        ],
+        "publisher": "Yearling Books",
+        "publishedDate": "1996",
+        "description": "Having purchased two dogs for fifty dollars, young Billy is determined to create the valley's best hunting team.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0440412676"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780440412670"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 212,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 1774,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=-cxGPgAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=-cxGPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=-cxGPgAACAAJ&dq=where+the+red+fern+grows&hl=&cd=3&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=-cxGPgAACAAJ&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=-cxGPgAACAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=-cxGPgAACAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Having purchased two dogs for fifty dollars, young Billy is determined to create the valley&#39;s best hunting team."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "xRGXngEACAAJ",
+      "etag": "91GN8g4ztfE",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/xRGXngEACAAJ",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "subtitle": "The Story of 2 Dogs and a Boy",
+        "authors": [
+          "Wilson Rawls"
+        ],
+        "publishedDate": "1978",
+        "description": "A young boy living in the Ozarks achieves his heart's desire when he becomes the owner of two redbone hounds and teaches them to be champion hunters.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "OCLC:780058613"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 212,
+        "printType": "BOOK",
+        "averageRating": 4.0,
+        "ratingsCount": 1774,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=xRGXngEACAAJ&dq=where+the+red+fern+grows&hl=&cd=4&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=xRGXngEACAAJ&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=xRGXngEACAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=xRGXngEACAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "A young boy living in the Ozarks achieves his heart&#39;s desire when he becomes the owner of two redbone hounds and teaches them to be champion hunters."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "3xQUAQAAMAAJ",
+      "etag": "UZlEc3FER4k",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/3xQUAQAAMAAJ",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows, by Wilson Rawls",
+        "subtitle": "Teacher Guide",
+        "authors": [
+          "Anne Troy"
+        ],
+        "publishedDate": "1998-12-01",
+        "description": "Activities to be used in the classroom to accompany the reading of Where the red fern grows by Wilson Rawls.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PSU:000044045203"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 32,
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 2,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=3xQUAQAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=3xQUAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=3xQUAQAAMAAJ&q=where+the+red+fern+grows&dq=where+the+red+fern+grows&hl=&cd=5&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=3xQUAQAAMAAJ&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows_by_Wilson_Rawls.html?hl=&id=3xQUAQAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=3xQUAQAAMAAJ&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Activities to be used in the classroom to accompany the reading of Where the red fern grows by Wilson Rawls."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "TVGrZ_Z2y7oC",
+      "etag": "koWFG4cscdY",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/TVGrZ_Z2y7oC",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "authors": [
+          "Scholastic, Inc. Staff",
+          "Wilson Rahls"
+        ],
+        "publisher": "Scholastic Inc.",
+        "publishedDate": "1997-08-01",
+        "description": "Author biography, chapter summaries, discussion questions, vocabulary builders, reproducibles, cross-curricular activities for students of all learning styles for the novel Where the red fern grows by Wilson Rawls.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0590373579"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780590373579"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 16,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "averageRating": 4.5,
+        "ratingsCount": 13,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.0.0.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=TVGrZ_Z2y7oC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=TVGrZ_Z2y7oC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=TVGrZ_Z2y7oC&printsec=frontcover&dq=where+the+red+fern+grows&hl=&cd=6&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=TVGrZ_Z2y7oC&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=TVGrZ_Z2y7oC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED_FOR_ACCESSIBILITY",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Where_the_Red_Fern_Grows-sample-pdf.acsm?id=TVGrZ_Z2y7oC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=TVGrZ_Z2y7oC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Author biography, chapter summaries, discussion questions, vocabulary builders, reproducibles, cross-curricular activities for students of all learning styles for the novel Where the red fern grows by Wilson Rawls."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "xLrEdU_QzHMC",
+      "etag": "wsBE6DzShaA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/xLrEdU_QzHMC",
+      "volumeInfo": {
+        "title": "A Guide for Using Where the Red Fern Grows in the Classroom",
+        "authors": [
+          "John Carratello",
+          "Patty Carratello"
+        ],
+        "publisher": "Teacher Created Resources",
+        "publishedDate": "1991-09-01",
+        "description": "Pages perforated for removal and reproduction.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781557344007"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1557344000"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 48,
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.0.1.0.preview.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=xLrEdU_QzHMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=xLrEdU_QzHMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=xLrEdU_QzHMC&printsec=frontcover&dq=where+the+red+fern+grows&hl=&cd=7&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=xLrEdU_QzHMC&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/A_Guide_for_Using_Where_the_Red_Fern_Gro.html?hl=&id=xLrEdU_QzHMC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=xLrEdU_QzHMC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Pages perforated for removal and reproduction."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "BrgeEEykkP8C",
+      "etag": "NK7jGlxA/KQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/BrgeEEykkP8C",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows",
+        "authors": [
+          "Wilson Rawls"
+        ],
+        "publisher": "Laurel Leaf",
+        "publishedDate": "2011-01-12",
+        "description": "A loving threesome, they ranged the dark hills and river bottoms of Cherokee country. Old Dan had the brawn. Little Ann had the brains, and Billy had the will to make them into the finest hunting team in the valley. Glory and victory were coming to them, but sadness waited too. Where the Red Fern Grows is an exciting tale of love and adventure you'll never forget.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780307781567"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0307781569"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 256,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "averageRating": 4.0,
+        "ratingsCount": 1774,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.2.2.0.preview.2",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=BrgeEEykkP8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=BrgeEEykkP8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=BrgeEEykkP8C&printsec=frontcover&dq=where+the+red+fern+grows&hl=&cd=8&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=BrgeEEykkP8C&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows.html?hl=&id=BrgeEEykkP8C"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 6.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 6.99,
+          "currencyCode": "USD"
+        },
+        "buyLink": "http://books.google.com/books?id=BrgeEEykkP8C&dq=where+the+red+fern+grows&hl=&buy=&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 6990000.0,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 6990000.0,
+              "currencyCode": "USD"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED_FOR_ACCESSIBILITY",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Where_the_Red_Fern_Grows-sample-epub.acsm?id=BrgeEEykkP8C&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=BrgeEEykkP8C&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Glory and victory were coming to them, but sadness waited too. Where the Red Fern Grows is an exciting tale of love and adventure you&#39;ll never forget."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "JV-t414wGyMC",
+      "etag": "Fy6qbJ+WfQQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/JV-t414wGyMC",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows Comprehension Guide",
+        "authors": [
+          "Shep Foster",
+          "Laurie Detweiler"
+        ],
+        "publisher": "Veritas Press",
+        "publishedDate": "1999-01-01",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "1930710704"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9781930710702"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 32,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Nonfiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.1.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=JV-t414wGyMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=JV-t414wGyMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=JV-t414wGyMC&printsec=frontcover&dq=where+the+red+fern+grows&hl=&cd=9&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=JV-t414wGyMC&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows_Comprehension_G.html?hl=&id=JV-t414wGyMC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=JV-t414wGyMC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "afS4bulfdcEC",
+      "etag": "HFVARINaeCM",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/afS4bulfdcEC",
+      "volumeInfo": {
+        "title": "Where the Red Fern Grows Lit Link Gr. 4-6",
+        "publisher": "On The Mark Press",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781770722965"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1770722963"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.0.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=afS4bulfdcEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=afS4bulfdcEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=afS4bulfdcEC&printsec=frontcover&dq=where+the+red+fern+grows&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=afS4bulfdcEC&dq=where+the+red+fern+grows&hl=&source=gbs_api",
+        "canonicalVolumeLink": "http://books.google.com/books/about/Where_the_Red_Fern_Grows_Lit_Link_Gr_4_6.html?hl=&id=afS4bulfdcEC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 10.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 8.79,
+          "currencyCode": "USD"
+        },
+        "buyLink": "http://books.google.com/books?id=afS4bulfdcEC&dq=where+the+red+fern+grows&hl=&buy=&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1.099E7,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 8790000.0,
+              "currencyCode": "USD"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Where_the_Red_Fern_Grows_Lit_Link_Gr_4_6-sample-pdf.acsm?id=afS4bulfdcEC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://books.google.com/books/reader?id=afS4bulfdcEC&hl=&printsec=frontcover&output=reader&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      }
+    }
+  ]
+}
