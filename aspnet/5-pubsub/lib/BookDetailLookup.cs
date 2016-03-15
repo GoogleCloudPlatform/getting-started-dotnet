@@ -284,6 +284,14 @@ namespace GoogleCloudSamples
                 book.Author = string.Join(", ", authors.Select(author => author.ToString()));
             foreach (var description in GetInfo("description").Take(1))
                 book.Description = description.ToString();
+            foreach (JObject imageLinks in GetInfo("imageLinks"))
+            {
+                if (imageLinks.Property("thumbnail") != null)
+                {
+                    book.ImageUrl = imageLinks["thumbnail"].ToString();
+                    break;
+                }
+            }
         }
     }
 }

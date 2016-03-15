@@ -132,6 +132,9 @@ namespace GoogleCloudSamples
             Assert.Equal("Wilson Rawls", book.Author);
             Assert.Equal(new DateTime(1978, 1, 1), book.PublishedDate);
             Assert.Contains("Ozarks", book.Description);
+            Assert.Equal("http://books.google.com/books/content?" +
+                "id=-ddvPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                book.ImageUrl);
         }
 
         [Fact]
