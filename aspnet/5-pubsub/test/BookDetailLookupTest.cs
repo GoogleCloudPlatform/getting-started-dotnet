@@ -123,15 +123,27 @@ namespace GoogleCloudSamples
         }
 
         [Fact]
-        public void TestParseBook()
+        public void TestUpdateBookFromJsonRedFern()
         {
             var json = System.IO.File.ReadAllText(@"testdata\RedFern.json");
             Book book = new Book();
-            BookDetailLookup.ParseBook(json, ref book);
+            BookDetailLookup.UpdateBookFromJson(json, book);
             Assert.Equal("Where the Red Fern Grows", book.Title);
             Assert.Equal("Wilson Rawls", book.Author);
             Assert.Equal(new DateTime(1978, 1, 1), book.PublishedDate);
             Assert.Contains("Ozarks", book.Description);
+        }
+
+        [Fact]
+        public void TestUpdateBookFromJsonBackendError()
+        {
+            var json = System.IO.File.ReadAllText(@"testdata\BackendError.json");
+            Book book = new Book();
+            BookDetailLookup.UpdateBookFromJson(json, book);
+            Assert.Equal(null, book.Title);
+            Assert.Equal(null, book.Author);
+            Assert.Equal(null, book.PublishedDate);
+            Assert.Equal(null, book.Description);
         }
     }
 }

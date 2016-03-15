@@ -228,7 +228,7 @@ namespace GoogleCloudSamples
             var response = WebRequest.Create(query).GetResponse();
             var reader = new StreamReader(response.GetResponseStream());
             var json = reader.ReadToEnd();
-            ParseBook(json, ref book);
+            UpdateBookFromJson(json, book);
             bookStore.Update(book);
         }
         // [END processbook]
@@ -255,11 +255,13 @@ namespace GoogleCloudSamples
         /// </summary>
         /// <param name="json">A response from Google's Books API.</param>
         /// <param name="book">Fields in book will be overwritten.</param>
-        public static void ParseBook(string json, ref Book book)
+        public static void UpdateBookFromJson(string json, Book book)
         {
             // There are many volumeInfos, and many are incomplete.  So, to find a field like
             // "title", we use LINQ to scan multiple volumeInfos.
             JObject results = JObject.Parse(json);
+            if (results.Property("items") == null)
+                return;
             var infos = results["items"].Select(token => (JObject)token)
                 .Where(obj => obj.Property("volumeInfo") != null)
                 .Select(obj => obj["volumeInfo"]);

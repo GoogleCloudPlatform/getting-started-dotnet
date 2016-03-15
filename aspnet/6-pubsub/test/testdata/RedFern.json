@@ -7,6 +7,12 @@
       "id": "G4AHnwEACAAJ",
       "etag": "ib3Vz0eAPdU",
       "selfLink": "https://www.googleapis.com/books/v1/volumes/G4AHnwEACAAJ",
+    },
+    {
+      "kind": "books#volume",
+      "id": "G4AHnwEACAAJ",
+      "etag": "ib3Vz0eAPdU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/G4AHnwEACAAJ",
       "volumeInfo": {
         "title": "Where the Red Fern Grows",
         "subtitle": "The Story of Two Dogs and a Boy ; with Connections",
