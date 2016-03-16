@@ -46,30 +46,35 @@ namespace GoogleCloudSamples
             // ...
             // [END cookie_authentication]
 
-            // [START google_authentication]
+            // [START configure_google_auth_client]
             var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = Config.GetConfigVariable("GoogleCloudSamples:AuthClientId"),
                 ClientSecret = Config.GetConfigVariable("GoogleCloudSamples:AuthClientSecret"),
-                Provider = new GoogleOAuth2AuthenticationProvider()
-                {
-                    // After OAuth authentication completes successfully,
-                    // read user's profile image URL from the profile
-                    // response data and add it to the current user identity
-                    OnAuthenticated = context =>
-                    {
-                        var profileUrl = context.User["image"]["url"].ToString();
-                        context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
-                        return Task.FromResult(0);
-                    }
-                }
             };
+            // [END configure_google_auth_client]
 
+            // [START configure_google_auth_scopes]
             // Add scope to access user's profile information including profile image URL
             authenticationOptions.Scope.Add("profile");
+            // [END configure_google_auth_scopes]
+
+            // [START read_google_profile_image_url]
+            authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
+            {
+                // After OAuth authentication completes successfully,
+                // read user's profile image URL from the profile
+                // response data and add it to the current user identity
+                OnAuthenticated = context =>
+                {
+                    var profileUrl = context.User["image"]["url"].ToString();
+                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
+                    return Task.FromResult(0);
+                }
+            };
+            // [END read_google_profile_image_url]
 
             app.UseGoogleAuthentication(authenticationOptions);
-            // [END google_authentication]
         }
     }
 }
