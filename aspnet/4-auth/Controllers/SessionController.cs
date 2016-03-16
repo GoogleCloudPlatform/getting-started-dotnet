@@ -21,14 +21,13 @@ namespace GoogleCloudSamples.Controllers
     // [START login]
     public class SessionController : Controller
     {
-        public ActionResult Login()
+        public void Login()
         {
             // Redirect to the Google OAuth 2.0 user consent screen
             HttpContext.GetOwinContext().Authentication.Challenge(
                 new AuthenticationProperties { RedirectUri = "/" },
                 "Google"
             );
-            return new HttpUnauthorizedResult();
         }
 
         // ...
