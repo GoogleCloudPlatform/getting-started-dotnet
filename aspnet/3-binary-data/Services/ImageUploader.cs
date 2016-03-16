@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Google.Apis.Storage.v1;
 using Google.Apis.Storage.v1.ClientWrapper;
+using System;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace GoogleCloudSamples.Services
@@ -26,24 +23,21 @@ namespace GoogleCloudSamples.Services
     public class ImageUploader
     {
         private string _bucketName;
-        private string _applicationName;
-  
+        private StorageClient _storageClient;
+
         public ImageUploader(string bucketName, string applicationName)
         {
             _bucketName = bucketName;
-            _applicationName = applicationName;
+            _storageClient = StorageClient
+                .FromApplicationCredentials(applicationName).Result;
         }
 
         public async Task<String> UploadImage(HttpPostedFileBase image, long id)
         {
-            // Create client and use it to upload object to Cloud Storage
-            var client = await StorageClient
-                .FromApplicationCredentials(_applicationName);
-
             var imageAcl = ObjectsResource
                 .InsertMediaUpload.PredefinedAclEnum.PublicRead;
 
-            var imageObject = await client.UploadObjectAsync(
+            var imageObject = await _storageClient.UploadObjectAsync(
                 bucket: _bucketName,
                 objectName: id.ToString(),
                 contentType: image.ContentType,
@@ -56,9 +50,7 @@ namespace GoogleCloudSamples.Services
 
         public async Task DeleteUploadedImage(long id)
         {
-            var client = await StorageClient
-                .FromApplicationCredentials(_applicationName);
-            client.DeleteObject(_bucketName, id.ToString());
+            await _storageClient.DeleteObjectAsync(_bucketName, id.ToString());
         }
     }
 }
