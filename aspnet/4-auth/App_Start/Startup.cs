@@ -59,9 +59,9 @@ namespace GoogleCloudSamples
             authenticationOptions.Scope.Add("profile");
             // [END configure_google_auth_scopes]
 
-            // [START read_google_profile_image_url]
             authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
             {
+                // [START read_google_profile_image_url]
                 // After OAuth authentication completes successfully,
                 // read user's profile image URL from the profile
                 // response data and add it to the current user identity
@@ -71,8 +71,8 @@ namespace GoogleCloudSamples
                     context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
                     return Task.FromResult(0);
                 }
+                // [END read_google_profile_image_url]
             };
-            // [END read_google_profile_image_url]
 
             app.UseGoogleAuthentication(authenticationOptions);
         }
