@@ -100,10 +100,14 @@ namespace GoogleCloudSamples.Controllers
             {
                 if (Request.IsAuthenticated)
                 {
+                    // Track the user who created this book
                     book.CreatedById = CurrentUser.UserId;
                 }
 
                 _store.Create(book);
+
+                // ...
+                // [END create_book]
                 // If book cover image submitted, save image to Cloud Storage
                 if (image != null)
                 {
@@ -115,7 +119,6 @@ namespace GoogleCloudSamples.Controllers
             }
             return ViewForm("Create", "Create", book);
         }
-        // [END create_book]
         // [END create]
 
         /// <summary>
