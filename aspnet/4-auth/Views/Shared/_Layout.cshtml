@@ -28,7 +28,7 @@
             <div class="navbar-header">
                 <div class="navbar-brand">Bookshelf</div>
             </div>
-            @* [START authentication] *@
+            @* [START mine] *@
             <ul class="nav navbar-nav">
                 <li><a href="/Books">Books</a></li>
                 @if (Request.IsAuthenticated)
@@ -36,6 +36,8 @@
                     <li>@Html.ActionLink("Mine", "Mine", "Books")</li>
                 }
             </ul>
+            @* [END mine] *@
+            @* [START authentication] *@
             <p class="navbar-text navbar-right">
                 @if (Request.IsAuthenticated)
                 {
