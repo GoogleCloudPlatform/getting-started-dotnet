@@ -18,6 +18,7 @@ using Microsoft.Owin.Security;
 
 namespace GoogleCloudSamples.Controllers
 {
+    // [START login]
     public class SessionController : Controller
     {
         // GET: Session/Login
@@ -29,12 +30,16 @@ namespace GoogleCloudSamples.Controllers
             );
             return new HttpUnauthorizedResult();
         }
+        // ...
+        // [END login]
 
+        // [START logout]
         // GET: Session/Logout
         public ActionResult Logout()
         {
             Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
+        // [END logout]
     }
 }

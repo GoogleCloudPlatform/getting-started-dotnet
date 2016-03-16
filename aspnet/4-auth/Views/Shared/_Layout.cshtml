@@ -28,6 +28,7 @@
             <div class="navbar-header">
                 <div class="navbar-brand">Bookshelf</div>
             </div>
+            @* [START authentication] *@
             <ul class="nav navbar-nav">
                 <li><a href="/Books">Books</a></li>
                 @if (Request.IsAuthenticated)
@@ -50,6 +51,7 @@
                     @Html.ActionLink("Login", "Login", "Session")
                 }
             </p>
+            @* [END authentication] *@
         </div>
     </div>
     <div class="container">
