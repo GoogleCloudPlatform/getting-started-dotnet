@@ -69,7 +69,7 @@ namespace GoogleCloudSamples
             authenticationOptions.Scope.Add("profile");
 
             app.UseGoogleAuthentication(authenticationOptions);
+            // [END google_authentication]
         }
-        // [END google_authentication]
     }
 }
