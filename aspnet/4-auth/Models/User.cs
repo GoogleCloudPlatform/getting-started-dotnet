@@ -24,7 +24,7 @@ namespace GoogleCloudSamples.Models
 
         public string Name => this.Identity.Name;
         public string UserId => this.FindFirst(ClaimTypes.NameIdentifier).Value;
-        public string ProfileUrl => this.FindFirst(ClaimTypes.Uri).Value;
+        public string ProfileImage => this.FindFirst(ClaimTypes.Uri).Value;
     }
     // [END user]
 }
