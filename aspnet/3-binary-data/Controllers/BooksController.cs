@@ -62,13 +62,13 @@ namespace GoogleCloudSamples.Controllers
             return View(book);
         }
 
-        // [START create]
         // GET: Books/Create
         public ActionResult Create()
         {
             return ViewForm("Create", "Create");
         }
 
+        // [START create]
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -28,8 +28,10 @@ namespace GoogleCloudSamples.Services
         public ImageUploader(string bucketName, string applicationName)
         {
             _bucketName = bucketName;
+            // [START storageclient]
             _storageClient = StorageClient
                 .FromApplicationCredentials(applicationName).Result;
+            // [END storageclient]
         }
 
         // [START uploadimage]

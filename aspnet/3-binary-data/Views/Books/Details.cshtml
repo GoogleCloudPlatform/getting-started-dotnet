@@ -35,9 +35,11 @@
 
 <div class="media">
     <div class="media-left">
+        <!-- [START bookimage] -->
         <img class="book-image"
              src="@(String.IsNullOrEmpty(Model.ImageUrl) ?
         "http://placekitten.com/g/128/192" : Model.ImageUrl)">
+        <!-- [END bookimage] -->        
     </div>
     <div class="media-body">
         <h4 class="book-title">

@@ -43,11 +43,12 @@
         @Html.EditorFor(model => model.Book.Description, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
         @Html.ValidationMessageFor(model => model.Book.Description, "", new { @class = "text-danger" })
     </div>
-
+    <!-- [START image] -->
     <div class="form-group">
         @Html.Label("Cover Image")
         <input type="file" id="image" name="image" value="@Model.Book.ImageUrl" class="form-control">
     </div>
+    <!-- [END image] -->
 
     <button type="submit" class="btn btn-success">Save</button>
 </form>
