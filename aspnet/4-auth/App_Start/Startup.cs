@@ -32,7 +32,7 @@ namespace GoogleCloudSamples
         /// <remarks>
         /// OAauth Client Id and Client Secret must be set in application configuration
         /// </remarks>
-        // [START oauth_configuration]
+        // [START cookie_authentication]
         public void Configuration(IAppBuilder app)
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -43,7 +43,9 @@ namespace GoogleCloudSamples
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+            // [END cookie_authentication]
 
+            // [START google_authentication]
             var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = Config.GetConfigVariable("GoogleCloudSamples:AuthClientId"),
@@ -52,7 +54,8 @@ namespace GoogleCloudSamples
                 {
                     OnAuthenticated = context =>
                     {
-                        // Read user's profile image URL from Google OAuth2 login
+                        // After OAuth authentication completes successfully,
+                        // read user's profile image URL from the profile
                         // response data and add it to the current user identity
                         var profileUrl = context.User["image"]["url"].ToString();
                         context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
@@ -63,6 +66,6 @@ namespace GoogleCloudSamples
             authenticationOptions.Scope.Add("profile");
             app.UseGoogleAuthentication(authenticationOptions);
         }
-        // [END oauth_configuration]
+        // [END google_authentication]
     }
 }
