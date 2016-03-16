@@ -42,8 +42,6 @@ namespace GoogleCloudSamples
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
-
-            // ...
             // [END cookie_authentication]
 
             // [START configure_google_auth_client]
