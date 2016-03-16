@@ -216,6 +216,9 @@ namespace GoogleCloudSamples.Models
                 body: new RunQueryRequest() { Query = query }
             );
 
+            // ...
+            // [END list]
+
             var response = datastoreRequest.Execute();
             var results = response.Batch.EntityResults;
             var books = results.Select(result => result.Entity.ToBook());
@@ -228,7 +231,6 @@ namespace GoogleCloudSamples.Models
                     ? response.Batch.EndCursor : null,
             };
         }
-        // [END list]
 
         public Book Read(long id)
         {
