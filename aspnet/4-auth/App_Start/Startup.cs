@@ -52,18 +52,21 @@ namespace GoogleCloudSamples
                 ClientSecret = Config.GetConfigVariable("GoogleCloudSamples:AuthClientSecret"),
                 Provider = new GoogleOAuth2AuthenticationProvider()
                 {
+                    // After OAuth authentication completes successfully,
+                    // read user's profile image URL from the profile
+                    // response data and add it to the current user identity
                     OnAuthenticated = context =>
                     {
-                        // After OAuth authentication completes successfully,
-                        // read user's profile image URL from the profile
-                        // response data and add it to the current user identity
                         var profileUrl = context.User["image"]["url"].ToString();
                         context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
                         return Task.FromResult(0);
                     }
                 }
             };
+
+            // Add scope to access user's profile information including profile image URL
             authenticationOptions.Scope.Add("profile");
+
             app.UseGoogleAuthentication(authenticationOptions);
         }
         // [END google_authentication]
