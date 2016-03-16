@@ -48,6 +48,7 @@ namespace GoogleCloudSamples.Controllers
         }
 
         // GET: Books/Mine
+        // [START mine]
         public ActionResult Mine(string nextPageToken)
         {
             if (Request.IsAuthenticated)
@@ -63,6 +64,7 @@ namespace GoogleCloudSamples.Controllers
                 return RedirectToAction("Index");
             }
         }
+        // [END mine]
 
         // GET: Books/Details/5
         public ActionResult Details(long? id)
@@ -91,6 +93,7 @@ namespace GoogleCloudSamples.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // [START create_book]
         public async Task<ActionResult> Create(Book book, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
@@ -112,6 +115,7 @@ namespace GoogleCloudSamples.Controllers
             }
             return ViewForm("Create", "Create", book);
         }
+        // [END create_book]
         // [END create]
 
         /// <summary>
