@@ -37,8 +37,7 @@ namespace GoogleCloudSamples
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = DefaultAuthenticationTypes.ExternalCookie,
-                LoginPath = new PathString("/Account/Login"),
+                AuthenticationType = DefaultAuthenticationTypes.ExternalCookie
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
