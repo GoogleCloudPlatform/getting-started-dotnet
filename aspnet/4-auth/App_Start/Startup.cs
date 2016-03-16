@@ -53,7 +53,7 @@ namespace GoogleCloudSamples
             // [END configure_google_auth_client]
 
             // [START configure_google_auth_scopes]
-            // Add scope to access user's profile information including profile image URL
+            // Add scope to access user's basic profile information
             authenticationOptions.Scope.Add("profile");
             // [END configure_google_auth_scopes]
 
