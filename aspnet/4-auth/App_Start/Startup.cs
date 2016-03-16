@@ -32,9 +32,9 @@ namespace GoogleCloudSamples
         /// <remarks>
         /// OAauth Client Id and Client Secret must be set in application configuration
         /// </remarks>
-        // [START cookie_authentication]
         public void Configuration(IAppBuilder app)
         {
+            // [START cookie_authentication]
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ExternalCookie
