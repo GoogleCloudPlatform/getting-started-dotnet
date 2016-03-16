@@ -18,9 +18,9 @@ using Microsoft.Owin.Security;
 
 namespace GoogleCloudSamples.Controllers
 {
-    // [START login]
     public class SessionController : Controller
     {
+        // [START login]
         public void Login()
         {
             // Redirect to the Google OAuth 2.0 user consent screen
@@ -29,8 +29,6 @@ namespace GoogleCloudSamples.Controllers
                 "Google"
             );
         }
-
-        // ...
         // [END login]
 
         // [START logout]
