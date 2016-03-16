@@ -34,6 +34,7 @@ namespace GoogleCloudSamples.Services
             _applicationName = applicationName;
         }
 
+        // [START uploadimage]
         public async Task<String> UploadImage(HttpPostedFileBase image, long id)
         {
             // Create client and use it to upload object to Cloud Storage
@@ -53,6 +54,7 @@ namespace GoogleCloudSamples.Services
 
             return imageObject.MediaLink;
         }
+        // [END uploadimage]
 
         public async Task DeleteUploadedImage(long id)
         {
