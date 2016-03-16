@@ -17,6 +17,7 @@ using System.Security.Principal;
 
 namespace GoogleCloudSamples.Models
 {
+    // [START user]
     public class User : ClaimsPrincipal
     {
         public User(IPrincipal principal) : base(principal as ClaimsPrincipal) { }
@@ -25,4 +26,5 @@ namespace GoogleCloudSamples.Models
         public string UserId => this.FindFirst(ClaimTypes.NameIdentifier).Value;
         public string ProfileUrl => this.FindFirst(ClaimTypes.Uri).Value;
     }
+    // [END user]
 }
