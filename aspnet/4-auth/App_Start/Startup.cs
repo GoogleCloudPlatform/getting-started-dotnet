@@ -34,33 +34,44 @@ namespace GoogleCloudSamples
         /// </remarks>
         public void Configuration(IAppBuilder app)
         {
+            // [START cookie_authentication]
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = DefaultAuthenticationTypes.ExternalCookie,
-                LoginPath = new PathString("/Account/Login"),
+                AuthenticationType = DefaultAuthenticationTypes.ExternalCookie
             });
-
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+            // [END cookie_authentication]
 
+            // [START configure_google_auth_client]
             var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = Config.GetConfigVariable("GoogleCloudSamples:AuthClientId"),
                 ClientSecret = Config.GetConfigVariable("GoogleCloudSamples:AuthClientSecret"),
-                Provider = new GoogleOAuth2AuthenticationProvider()
-                {
-                    OnAuthenticated = context =>
-                    {
-                        // Read user's profile image URL from Google OAuth2 login
-                        // response data and add it to the current user identity
-                        var profileUrl = context.User["image"]["url"].ToString();
-                        context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
-                        return Task.FromResult(0);
-                    }
-                }
             };
+            // [END configure_google_auth_client]
+
+            // [START configure_google_auth_scopes]
+            // Add scope to access user's basic profile information
             authenticationOptions.Scope.Add("profile");
+            // [END configure_google_auth_scopes]
+
+            authenticationOptions.Provider = new GoogleOAuth2AuthenticationProvider()
+            {
+                // [START read_google_profile_image_url]
+                // After OAuth authentication completes successfully,
+                // read user's profile image URL from the profile
+                // response data and add it to the current user identity
+                OnAuthenticated = context =>
+                {
+                    var profileUrl = context.User["image"]["url"].ToString();
+                    context.Identity.AddClaim(new Claim(ClaimTypes.Uri, profileUrl));
+                    return Task.FromResult(0);
+                }
+                // [END read_google_profile_image_url]
+            };
+
             app.UseGoogleAuthentication(authenticationOptions);
         }
     }

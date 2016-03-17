@@ -28,6 +28,7 @@
             <div class="navbar-header">
                 <div class="navbar-brand">Bookshelf</div>
             </div>
+            @* [START mine] *@
             <ul class="nav navbar-nav">
                 <li><a href="/Books">Books</a></li>
                 @if (Request.IsAuthenticated)
@@ -35,10 +36,12 @@
                     <li>@Html.ActionLink("Mine", "Mine", "Books")</li>
                 }
             </ul>
+            @* [END mine] *@
+            @* [START authentication] *@
             <p class="navbar-text navbar-right">
                 @if (Request.IsAuthenticated)
                 {
-                    <img src="@CurrentUser.ProfileUrl" class="img-circle" width="24">
+                    <img src="@CurrentUser.ProfileImage" class="img-circle" width="24">
                     <span>
                         @CurrentUser.Name
                         &nbsp;
@@ -50,6 +53,7 @@
                     @Html.ActionLink("Login", "Login", "Session")
                 }
             </p>
+            @* [END authentication] *@
         </div>
     </div>
     <div class="container">
