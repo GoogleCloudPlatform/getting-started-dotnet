@@ -30,7 +30,6 @@ namespace GoogleCloudSamples.Migrations
                     PublishedDate = c.DateTime(precision: 0),
                     ImageUrl = c.String(unicode: false),
                     Description = c.String(unicode: false),
-                    CreatedBy = c.String(unicode: false),
                     CreatedById = c.String(unicode: false),
                 })
                 .PrimaryKey(t => t.Id);
