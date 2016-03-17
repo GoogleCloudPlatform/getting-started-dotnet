@@ -93,7 +93,6 @@ namespace GoogleCloudSamples.Models
             entity.Properties["PublishedDate"] = NewProperty(book.PublishedDate);
             entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
             entity.Properties["Description"] = NewProperty(book.Description);
-            entity.Properties["CreatedBy"] = NewProperty(book.CreatedBy);
             entity.Properties["CreateById"] = NewProperty(book.CreatedById);
             return entity;
         }
@@ -115,7 +114,6 @@ namespace GoogleCloudSamples.Models
             book.PublishedDate = entity.Properties.GetValue("PublishedDate")?.DateTimeValue;
             book.ImageUrl = entity.Properties.GetValue("ImageUrl")?.StringValue;
             book.Description = entity.Properties.GetValue("Description")?.StringValue;
-            book.CreatedBy = entity.Properties.GetValue("CreatedBy")?.StringValue;
             book.CreatedById = entity.Properties.GetValue("CreatedById")?.StringValue;
             return book;
         }
