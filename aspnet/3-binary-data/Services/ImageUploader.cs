@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using Google.Apis.Storage.v1;
-using Google.Apis.Storage.v1.ClientWrapper;
+using Google.Storage.V1;
 using System;
 using System.Threading.Tasks;
 using System.Web;
