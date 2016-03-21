@@ -16,7 +16,7 @@
 # masks.
 function GetFiles($path = $null, [string[]]$masks = '*', $maxDepth = 0, $depth=-1)
 {
-    foreach ($item in Get-ChildItem $path | Sort-Object -Property Mode)
+    foreach ($item in Get-ChildItem $path | Sort-Object -Property Mode,Name)
     {
         if ($masks | Where {$item -like $_})
         {
