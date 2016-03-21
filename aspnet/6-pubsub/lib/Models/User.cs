@@ -12,26 +12,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using System.Security.Claims;
+using System.Security.Principal;
+
 namespace GoogleCloudSamples.Models
 {
-    /// <summary>
-    /// An interface for storing books.  Can be implemented by a database,
-    /// Google Datastore, etc.
-    /// </summary>
-    public interface IBookStore
+    // [START user]
+    public class User : ClaimsPrincipal
     {
-        /// <summary>
-        /// Creates a new book.  The Id of the book will be filled when the
-        /// function returns.
-        /// </summary>
-        void Create(Book book);
+        public User(IPrincipal principal) : base(principal as ClaimsPrincipal) { }
 
-        Book Read(long id);
-
-        void Update(Book book);
-
-        void Delete(long id);
-
-        BookList List(int pageSize, string nextPageToken, string userId = null);
+        public string Name => this.Identity.Name;
+        public string UserId => this.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public string ProfileImage => this.FindFirst(ClaimTypes.Uri).Value;
     }
+    // [END user]
 }

@@ -13,6 +13,7 @@
 // the License.
 
 using GoogleCloudSamples.Models;
+using GoogleCloudSamples.Services;
 using Microsoft.Practices.Unity;
 using System;
 using System.Configuration;
@@ -43,24 +44,11 @@ namespace GoogleCloudSamples
     /// </summary>
     public class LibUnityConfig
     {
-        /// <summary>
-        /// Looks for variable in environment and app settings.
-        /// Throws an exception of the key is not in the configuration.
-        /// </summary>
-        public static string GetConfigVariable(string key)
-        {
-            string value = Environment.GetEnvironmentVariable(key) ??
-                ConfigurationManager.AppSettings[key];
-            if (value == null)
-                throw new ConfigurationException($"You must set the configuration variable {key}.");
-            return value;
-        }
-
-        public static string ProjectId => GetConfigVariable("GoogleCloudSamples:ProjectId");
+        public static string ProjectId => Config.GetConfigVariable("GoogleCloudSamples:ProjectId");
 
         public static BookStoreFlag ChooseBookStoreFromConfig()
         {
-            string bookStore = GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
+            string bookStore = Config.GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
             switch (bookStore)
             {
                 case "datastore":
@@ -96,6 +84,13 @@ namespace GoogleCloudSamples
                     container.RegisterType<IBookStore, DbBookStore>();
                     break;
             }
-        }
+	    
+            container.RegisterInstance<ImageUploader>(
+                new ImageUploader(
+                  Config.GetConfigVariable("GoogleCloudSamples:BucketName"),
+                  Config.GetConfigVariable("GoogleCloudSamples:ApplicationName")
+                )
+            );
+       }
     }
 }

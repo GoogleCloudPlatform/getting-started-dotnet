@@ -18,7 +18,7 @@
 
 <h3>@Model.Action book</h3>
 <!-- [START form] -->
-<form action="/Books/@Model.FormAction/@Model.Book.Id" method="post" id="book-form">
+<form action="/Books/@Model.FormAction/@Model.Book.Id" method="post" id="book-form" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(model => model.Book.Title)
@@ -42,6 +42,12 @@
         @Html.LabelFor(model => model.Book.Description)
         @Html.EditorFor(model => model.Book.Description, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
         @Html.ValidationMessageFor(model => model.Book.Description, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Cover Image")
+        <input type="file" id="image" name="image" value="@Model.Book.ImageUrl" class="form-control">
+        @Html.HiddenFor(model => model.Book.ImageUrl)
     </div>
 
     <button type="submit" class="btn btn-success">Save</button>

@@ -229,7 +229,7 @@ namespace GoogleCloudSamples
             book.PublishedDate = info.publishedDate;
             book.Author = string.Join(", ", info.authors);
             book.Description = info.description;
-            // TODO: update image.
+            book.ImageUrl = info.imageLinks.thumbnail;
             bookStore.Update(book);
         }
         // [END processbook]

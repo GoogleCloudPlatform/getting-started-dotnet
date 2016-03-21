@@ -12,26 +12,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-namespace GoogleCloudSamples.Models
+using System;
+using System.Configuration;
+
+namespace GoogleCloudSamples
 {
-    /// <summary>
-    /// An interface for storing books.  Can be implemented by a database,
-    /// Google Datastore, etc.
-    /// </summary>
-    public interface IBookStore
+    public static class Config
     {
         /// <summary>
-        /// Creates a new book.  The Id of the book will be filled when the
-        /// function returns.
+        /// Looks for variable in environment and app settings.
+        /// Throws an exception of the key is not in the configuration.
         /// </summary>
-        void Create(Book book);
-
-        Book Read(long id);
-
-        void Update(Book book);
-
-        void Delete(long id);
-
-        BookList List(int pageSize, string nextPageToken, string userId = null);
+        public static string GetConfigVariable(string key)
+        {
+            string value = Environment.GetEnvironmentVariable(key) ??
+                ConfigurationManager.AppSettings[key];
+            if (value == null)
+                throw new ConfigurationException($"You must set the configuration variable {key}.");
+            return value;
+        }
     }
 }

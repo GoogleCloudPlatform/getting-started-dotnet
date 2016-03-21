@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using System;
 using System.Linq;
 
 namespace GoogleCloudSamples.Models
@@ -27,7 +28,6 @@ namespace GoogleCloudSamples.Models
         {
             _dbcontext = dbcontext;
         }
-
         // [START create]
         public void Create(Book book)
         {
@@ -35,7 +35,6 @@ namespace GoogleCloudSamples.Models
             _dbcontext.SaveChanges();
             book.Id = trackBook.Id;
         }
-
         // [END create]
         public void Delete(long id)
         {
@@ -45,13 +44,18 @@ namespace GoogleCloudSamples.Models
         }
 
         // [START list]
-        public BookList List(int pageSize, string nextPageToken)
+        public BookList List(int pageSize, string nextPageToken, string userId = null)
         {
             IQueryable<Book> query = _dbcontext.Books.OrderBy(book => book.Id);
             if (nextPageToken != null)
             {
                 long previousBookId = long.Parse(nextPageToken);
                 query = query.Where(book => book.Id > previousBookId);
+            }
+            if (userId != null)
+            {
+                // Query for books created by the user
+                query = query.Where(book => book.CreatedById == userId);
             }
             var books = query.Take(pageSize).ToArray();
             return new BookList()
@@ -60,7 +64,6 @@ namespace GoogleCloudSamples.Models
                 NextPageToken = books.Count() == pageSize ? books.Last().Id.ToString() : null
             };
         }
-
         // [END list]
 
         public Book Read(long id)

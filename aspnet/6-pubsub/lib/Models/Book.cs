@@ -19,8 +19,7 @@ using System.Web.Mvc;
 namespace GoogleCloudSamples.Models
 {
     // [START book]
-    [Bind(Include = "Title, Author, PublishedDate, Description")]
-
+    [Bind(Include = "Title, Author, PublishedDate, Description, ImageUrl")]
     public class Book
     {
         [Key]
@@ -42,6 +41,5 @@ namespace GoogleCloudSamples.Models
 
         public string CreatedById { get; set; }
     }
-
     // [END book]
 }
