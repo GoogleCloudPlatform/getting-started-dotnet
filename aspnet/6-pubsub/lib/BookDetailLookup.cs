@@ -61,7 +61,10 @@ namespace GoogleCloudSamples
             // [END pubsubpaths]
             var credentials = Google.Apis.Auth.OAuth2.GoogleCredential.GetApplicationDefaultAsync()
                 .Result;
-            credentials = credentials.CreateScoped(new[] { PubsubService.Scope.Pubsub });
+            if (credentials.IsCreateScopedRequired)
+            {
+                credentials = credentials.CreateScoped(new[] { PubsubService.Scope.Pubsub });
+            }
             _pubsub = new PubsubService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credentials,
