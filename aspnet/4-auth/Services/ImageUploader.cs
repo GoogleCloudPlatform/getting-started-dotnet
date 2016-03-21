@@ -18,7 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Google.Apis.Storage.v1;
-using Google.Apis.Storage.v1.ClientWrapper;
+using Google.Storage.V1;
 using System.Web;
 
 namespace GoogleCloudSamples.Services
