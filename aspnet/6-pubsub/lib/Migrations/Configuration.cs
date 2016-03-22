@@ -13,6 +13,7 @@
 // the License.
 
 using System.Data.Entity.Migrations;
+using System.Diagnostics;
 
 namespace GoogleCloudSamples.Migrations
 {
