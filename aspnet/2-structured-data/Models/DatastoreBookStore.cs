@@ -134,10 +134,13 @@ namespace GoogleCloudSamples.Models
             // Use Application Default Credentials.
             var credentials = Google.Apis.Auth.OAuth2.GoogleCredential
                 .GetApplicationDefaultAsync().Result;
-            credentials = credentials.CreateScoped(new[] {
-                DatastoreService.Scope.Datastore,
-                DatastoreService.Scope.UserinfoEmail,
-            });
+            if (credentials.IsCreateScopedRequired)
+            {
+                credentials = credentials.CreateScoped(new[] {
+                    DatastoreService.Scope.Datastore,
+                    DatastoreService.Scope.UserinfoEmail,
+                });
+            }
             // Create our connection to datastore.
             _datastore = new DatastoreService(new Google.Apis.Services
                 .BaseClientService.Initializer()
