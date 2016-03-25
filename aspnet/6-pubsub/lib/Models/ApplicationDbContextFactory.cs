@@ -14,6 +14,7 @@
 
 using System;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 
 namespace GoogleCloudSamples.Models
 {

@@ -93,7 +93,7 @@ namespace GoogleCloudSamples.Models
             entity.Properties["PublishedDate"] = NewProperty(book.PublishedDate);
             entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
             entity.Properties["Description"] = NewProperty(book.Description);
-            entity.Properties["CreateById"] = NewProperty(book.CreatedById);
+            entity.Properties["CreatedById"] = NewProperty(book.CreatedById);
             return entity;
         }
         // [END toentity]

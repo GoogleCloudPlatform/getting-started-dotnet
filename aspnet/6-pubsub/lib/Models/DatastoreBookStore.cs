@@ -93,10 +93,9 @@ namespace GoogleCloudSamples.Models
             entity.Properties["PublishedDate"] = NewProperty(book.PublishedDate);
             entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
             entity.Properties["Description"] = NewProperty(book.Description);
-            entity.Properties["CreateById"] = NewProperty(book.CreatedById);
+            entity.Properties["CreatedById"] = NewProperty(book.CreatedById);
             return entity;
         }
-
         // [END toentity]
 
         /// <summary>
@@ -167,7 +166,6 @@ namespace GoogleCloudSamples.Models
             return _datastore.Datasets.Commit(commitRequest, _projectId)
                 .Execute();
         }
-
         // [END commitmutation]
 
         // [START create]
@@ -179,7 +177,6 @@ namespace GoogleCloudSamples.Models
             });
             book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
         }
-
         // [END create]
 
         public void Delete(long id)
@@ -191,7 +188,7 @@ namespace GoogleCloudSamples.Models
         }
 
         // [START list]
-        public BookList List(int pageSize, string nextPageToken)
+        public BookList List(int pageSize, string nextPageToken, string userId = null)
         {
             var query = new Query()
             {
@@ -201,6 +198,20 @@ namespace GoogleCloudSamples.Models
 
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = nextPageToken;
+
+            if (userId != null)
+            {
+                // Query for books created by the user
+                query.Filter = new Filter()
+                {
+                    PropertyFilter = new PropertyFilter()
+                    {
+                        Property = new PropertyReference() { Name = "CreatedById" },
+                        Operator__ = "equal",
+                        Value = new Value() { StringValue = userId }
+                    }
+                };
+            }
 
             var datastoreRequest = _datastore.Datasets.RunQuery(
                 datasetId: _projectId,
