@@ -96,7 +96,6 @@ namespace GoogleCloudSamples.Models
             entity.Properties["CreateById"] = NewProperty(book.CreatedById);
             return entity;
         }
-
         // [END toentity]
 
         /// <summary>
@@ -167,7 +166,6 @@ namespace GoogleCloudSamples.Models
             return _datastore.Datasets.Commit(commitRequest, _projectId)
                 .Execute();
         }
-
         // [END commitmutation]
 
         // [START create]
@@ -179,7 +177,6 @@ namespace GoogleCloudSamples.Models
             });
             book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
         }
-
         // [END create]
 
         public void Delete(long id)
@@ -219,7 +216,6 @@ namespace GoogleCloudSamples.Models
                     ? response.Batch.EndCursor : null,
             };
         }
-
         // [END list]
 
         public Book Read(long id)

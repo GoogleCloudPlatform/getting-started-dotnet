@@ -12,7 +12,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using System;
 using System.Linq;
 
 namespace GoogleCloudSamples.Models
@@ -28,6 +27,7 @@ namespace GoogleCloudSamples.Models
         {
             _dbcontext = dbcontext;
         }
+
         // [START create]
         public void Create(Book book)
         {

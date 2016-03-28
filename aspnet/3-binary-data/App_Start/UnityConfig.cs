@@ -76,6 +76,8 @@ namespace GoogleCloudSamples
             return value;
         }
 
+        public static string ProjectId => GetConfigVariable("GoogleCloudSamples:ProjectId");
+
         public static BookStoreFlag ChooseBookStoreFromConfig()
         {
             string bookStore = GetConfigVariable("GoogleCloudSamples:BookStore")?.ToLower();
@@ -104,7 +106,7 @@ namespace GoogleCloudSamples
             {
                 case BookStoreFlag.Datastore:
                     container.RegisterInstance<IBookStore>(
-                        new DatastoreBookStore(GetConfigVariable("GoogleCloudSamples:ProjectId")));
+                        new DatastoreBookStore(ProjectId));
                     break;
 
                 case BookStoreFlag.MySql:

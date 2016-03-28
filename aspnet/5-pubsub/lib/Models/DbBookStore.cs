@@ -35,7 +35,6 @@ namespace GoogleCloudSamples.Models
             _dbcontext.SaveChanges();
             book.Id = trackBook.Id;
         }
-
         // [END create]
         public void Delete(long id)
         {
@@ -60,7 +59,6 @@ namespace GoogleCloudSamples.Models
                 NextPageToken = books.Count() == pageSize ? books.Last().Id.ToString() : null
             };
         }
-
         // [END list]
 
         public Book Read(long id)
