@@ -18,7 +18,7 @@
 
 <h3>@Model.Action book</h3>
 <!-- [START form] -->
-<form action="/Books/@Model.FormAction/@Model.Book.Id" method="post" id="book-form">
+<form action="/Books/@Model.FormAction/@Model.Book.Id" method="post" id="book-form" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(model => model.Book.Title)

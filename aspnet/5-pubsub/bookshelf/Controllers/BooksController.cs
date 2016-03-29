@@ -13,6 +13,9 @@
 // the License.
 
 using GoogleCloudSamples.Models;
+using GoogleCloudSamples.Services;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace GoogleCloudSamples.Controllers
@@ -26,10 +29,12 @@ namespace GoogleCloudSamples.Controllers
 
         private readonly IBookStore _store;
         private BookDetailLookup _bookDetailLookup;
+        private readonly ImageUploader _imageUploader;
 
-        public BooksController(IBookStore store, BookDetailLookup bookDetailLookup)
+        public BooksController(IBookStore store, ImageUploader imageUploader, BookDetailLookup bookDetailLookup)
         {
             _store = store;
+            _imageUploader = imageUploader;
             _bookDetailLookup = bookDetailLookup;
         }
 
@@ -69,17 +74,23 @@ namespace GoogleCloudSamples.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Book book)
+        public async Task<ActionResult> Create(Book book, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
                 _store.Create(book);
+                // If book cover image submitted, save image to Cloud Storage
+                if (image != null)
+                {
+                    var imageUrl = await _imageUploader.UploadImage(image, book.Id);
+                    book.ImageUrl = imageUrl;
+                    _store.Update(book);
+                }
                 _bookDetailLookup.EnqueueBook(book.Id);
                 return RedirectToAction("Details", new { id = book.Id });
             }
             return ViewForm("Create", "Create", book);
         }
-
         // [END create]
 
         /// <summary>
@@ -119,11 +130,15 @@ namespace GoogleCloudSamples.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Book book, long id)
+        public async Task<ActionResult> Edit(Book book, long id, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
                 book.Id = id;
+                if (image != null)
+                {
+                    book.ImageUrl = await _imageUploader.UploadImage(image, book.Id);
+                }
                 _store.Update(book);
                 return RedirectToAction("Details", new { id = book.Id });
             }
@@ -133,8 +148,14 @@ namespace GoogleCloudSamples.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(long id)
+        public async Task<ActionResult> Delete(long id)
         {
+            // Delete book cover image from Cloud Storage if ImageUrl exists
+            string imageUrlToDelete = _store.Read((long)id).ImageUrl;
+            if (imageUrlToDelete != null)
+            {
+                await _imageUploader.DeleteUploadedImage(id);
+            }
             _store.Delete(id);
             return RedirectToAction("Index");
         }

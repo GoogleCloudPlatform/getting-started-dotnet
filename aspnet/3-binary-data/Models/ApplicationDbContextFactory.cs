@@ -14,7 +14,6 @@
 
 using System;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics;
 
 namespace GoogleCloudSamples.Models
 {
@@ -24,6 +23,10 @@ namespace GoogleCloudSamples.Models
     /// </summary>
     public class ApplicationDbContextFactory : IDbContextFactory<ApplicationDbContext>
     {
+        /// <summary>
+        /// Check the environment variable, and create a new ApplicationDbContext accordingly.
+        /// </summary>
+        /// <returns></returns>
         public ApplicationDbContext Create()
         {
             string envConnectionString = Environment.GetEnvironmentVariable(
