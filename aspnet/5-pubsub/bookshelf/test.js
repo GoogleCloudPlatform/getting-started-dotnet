@@ -28,7 +28,7 @@ casper.thenOpen(host + '/Books', function (response) {
 casper.thenClick('#add-book', function () {
     console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
     this.test.assertExists({ type: 'xpath', path: '//input[@type="file"]' },
-    'The Form element "image" exists for uploading book cover images .');
+    'The Form element "image" exists for uploading book cover images.');
     this.fill('form#book-form', {
         'Book.Title': 'test.js',
         'Book.Author': 'test.js',
