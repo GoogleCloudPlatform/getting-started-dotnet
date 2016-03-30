@@ -35,7 +35,7 @@ namespace GoogleCloudSamples.Models
         /// <summary>
         /// Pulls connection string from Web.config.
         /// </summary>
-        internal ApplicationDbContext()
+        internal ApplicationDbContext() : base("name=LocalMySqlServer")
         {
         }
     }
