@@ -74,6 +74,8 @@ namespace GoogleCloudSamples.Models
             return null == value ? null : new Property() { DateTimeValue = value };
         }
 
+        // TODO: Use reflection so we don't have to modify the code every time we add or drop
+        // a property from Book.
         /// <summary>
         /// Create a datastore entity with the same values as book.
         /// </summary>
@@ -82,8 +84,6 @@ namespace GoogleCloudSamples.Models
         /// [START toentity]
         public static Entity ToEntity(this Book book)
         {
-            // TODO: Use reflection so we don't have to modify the code every time we add or drop
-            // a property from Book.
             var entity = new Entity();
             entity.Properties =
                 new Dictionary<string, Property>();
