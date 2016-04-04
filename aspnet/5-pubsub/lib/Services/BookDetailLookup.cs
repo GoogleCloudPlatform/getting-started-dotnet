@@ -28,7 +28,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GoogleCloudSamples
+namespace GoogleCloudSamples.Services
 {
     /// <summary>
     /// A library for the background task of looking up a book in Google's books API.
@@ -38,6 +38,7 @@ namespace GoogleCloudSamples
         private readonly PubsubService _pubsub;
         private readonly string _topicPath;
         private readonly string _subscriptionPath;
+        private readonly ISimpleLogger _logger;
 
         /// <summary>
         /// We json-encode this message and publish it to the topic.
@@ -55,9 +56,10 @@ namespace GoogleCloudSamples
             public string SubscriptionName = "shared-worker-subscription";
         };
 
-        public BookDetailLookup(string projectId, Options options = null)
+        public BookDetailLookup(string projectId, Options options = null, ISimpleLogger logger = null)
         {
             options = options ?? new Options();
+            _logger = logger ?? new DebugLogger();
             // [START pubsubpaths]
             _topicPath = $"projects/{projectId}/topics/{options.TopicName}";
             _subscriptionPath = $"projects/{projectId}/subscriptions/{options.SubscriptionName}";
@@ -75,14 +77,12 @@ namespace GoogleCloudSamples
         }
 
         // Using a sophisticated logger like log4net is beyond the scope of this sample.
-        private class ConsoleLogger
+        private class DebugLogger : ISimpleLogger
         {
             public void LogVerbose(string message) => Debug.WriteLine(message);
 
             public void LogError(string message, Exception e) => Debug.WriteLine(message);
         };
-
-        private ConsoleLogger Logger => new ConsoleLogger();
 
         /// <summary>
         /// Creates the topic and subscription, if they don't already exist.  You should call this
@@ -95,7 +95,7 @@ namespace GoogleCloudSamples
             {
                 _pubsub.Projects.Topics.Create(new Topic() { Name = _topicPath }, _topicPath)
                     .Execute();
-                Logger.LogVerbose("Created topic " + _topicPath);
+                _logger.LogVerbose("Created topic " + _topicPath);
             }
             catch (Google.GoogleApiException e)
             {
@@ -110,7 +110,7 @@ namespace GoogleCloudSamples
                     Name = _subscriptionPath,
                     Topic = _topicPath
                 }, _subscriptionPath).Execute();
-                Logger.LogVerbose("Created subscription " + _subscriptionPath);
+                _logger.LogVerbose("Created subscription " + _subscriptionPath);
             }
             catch (Google.GoogleApiException e)
             {
@@ -125,7 +125,7 @@ namespace GoogleCloudSamples
         {
             return Task.Factory.StartNew(() => PullLoop((long bookId) =>
             {
-                Logger.LogVerbose($"Processing {bookId}.");
+                _logger.LogVerbose($"Processing {bookId}.");
                 ProcessBook(bookStore, bookId);
             }, cancellationToken));
         }
@@ -147,7 +147,7 @@ namespace GoogleCloudSamples
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError("PullOnce() failed.", e);
+                    _logger.LogError("PullOnce() failed.", e);
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace GoogleCloudSamples
         // [START pullonce]
         private void PullOnce(Action<long> callback, CancellationToken cancellationToken)
         {
-            Logger.LogVerbose("Pulling messages from subscription...");
+            _logger.LogVerbose("Pulling messages from subscription...");
             // Pull some messages from the subscription.
             var response = _pubsub.Projects.Subscriptions.Pull(new PullRequest()
             {
@@ -168,10 +168,10 @@ namespace GoogleCloudSamples
             if (response.ReceivedMessages == null)
             {
                 // HTTP Request expired because the queue was empty.  Ok.
-                Logger.LogVerbose("Pulled no messages.");
+                _logger.LogVerbose("Pulled no messages.");
                 return;
             }
-            Logger.LogVerbose($"Pulled {response.ReceivedMessages.Count} messages.");
+            _logger.LogVerbose($"Pulled {response.ReceivedMessages.Count} messages.");
             foreach (var message in response.ReceivedMessages)
             {
                 try
@@ -185,7 +185,7 @@ namespace GoogleCloudSamples
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError("Error processing book.", e);
+                    _logger.LogError("Error processing book.", e);
                 }
             }
             // Acknowledge the message so we don't see it again.
@@ -221,9 +221,10 @@ namespace GoogleCloudSamples
         /// <param name="bookId">The id of the book to look up.</param>
         /// <returns></returns>
         // [START processbook]
-        public static void ProcessBook(IBookStore bookStore, long bookId)
+        public void ProcessBook(IBookStore bookStore, long bookId)
         {
             var book = bookStore.Read(bookId);
+            _logger.LogVerbose($"Found {book.Title}.  Updating.");
             var query = "https://www.googleapis.com/books/v1/volumes?q="
                 + Uri.EscapeDataString(book.Title);
             var response = WebRequest.Create(query).GetResponse();
@@ -235,7 +236,7 @@ namespace GoogleCloudSamples
         // [END processbook]
 
         /// <summary>
-        /// Parse a date time.  Return null if it can't be parsed.  A single number will be 
+        /// Parse a date time.  Return null if it can't be parsed.  A single number will be
         /// interpreted as a year, and the date returned will be YEAR-01-01.
         /// </summary>
         /// <param name="dateString">A string representation of the date.</param>
