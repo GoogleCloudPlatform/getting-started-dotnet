@@ -146,6 +146,7 @@ namespace GoogleCloudSamples.Models
                 .BaseClientService.Initializer()
             {
                 HttpClientInitializer = credentials,
+                ApplicationName = "Bookshelf.NET-Step5"
             });
         }
 
