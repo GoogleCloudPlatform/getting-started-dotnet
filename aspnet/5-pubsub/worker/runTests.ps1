@@ -12,4 +12,4 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 $env:GoogleCloudSamples:BookStore = "datastore"
-RunIISExpressTest  5-pubsub-worker
+RunIISExpressTest 5-pubsub-worker

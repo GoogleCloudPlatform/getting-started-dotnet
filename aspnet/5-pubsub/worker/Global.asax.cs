@@ -13,23 +13,29 @@
 // the License.
 
 using GoogleCloudSamples.Models;
+using GoogleCloudSamples.Services;
 using Microsoft.Practices.Unity;
 using System.Threading;
-using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 
 namespace GoogleCloudSamples
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Launch a thread that watches the book detail subscription.
             var container = App_Start.UnityConfig.GetConfiguredContainer();
-            var bookDetailLookup = new BookDetailLookup(LibUnityConfig.ProjectId);
+            LibUnityConfig.RegisterTypes(container);
+            var bookDetailLookup = new BookDetailLookup(LibUnityConfig.ProjectId,
+                logger: LogTicker.Instance);
             bookDetailLookup.CreateTopicAndSubscription();
             var pullTask = bookDetailLookup.StartPullLoop(container.Resolve<IBookStore>(),
                 new CancellationTokenSource().Token);

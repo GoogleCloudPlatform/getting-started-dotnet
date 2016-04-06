@@ -26,6 +26,7 @@
 // limitations under the License.
 
 using GoogleCloudSamples.Models;
+using GoogleCloudSamples.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,14 +79,18 @@ namespace GoogleCloudSamples
                 "GoogleCloudSamples:ProjectId to your google project id.");
         }
 
-        [Fact]
-        public void TestPubsub()
+        private BookDetailLookup NewBookDetailLookup()
         {
             var options = new BookDetailLookup.Options();
             options.SubscriptionName += "-test";
             options.TopicName += "-test";
-            BookDetailLookup bookDetailLookup =
-                new BookDetailLookup(s_projectId, options);
+            return new BookDetailLookup(s_projectId, options);
+        }
+
+        [Fact]
+        public void TestPubsub()
+        {
+            BookDetailLookup bookDetailLookup = NewBookDetailLookup();
             bookDetailLookup.CreateTopicAndSubscription();
             bookDetailLookup.EnqueueBook(45);
             var cancel = new CancellationTokenSource();
@@ -101,7 +106,8 @@ namespace GoogleCloudSamples
         public void TestProcessBook()
         {
             FakeBookStore bookStore = new FakeBookStore();
-            BookDetailLookup.ProcessBook(bookStore, 3);
+            BookDetailLookup bookDetailLookup = NewBookDetailLookup();
+            bookDetailLookup.ProcessBook(bookStore, 3);
             Assert.Equal(3, bookStore.UpdatedBook.Id);
             Assert.Equal("Test-Driven JavaScript Development", bookStore.UpdatedBook.Title);
             Assert.Equal("Christian Johansen", bookStore.UpdatedBook.Author);
@@ -110,11 +116,7 @@ namespace GoogleCloudSamples
         [Fact]
         public void TestLoop()
         {
-            var options = new BookDetailLookup.Options();
-            options.SubscriptionName += "-test";
-            options.TopicName += "-test";
-            BookDetailLookup bookDetailLookup =
-                new BookDetailLookup(s_projectId, options);
+            BookDetailLookup bookDetailLookup = NewBookDetailLookup();
             bookDetailLookup.CreateTopicAndSubscription();
             var cancel = new CancellationTokenSource();
             var pullTask = bookDetailLookup.StartPullLoop(new FakeBookStore(), cancel.Token);

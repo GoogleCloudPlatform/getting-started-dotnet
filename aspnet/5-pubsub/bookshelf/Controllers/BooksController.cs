@@ -28,7 +28,7 @@ namespace GoogleCloudSamples.Controllers
         private const int _pageSize = 10;
 
         private readonly IBookStore _store;
-        private BookDetailLookup _bookDetailLookup;
+        private readonly BookDetailLookup _bookDetailLookup;
         private readonly ImageUploader _imageUploader;
 
         public BooksController(IBookStore store, ImageUploader imageUploader, BookDetailLookup bookDetailLookup)
@@ -91,6 +91,7 @@ namespace GoogleCloudSamples.Controllers
             }
             return ViewForm("Create", "Create", book);
         }
+
         // [END create]
 
         /// <summary>
