@@ -33,22 +33,57 @@ function GetFiles($path = $null, [string[]]$masks = '*', $maxDepth = 0, $depth=-
     }
 }
 
-function GetScriptDirectory
+function GetRootDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value
     Split-Path $Invocation.MyCommand.Path
 }
 
-# Run inner runTests.ps1 scripts.
-filter RunTestScript {
-    Set-Location $_.Directory
-    echo $_.FullName
-    Invoke-Expression (".\" + $_.Name)
-    $LASTEXITCODE
+$rootDir = GetRootDirectory
+
+# Run inner runTests.ps1 scripts.  Script names passed via pipe $input.
+function RunTestScripts 
+{
+    # Keep running lists of successes and failures.
+    # Array of strings: the relative path of the inner script.
+    $successes = @()
+    $failures = @()
+    foreach ($script in $input) {
+        Set-Location $script.Directory
+        $relativePath = $script.FullName.Substring($rootDir.Length + 1, $script.FullName.Length - $rootDir.Length - 1)
+        echo $relativePath
+        # A script can fail two ways.
+        # 1. Throw an exception.
+        # 2. The last command it executed failed. 
+        Try {
+            Invoke-Expression (".\" + $script.Name)
+            if ($LASTEXITCODE) {
+                $failures += $relativePath
+            } else {
+                $successes += $relativePath
+            }
+        }
+        Catch {
+            echo  $_.Exception.Message
+            $failures += $relativePath
+        }
+    }
+    # Print a final summary.
+    echo "==============================================================================="
+    $successCount = $successes.Count
+    echo "$successCount SUCCEEDED"
+    echo $successes
+    $failureCount = $failures.Count
+    echo "$failureCount FAILED"
+    echo $failures
+    # Throw an exception to set ERRORLEVEL to 1 in the calling process.
+    if ($failureCount) {
+        throw "$failureCount FAILED"
+    }
 }
 
 ##############################################################################
-# aspnet-core tests.
+# core tests.
 
 dnvm use 1.0.0-rc1-update1 -r clr
 
@@ -61,7 +96,6 @@ filter BuildAndRunLocalTest {
     {
         Start-Sleep -Seconds 4  # Wait for web process to start up.
         casperjs $_ http://localhost:5000
-        $LASTEXITCODE
     }
     Finally
     {
@@ -72,7 +106,7 @@ filter BuildAndRunLocalTest {
 ##############################################################################
 # aspnet tests.
 $curDir = pwd
-cd (Join-Path (GetScriptDirectory) "aspnet")
+cd (Join-Path $rootDir "aspnet")
 $env:GETTING_STARTED_DOTNET = pwd
 $env:APPLICATIONHOST_CONFIG =  Get-ChildItem .\applicationhost.config
 cd $curDir
@@ -105,7 +139,9 @@ function RunIISExpressTest($sitename = '', $testjs = 'test.js') {
     {
         Start-Sleep -Seconds 4  # Wait for web process to start up.
         casperjs $testjs http://localhost:$port
-        $LASTEXITCODE
+        if ($LASTEXITCODE) {
+            throw "Casperjs failed with error code $LASTEXITCODE"
+        }
     }
     Finally
     {
@@ -115,7 +151,13 @@ function RunIISExpressTest($sitename = '', $testjs = 'test.js') {
 
 function BuildSolution() {
     nuget restore
+    if ($LASTEXITCODE) {
+        throw "Nuget failed with error code $LASTEXITCODE"
+    }
     msbuild /p:Configuration=Debug
+    if ($LASTEXITCODE) {
+        throw "Msbuild failed with error code $LASTEXITCODE"
+    }
 }
 
 ##############################################################################
@@ -126,7 +168,7 @@ Try
 {
     # Use Where-Object to avoid infinitely recursing, because this script
     # matches the mask.
-    GetFiles -masks '*runtests.ps1' -maxDepth 2 | Where-Object FullName -ne $PSCommandPath | RunTestScript
+    GetFiles -masks '*runtests*.ps1' -maxDepth 2 | Where-Object FullName -ne $PSCommandPath | RunTestScripts
 }
 Finally
 {
