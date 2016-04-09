@@ -193,24 +193,6 @@
           "lib/net40/Google.Apis.Auth.PlatformServices.dll": {}
         }
       },
-      "Google.Apis.Common/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        }
-      },
       "Google.Apis.Core/1.10.0": {
         "type": "package",
         "dependencies": {
@@ -251,28 +233,6 @@
         },
         "runtime": {
           "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.dll": {}
-        }
-      },
-      "Google.Apis.Storage.v1.ClientWrapper/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Google.Apis.Auth": "1.10.0",
-          "Google.Apis.Common": "0.1.0-alpha-1",
-          "Google.Apis.Core": "1.10.0",
-          "Google.Apis.Storage.v1": "1.10.0.550",
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
         }
       },
       "Ix-Async/1.2.5": {
@@ -2484,24 +2444,6 @@
           "lib/net40/Google.Apis.Auth.PlatformServices.dll": {}
         }
       },
-      "Google.Apis.Common/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        }
-      },
       "Google.Apis.Core/1.10.0": {
         "type": "package",
         "dependencies": {
@@ -2542,28 +2484,6 @@
         },
         "runtime": {
           "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.dll": {}
-        }
-      },
-      "Google.Apis.Storage.v1.ClientWrapper/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Google.Apis.Auth": "1.10.0",
-          "Google.Apis.Common": "0.1.0-alpha-1",
-          "Google.Apis.Core": "1.10.0",
-          "Google.Apis.Storage.v1": "1.10.0.550",
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
         }
       },
       "Ix-Async/1.2.5": {
@@ -4778,24 +4698,6 @@
           "lib/net40/Google.Apis.Auth.PlatformServices.dll": {}
         }
       },
-      "Google.Apis.Common/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Common.dll": {}
-        }
-      },
       "Google.Apis.Core/1.10.0": {
         "type": "package",
         "dependencies": {
@@ -4836,28 +4738,6 @@
         },
         "runtime": {
           "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.dll": {}
-        }
-      },
-      "Google.Apis.Storage.v1.ClientWrapper/0.1.0-alpha-1": {
-        "type": "package",
-        "dependencies": {
-          "Google.Apis.Auth": "1.10.0",
-          "Google.Apis.Common": "0.1.0-alpha-1",
-          "Google.Apis.Core": "1.10.0",
-          "Google.Apis.Storage.v1": "1.10.0.550",
-          "Ix-Async": "1.2.5"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll": {}
         }
       },
       "Ix-Async/1.2.5": {
@@ -7081,19 +6961,6 @@
         "License.txt"
       ]
     },
-    "Google.Apis.Common/0.1.0-alpha-1": {
-      "type": "package",
-      "sha512": "M9kklUJTUPK1JhcaWGji3cRCVZJeCr8+BNQ+V5AjD7H14cDcXi6fww+2TYWI7adRUEcI5bEztZR8L7G6mIkiNw==",
-      "files": [
-        "Google.Apis.Common.0.1.0-alpha-1.nupkg",
-        "Google.Apis.Common.0.1.0-alpha-1.nupkg.sha512",
-        "Google.Apis.Common.nuspec",
-        "lib/dotnet5.4/Google.Apis.Common.dll",
-        "lib/dotnet5.4/Google.Apis.Common.xml",
-        "lib/net451/Google.Apis.Common.dll",
-        "lib/net451/Google.Apis.Common.xml"
-      ]
-    },
     "Google.Apis.Core/1.10.0": {
       "type": "package",
       "sha512": "O7Cz2+ujpK+m1j3JeD+qXG/+7D9H8SMBiY2uHfewco+V9g4ScQUn5MoPuPkrGsAnLcjitC6qPCgyt2rhUZUVpg==",
@@ -7129,17 +6996,6 @@
         "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.dll",
         "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.pdb",
         "lib/portable-net40+sl50+win+wpa81+wp80/Google.Apis.Storage.v1.xml"
-      ]
-    },
-    "Google.Apis.Storage.v1.ClientWrapper/0.1.0-alpha-1": {
-      "type": "package",
-      "sha512": "VDch2Q5DrkwuaIMc01kwnD0rHJSMHS7nH1m9Bk4KZvQUdc8Km5iAhOaqVZIJHnE0g5oqmYUdZEvDMIEIh9uSlA==",
-      "files": [
-        "Google.Apis.Storage.v1.ClientWrapper.0.1.0-alpha-1.nupkg",
-        "Google.Apis.Storage.v1.ClientWrapper.0.1.0-alpha-1.nupkg.sha512",
-        "Google.Apis.Storage.v1.ClientWrapper.nuspec",
-        "lib/net451/Google.Apis.Storage.v1.ClientWrapper.dll",
-        "lib/net451/Google.Apis.Storage.v1.ClientWrapper.xml"
       ]
     },
     "Ix-Async/1.2.5": {

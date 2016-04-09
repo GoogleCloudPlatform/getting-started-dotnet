@@ -281,7 +281,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
-    <Compile Include="Models\ApplicationDbContextFactory.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\BookList.cs" />
