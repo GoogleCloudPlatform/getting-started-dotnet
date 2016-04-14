@@ -22,8 +22,8 @@ namespace GoogleCloudSamples.Services
 {
     public class ImageUploader
     {
-        private string _bucketName;
-        private StorageClient _storageClient;
+        private readonly string _bucketName;
+        private readonly StorageClient _storageClient;
 
         public ImageUploader(string bucketName, string applicationName)
         {
