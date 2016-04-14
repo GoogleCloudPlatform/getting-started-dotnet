@@ -12,6 +12,8 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+param([switch]$lint)
+
 # Recursively retrieve all the files in a directory that match one of the
 # masks.
 function GetFiles($path = $null, [string[]]$masks = '*', $maxDepth = 0, $depth=-1)
@@ -160,12 +162,30 @@ function BuildSolution() {
     }
 }
 
+filter RunLint {
+    codeformatter.exe /rule:BraceNewLine /rule:ExplicitThis /rule:ExplicitVisibility /rule:FieldNames /rule:FormatDocument /rule:ReadonlyFields /rule:UsingLocation /nocopyright $_.FullName
+    if ($LASTEXITCODE) {
+        throw "codeformatter failed with exit code $LASTEXITCODE."
+    }
+    # If git reports a diff, codeformatter changed something, and that's bad.
+    $diff = git diff
+    if ($diff) {
+        $diff
+        throw "Lint failed for $_"
+    }
+}
+
 ##############################################################################
 # main
 # Leave the user in the same directory as they started.
 $originalDir = Get-Location
 Try
 {
+    # First, lint everything.  If the lint fails, don't waste time running
+    # tests.
+    if ($lint) {
+        GetFiles -masks '*.csproj' -maxDepth 2 | RunLint
+    }
     # Use Where-Object to avoid infinitely recursing, because this script
     # matches the mask.
     GetFiles -masks '*runtests*.ps1' -maxDepth 2 | Where-Object FullName -ne $PSCommandPath | RunTestScripts
