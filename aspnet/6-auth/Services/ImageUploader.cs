@@ -28,17 +28,15 @@ namespace GoogleCloudSamples.Services
         private readonly string _bucketName;
         private readonly string _applicationName;
 
-        public ImageUploader(string bucketName, string applicationName)
+        public ImageUploader(string bucketName)
         {
             _bucketName = bucketName;
-            _applicationName = applicationName;
         }
 
         public async Task<String> UploadImage(HttpPostedFileBase image, long id)
         {
             // Create client and use it to upload object to Cloud Storage
-            var client = await StorageClient
-                .FromApplicationCredentials(_applicationName);
+            var client = await StorageClient.CreateAsync();
 
             var imageAcl = ObjectsResource
                 .InsertMediaUpload.PredefinedAclEnum.PublicRead;
@@ -56,8 +54,7 @@ namespace GoogleCloudSamples.Services
 
         public async Task DeleteUploadedImage(long id)
         {
-            var client = await StorageClient
-                .FromApplicationCredentials(_applicationName);
+            var client = await StorageClient.CreateAsync();
             client.DeleteObject(_bucketName, id.ToString());
         }
     }

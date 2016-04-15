@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using Google.Storage.V1;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -21,6 +22,10 @@ namespace GoogleCloudSamples
     {
         protected void Application_Start()
         {
+            // This helps Google determine how many developers have been through
+            // this Getting Started guide. Regular applications do not need to set this.
+            StorageClientImpl.ApplicationName = "Bookshelf.NET-Step5";
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -104,8 +104,7 @@ namespace GoogleCloudSamples
 
             container.RegisterInstance<ImageUploader>(
                 new ImageUploader(
-                  Config.GetConfigVariable("GoogleCloudSamples:BucketName"),
-                  Config.GetConfigVariable("GoogleCloudSamples:ApplicationName")
+                  Config.GetConfigVariable("GoogleCloudSamples:BucketName")
                 )
             );
         }

@@ -81,7 +81,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Storage.V1, Version=0.1.0.0, Culture=neutral, PublicKeyToken=185c282632e132a0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Storage.V1.0.1.0-CI00039\lib\net45\Google.Storage.V1.dll</HintPath>
+      <HintPath>..\packages\Google.Storage.V1.0.1.0-CI00063\lib\net45\Google.Storage.V1.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
