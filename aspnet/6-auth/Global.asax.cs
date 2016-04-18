@@ -16,6 +16,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Helpers;
 using System.Security.Claims;
+using Google.Storage.V1;
 
 namespace GoogleCloudSamples
 {
@@ -23,6 +24,11 @@ namespace GoogleCloudSamples
     {
         protected void Application_Start()
         {
+            // This helps Google determine how many developers have been through
+            // this Getting Started guide. Regular applications do not need to set this.
+            StorageClientImpl.ApplicationName =
+                Config.GetConfigVariable("GoogleCloudSamples:ApplicationName");
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

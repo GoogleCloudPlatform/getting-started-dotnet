@@ -53,8 +53,7 @@ namespace GoogleCloudSamples.App_Start
 
             container.RegisterInstance<ImageUploader>(
                 new ImageUploader(
-                  LibUnityConfig.GetConfigVariable("GoogleCloudSamples:BucketName"),
-                  "Bookshelf.NET-Step5"
+                  LibUnityConfig.GetConfigVariable("GoogleCloudSamples:BucketName")
                 )
             );
         }

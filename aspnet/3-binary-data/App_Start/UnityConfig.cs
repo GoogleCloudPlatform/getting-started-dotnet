@@ -119,8 +119,7 @@ namespace GoogleCloudSamples
 
             container.RegisterInstance<ImageUploader>(
                 new ImageUploader(
-                  GetConfigVariable("GoogleCloudSamples:BucketName"),
-                  "Bookshelf.NET-Step3"
+                  GetConfigVariable("GoogleCloudSamples:BucketName")
                 )
             );
         }
