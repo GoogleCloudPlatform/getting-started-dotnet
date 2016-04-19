@@ -319,11 +319,9 @@ function Run-TestScripts
     # Array of strings: the relative path of the inner script.
     $successes = @()
     $failures = @()
-    $separator = $null
     foreach ($script in $scripts) {
         $relativePath = Resolve-Path -Relative $script.FullName
-        echo $separator
-        $separator = "-" * 79
+        echo ("-" * 79)
         echo $relativePath
         Set-Location $script.Directory
         # A script can fail two ways.
@@ -571,5 +569,39 @@ function Migrate-Database($DllName = '') {
     }
     Finally {
         cd $originalDir
+    }
+}
+
+##############################################################################
+#.SYNOPSIS
+# Calls nuget update on all the packages that match the mask.
+#
+#.PARAMETER Mask
+# Which packages should be updated?
+#
+#.INPUTS
+# Paths to .sln files.  If empty, recursively searches directories for
+# *.sln files.
+#
+#.EXAMPLE
+# Update-Packages Google.*
+##############################################################################
+filter Update-Packages ([string] $Mask) {
+    $solutions = When-Empty $_ $args { Find-Files -Masks *.sln }
+    foreach ($solution in $solutions) {
+        # Nuget refuses to update without calling restore first.
+        nuget restore $solution
+        # Assume all packages.configs in the same directory, or a subdirectory
+        # as the solution are for projects in the solution.
+        $packageConfigs = Find-Files (Get-Item $solution).Directory -Masks packages.config
+        # Inspect each packages.config and find matching Ids.
+        $packageIds = $packageConfigs `
+            | ForEach-Object {(Select-Xml -Path $_ -XPath packages/package).Node.Id} `
+            | Where {$_ -like $Mask}
+        # Calling nuget update with no packageIds means update *all* packages,
+        # and that's definitely not what we want.
+        if ($packageIds) {
+            nuget update -Prerelease $solution ($packageIds | ForEach-Object {"-Id", $_})
+        }
     }
 }
