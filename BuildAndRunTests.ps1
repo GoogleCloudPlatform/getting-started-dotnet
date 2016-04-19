@@ -12,7 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-param([switch]$lint)
+param([switch]$Lint, [switch]$UpdatePackages, [string]$PackageMask="Google.*")
 
 $private:invocation = (Get-Variable MyInvocation -Scope 0).Value
 
@@ -21,8 +21,11 @@ Import-Module (Join-Path (Split-Path $invocation.MyCommand.Path) `
 
 # First, lint everything.  If the lint fails, don't waste time running
 # tests.
-if ($lint) {
+if ($Lint) {
     Lint-Code
+}
+if ($UpdatePackages) {
+    Update-Packages $PackageMask
 }
 $private:modifiedConfigs = Update-Config
 Try {
