@@ -68,8 +68,7 @@ namespace GoogleCloudSamples
         /// </summary>
         public static string GetConfigVariable(string key)
         {
-            string value = Environment.GetEnvironmentVariable(key) ??
-                ConfigurationManager.AppSettings[key];
+            string value = ConfigurationManager.AppSettings[key];
             if (value == null)
                 throw new ConfigurationException($"You must set the configuration variable {key}.");
             return value;
@@ -98,7 +97,6 @@ namespace GoogleCloudSamples
         /// <param name="container">The unity container to configure.</param>
         public static void RegisterTypes(IUnityContainer container)
         {
-            ApplicationDbContextFactory factory;
             switch (ChooseBookStoreFromConfig())
             {
                 case BookStoreFlag.Datastore:
@@ -107,9 +105,6 @@ namespace GoogleCloudSamples
                     break;
 
                 case BookStoreFlag.MySql:
-                    factory = new ApplicationDbContextFactory();
-                    container.RegisterType<ApplicationDbContext>(
-                        new InjectionFactory((x) => factory.Create()));
                     container.RegisterType<IBookStore, DbBookStore>();
                     break;
             }

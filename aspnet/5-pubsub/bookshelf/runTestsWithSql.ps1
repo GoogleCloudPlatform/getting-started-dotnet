@@ -11,9 +11,8 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under
 # the License.
-Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
+Import-Module ..\..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore mysql
-Build-Solution
-Migrate-Database
-Run-IISExpressTest
+Build-Solution ..\5-pubsub.sln
+Run-IISExpressTest 5-pubsub-bookshelf

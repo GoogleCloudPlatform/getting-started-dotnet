@@ -86,7 +86,6 @@ namespace GoogleCloudSamples
         /// <param name="container">The unity container to configure.</param>
         public static void RegisterTypes(IUnityContainer container)
         {
-            ApplicationDbContextFactory factory;
             switch (ChooseBookStoreFromConfig())
             {
                 case BookStoreFlag.Datastore:
@@ -95,9 +94,6 @@ namespace GoogleCloudSamples
                     break;
 
                 case BookStoreFlag.MySql:
-                    factory = new ApplicationDbContextFactory();
-                    container.RegisterType<ApplicationDbContext>(
-                        new InjectionFactory((x) => factory.Create()));
                     container.RegisterType<IBookStore, DbBookStore>();
                     break;
             }

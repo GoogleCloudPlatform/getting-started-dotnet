@@ -11,8 +11,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under
 # the License.
+Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
 
 $env:Data:BookStore = "postgres"
-"test.js" | BuildAndRunLocalTest
+BuildAndRun-CoreTest
 $env:Data:BookStore = "datastore"
-"test.js" | BuildAndRunLocalTest
+BuildAndRun-CoreTest
