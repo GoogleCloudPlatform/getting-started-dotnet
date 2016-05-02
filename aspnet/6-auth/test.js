@@ -15,6 +15,10 @@
 // 1.0 style test script not using the `casperjs test` subcommand
 var casper = require('casper').create();
 var host = casper.cli.args[0];
+var fileName = '..\\..\\GoogleCloudPlatform.png';
+var placeholderImageUrl = 'http://placekitten.com/g/128/192';
+var imageSrcUrl = '';
+var bookDetailsUrl = '';
 
 casper.start(host + '/', function (response) {
     console.log('Starting ' + host + '/');
@@ -34,7 +38,8 @@ casper.thenClick('#add-book', function () {
         'Book.Title': 'test.js',
         'Book.Author': 'test.js',
         'Book.PublishedDate': '2000-01-01',
-        'Book.Description': 'Automatically added by test.js'
+        'Book.Description': 'Automatically added by test.js',
+        'image': fileName
     }, false);
     console.log('Filled form.');
 });
@@ -43,6 +48,22 @@ casper.thenClick('button', function () {
     console.log('Submitted.  New location is ' + this.getCurrentUrl());
     this.test.assertEquals(this.fetchText('.book-description'),
         'Automatically added by test.js');
+    // Save the current URL for revisiting, after testing cover image
+    bookDetailsUrl = this.getCurrentUrl();
+    // Confirm that cover image src isn't set to placeholder image
+    this.test.assertNotEquals(imageSrcUrl, placeholderImageUrl,
+        "Image src is not set to placeholder image.")
+    console.log("Image src = " + imageSrcUrl);
+});
+
+casper.thenOpen(imageSrcUrl, function (response) {
+    console.log('Testing for 200 HTTP status of cover image URL.');
+    this.test.assertEquals(response.status, 200);
+});
+
+casper.thenOpen(bookDetailsUrl, function (response) {
+    console.log('Reloading book details page.');
+    this.test.assertEquals(response.status, 200);
 });
 
 casper.thenClick('button', function (response) {
