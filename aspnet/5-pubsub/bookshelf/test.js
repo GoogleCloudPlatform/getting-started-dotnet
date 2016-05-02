@@ -50,9 +50,10 @@ casper.thenClick('button', function () {
     // Save the current URL for revisiting, after testing cover image
     bookDetailsUrl = this.getCurrentUrl();
     // Confirm that cover image src isn't set to placeholder image
+    imageSrcUrl = this.getElementAttribute('img[class="book-image"]', 'src');
     this.test.assertNotEquals(imageSrcUrl, placeholderImageUrl,
-        "Image src is not set to placeholder image.")
-    console.log("Image src = " + imageSrcUrl);
+        'Image src is not set to placeholder image.')
+    console.log('Image src = ' + imageSrcUrl);
 });
 
 casper.thenOpen(imageSrcUrl, function (response) {
