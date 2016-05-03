@@ -42,11 +42,12 @@ casper.thenClick('#add-book', function () {
     console.log('Inserting cover image file.');
     this.page.uploadFile('#image', fileName);
     console.log('Filled form.');
-    this.wait(1000);
+    this.wait(2000);
     console.log('Submitting form.');
 });
 
 casper.thenClick('#submit.btn', function () {
+    this.wait(2000);
     console.log('Submitted.  New location is ' + this.getCurrentUrl());
     this.test.assertEquals(this.fetchText('.book-description'),
         'Automatically added by test.js');
