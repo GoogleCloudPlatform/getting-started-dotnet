@@ -15,7 +15,7 @@
 // 1.0 style test script not using the `casperjs test` subcommand
 var casper = require('casper').create();
 var host = casper.cli.args[0];
-var fileName = './cat-image.jpg';
+var fileName = 'cat-image.jpg';
 var placeholderImageUrl = 'http://placekitten.com/g/128/192';
 var imageSrcUrl = '';
 var bookDetailsUrl = '';
