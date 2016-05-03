@@ -39,7 +39,7 @@ casper.thenClick('#add-book', function () {
         'Book.PublishedDate': '2000-01-01',
         'Book.Description': 'Automatically added by test.js',
         'image': fileName
-    }, true);
+    }, false);
     console.log('Filled form.');
     this.wait(1000);
     console.log('Submitting form.');
