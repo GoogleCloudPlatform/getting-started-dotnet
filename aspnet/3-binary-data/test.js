@@ -47,7 +47,10 @@ casper.thenClick('#add-book', function () {
 });
 
 casper.thenClick('#submit.btn', function () {
-    this.wait(2000);
+    this.wait(5000);
+});
+
+casper.then(function() {
     console.log('Submitted.  New location is ' + this.getCurrentUrl());
     this.test.assertEquals(this.fetchText('.book-description'),
         'Automatically added by test.js');
