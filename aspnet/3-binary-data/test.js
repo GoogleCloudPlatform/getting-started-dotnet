@@ -37,9 +37,10 @@ casper.thenClick('#add-book', function () {
         'Book.Title': 'test.js',
         'Book.Author': 'test.js',
         'Book.PublishedDate': '2000-01-01',
-        'Book.Description': 'Automatically added by test.js',
-        'image': fileName
+        'Book.Description': 'Automatically added by test.js'
     }, false);
+    console.log('Inserting cover image file.');
+    this.page.uploadFile('#image', fileName);
     console.log('Filled form.');
     this.wait(1000);
     console.log('Submitting form.');
