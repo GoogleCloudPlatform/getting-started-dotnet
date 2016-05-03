@@ -41,6 +41,8 @@ casper.thenClick('#add-book', function () {
         'image': fileName
     }, true);
     console.log('Filled form.');
+    this.wait(1000);
+    console.log('Submitting form.');
 });
 
 casper.thenClick('button', function () {
