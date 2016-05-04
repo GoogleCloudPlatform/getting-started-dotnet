@@ -47,6 +47,7 @@ casper.thenClick('#add-book', function () {
 
 casper.then(function () {
     this.click('button');
+    this.wait(5000);
 });
 
 casper.then(function() {
