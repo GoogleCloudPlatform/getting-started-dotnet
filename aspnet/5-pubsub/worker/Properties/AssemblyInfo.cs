@@ -21,9 +21,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("worker")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Google Inc")]
+[assembly: AssemblyCompany("Google Inc.")]
 [assembly: AssemblyProduct("worker")]
-[assembly: AssemblyCopyright("Copyright \u00A9 Google Inc 2016")]
+[assembly: AssemblyCopyright("Copyright \u00A9 Google Inc. 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("07b8d83b-470c-42f8-a129-e8dc658476b3")]
+[assembly: Guid("184e52e5-5739-415f-9b56-e0633524f13e")]
 
 // Version information for an assembly consists of the following four values:
 //
