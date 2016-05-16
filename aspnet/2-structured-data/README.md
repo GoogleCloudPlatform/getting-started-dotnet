@@ -26,8 +26,8 @@ See [CONTRIBUTING] for more information on how to get started.
 Apache 2.0 - See [LICENSE] for more information.
 
 
-[.NET Cloud Client Library]: https://github.com/googlecloudplatform/gcloud-dotnet
-[Cloud Datastore API]: https://cloud.google.com/datastore/docs/concepts/overview
+[.NET Cloud Client Library]: ../../../../../gcloud-dotnet
+[Cloud Datastore API]: https://developers.google.com/api-client-library/dotnet/apis/datastore/v1beta3
 [Cloud SQL API]: https://cloud.google.com/sql/docs/admin-api/
-[CONTRIBUTING]:https://github.com/GoogleCloudPlatform/gcloud-dotnet/blob/master/CONTRIBUTING.md
-[LICENSE]: https://github.com/GoogleCloudPlatform/gcloud-dotnet/blob/master/LICENSE
+[CONTRIBUTING]: ../../../../blob/master/CONTRIBUTING.md
+[LICENSE]: ../../../../blob/master/LICENSE

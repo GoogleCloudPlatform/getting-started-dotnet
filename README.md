@@ -35,11 +35,11 @@ The [core] directory contains ASP.NET Core samples that demonstrate how to acces
 
 * See [LICENSE](LICENSE)
 
-[.NET Cloud Client Library]: https://github.com/googlecloudplatform/gcloud-dotnet
-[Google API Client Library]: https://github.com/google/google-api-dotnet-client
-[aspnet]: https://github.com/GoogleCloudPlatform/getting-started-dotnet/tree/master/aspnet
-[core]: https://github.com/GoogleCloudPlatform/getting-started-dotnet/tree/master/core
-[Cloud Datastore API]: https://cloud.google.com/datastore/docs/concepts/overview
+[.NET Cloud Client Library]: ../gcloud-dotnet
+[Google API Client Library]: ../../google/google-api-dotnet-client
+[aspnet]: tree/master/aspnet
+[core]: tree/master/core
+[Cloud Datastore API]: https://developers.google.com/api-client-library/dotnet/apis/datastore/v1beta3
 [Cloud SQL API]: https://cloud.google.com/sql/docs/admin-api/
-[Cloud Storage API]: https://cloud.google.com/storage/docs/apis
-[Cloud Pub/Sub API]: https://cloud.google.com/pubsub/docs/apis
+[Cloud Storage API]: http://googlecloudplatform.github.io/gcloud-dotnet/index.html
+[Cloud Pub/Sub API]: https://developers.google.com/api-client-library/dotnet/apis/pubsub/v1
