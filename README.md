@@ -35,8 +35,8 @@ The [core] directory contains ASP.NET Core samples that demonstrate how to acces
 
 * See [LICENSE](LICENSE)
 
-[.NET Cloud Client Library]: ../gcloud-dotnet
-[Google API Client Library]: ../../google/google-api-dotnet-client
+[.NET Cloud Client Library]: https://github.com/googlecloudplatform/gcloud-dotnet
+[Google API Client Library]: https://github.com/google/google-api-dotnet-client
 [aspnet]: tree/master/aspnet
 [core]: tree/master/core
 [Cloud Datastore API]: https://developers.google.com/api-client-library/dotnet/apis/datastore/v1beta3
