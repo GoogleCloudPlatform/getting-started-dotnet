@@ -16,6 +16,8 @@ using Google.Datastore.V1Beta3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf;
+using Google.Api.Gax;
 
 using static Google.Datastore.V1Beta3.CommitRequest.Types;
 using static Google.Datastore.V1Beta3.PropertyFilter.Types;
@@ -27,6 +29,39 @@ namespace GoogleCloudSamples.Models
     public static class DatastoreBookStoreExtensionMethods
     {
         /// <summary>
+        /// Make a datastore key given a book's id.
+        /// </summary>
+        /// <param name="id">A book's id.</param>
+        /// <returns>A datastore key.</returns>
+        public static Key ToKey(this long id)
+        {
+            // P0 This function is especially useful, but I see no way to implement it
+            // with the new KeyFactory().  Because this is static.
+            return new Key()
+            {
+                Path = new KeyPathElement[]
+                {
+                    new KeyPathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
+                }
+            };
+        }
+
+        /// <summary>
+        /// Make a book id given a datastore key.
+        /// </summary>
+        /// <param name="key">A datastore key</param>
+        /// <returns>A book id.</returns>
+        public static long ToId(this Key key)
+        {
+            return (long)key.Path.First().Id;
+        }
+
+        // P2 What I really want is an ORM-like solution so that I don't
+        // have to implement ToEntity() and ToBook().  It should observe
+        // the System.ComponentModel.DataAnnotations annotations and act
+        // accordingly.
+
+        /// <summary>
         /// Create a datastore entity with the same values as book.
         /// </summary>
         /// <param name="book">The book to store in datastore.</param>
@@ -34,6 +69,8 @@ namespace GoogleCloudSamples.Models
         /// [START toentity]
         public static Entity ToEntity(this Book book)
         {
+            // Other than the aforementioned ToKey() issues, this is really
+            // nice.  About as nice as it can be.
             var entity = new Entity();
             entity.Key = book.Id.ToKey();
             entity["Title"] = book.Title;
@@ -55,17 +92,21 @@ namespace GoogleCloudSamples.Models
         {
             Book book = new Book();
             book.Id = (long)entity.Key.Path.First().Id;
-            // Having to call ?.StringValue is annoying.  In C++, the Value type would
+            // P1 Having to call ?.StringValue is annoying.  In C++, the Value type would
             // be automatically castable to these other types:
             // class Value {
             //   operator string()();
             // Not sure if that's possible in C#.
             // An alternative might be:
+            //   book.Title = entity<String>["Title"];
+            // or
+            //   book.Title = entity.Get<String>("Title");
+            // or
             //   book.Title = entity.GetString("Title");
             // Not sure I like it better.
             book.Title = entity["Title"]?.StringValue;
             book.Author = entity["Author"]?.StringValue;
-            // TimestampValue doesn't seem very useful.
+            // P2 TimestampValue doesn't seem very useful.
             book.PublishedDate = entity["PublishedDate"]?.TimestampValue.ToDateTime();
             book.ImageUrl = entity["ImageUrl"]?.StringValue;
             book.Description = entity["Description"]?.StringValue;
@@ -78,6 +119,7 @@ namespace GoogleCloudSamples.Models
     {
         private readonly string _projectId;
         private readonly DatastoreClient _datastore;
+        private readonly DatastoreFoo _foo;
 
         /// <summary>
         /// Create a new datastore-backed bookstore.
@@ -88,19 +130,19 @@ namespace GoogleCloudSamples.Models
             _projectId = projectId;
             // Use Application Default Credentials.
             _datastore = DatastoreClient.Create();
+            // I like this better.
+            _foo = DatastoreFoo.Create(_projectId);
         }
 
         // [START create]
         public void Create(Book book)
         {
-            // Why do I have to pass the _projectId again here if it's already in the key?
-            // Actually, I want the projectId baked into the datastore client so I never have
-            // to specify it again.
-            // Calling .ToInsert() is very weird.
+            // P0 Calling .ToInsert() is very weird.
             // Having two very different ways to insert, update, etc. depending on whether or not
-            // I'm in a transaction is annoying.  I want one interface to do it.
+            // I'm in a transaction is annoying.  I want one *interface* to do it.
             // How about a NullTransaction where all operations are immediately committed, and the
-            // final .Commit() is a no-op?
+            // final .Commit() is a no-op?  Or, make DatastoreFoo and Transaction implement the
+            // same interface?
             CommitResponse response = _datastore.Commit(_projectId, Mode.NonTransactional, new[] { book.ToEntity().ToInsert() });
             Key key = response.MutationResults[0].Key;
             book.Id = key.Path.First().Id;
@@ -109,10 +151,11 @@ namespace GoogleCloudSamples.Models
 
         public void Delete(long id)
         {
-            CommitMutation(new Mutation()
-            {
-                Delete = new Key[] { id.ToKey() }
-            });
+            // Pretty good.
+            _foo.Delete(id.ToKey());
+            var trans = _foo.BeginTransaction();
+            trans.Delete(id.ToKey());
+            trans.Commit();
         }
 
         // [START list]
@@ -120,51 +163,47 @@ namespace GoogleCloudSamples.Models
         {
             var query = new Query()
             {
+                // Why do see a squiggly red line under "Book", but not in your snippet?
+                Kind = { "Book" },
                 Limit = pageSize,
-                Kinds = new[] { new KindExpression() { Name = "Book" } },
             };
 
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = nextPageToken;
 
-            var datastoreRequest = _datastore.Datasets.RunQuery(
-                datasetId: _projectId,
-                body: new RunQueryRequest() { Query = query }
-            );
+            var response = _foo.RunQuery(query);
 
-            var response = datastoreRequest.Execute();
             var results = response.Batch.EntityResults;
             var books = results.Select(result => result.Entity.ToBook());
 
             return new BookList()
             {
                 Books = books,
+                // More string vs proto byte string warnings below.  Why?
                 NextPageToken = books.Count() == pageSize
-                    && response.Batch.MoreResults == "MORE_RESULTS_AFTER_LIMIT"
+                    && response.Batch.MoreResults == QueryResultBatch.Types.MoreResultsType.MoreResultsAfterCursor
                     ? response.Batch.EndCursor : null,
             };
+
+            // List() ends up being still more code than I want to write.
+            // Wondering off into the realm of ponies and ORMs, I'd ideally
+            // like to write:
+            // var query = new Query<Book>() {
+            //   ...
+            // And have it take care of the entity to Book translations.
         }
         // [END list]
 
         public Book Read(long id)
         {
-            var found = _datastore.Datasets.Lookup(new LookupRequest()
-            {
-                Keys = new Key[] { id.ToKey() }
-            }, _projectId).Execute().Found;
-            if (found == null || found.Count == 0)
-            {
-                return null;
-            }
-            return found[0].Entity.ToBook();
+            // Nice!
+            return _foo.Lookup(id.ToKey())?.ToBook();
         }
 
         public void Update(Book book)
         {
-            CommitMutation(new Mutation()
-            {
-                Update = new Entity[] { book.ToEntity() }
-            });
+            // Very nice!
+            _foo.Update(book.ToEntity());
         }
     }
 }
