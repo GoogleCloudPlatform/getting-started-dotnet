@@ -23,6 +23,7 @@ using static Google.Datastore.V1Beta3.CommitRequest.Types;
 using static Google.Datastore.V1Beta3.PropertyFilter.Types;
 using static Google.Datastore.V1Beta3.PropertyOrder.Types;
 using static Google.Datastore.V1Beta3.ReadOptions.Types;
+// using Google.Apis.Datastore.v1beta2.Data;
 
 namespace GoogleCloudSamples.Models
 {
@@ -35,15 +36,7 @@ namespace GoogleCloudSamples.Models
         /// <returns>A datastore key.</returns>
         public static Key ToKey(this long id)
         {
-            // P0 This function is especially useful, but I see no way to implement it
-            // with the new KeyFactory().  Because this is static.
-            return new Key()
-            {
-                Path = new KeyPathElement[]
-                {
-                    new KeyPathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
-                }
-            };
+            return new Key().WithElement("Book", id);
         }
 
         /// <summary>
@@ -104,13 +97,13 @@ namespace GoogleCloudSamples.Models
             // or
             //   book.Title = entity.GetString("Title");
             // Not sure I like it better.
-            book.Title = entity["Title"]?.StringValue;
-            book.Author = entity["Author"]?.StringValue;
+            book.Title = (string) entity["Title"];
+            book.Author = (string) entity["Author"];
             // P2 TimestampValue doesn't seem very useful.
-            book.PublishedDate = entity["PublishedDate"]?.TimestampValue.ToDateTime();
-            book.ImageUrl = entity["ImageUrl"]?.StringValue;
-            book.Description = entity["Description"]?.StringValue;
-            book.CreatedById = entity["CreatedById"]?.StringValue;
+            book.PublishedDate = (DateTime) entity["PublishedDate"];
+            book.ImageUrl = (string) entity["ImageUrl"];
+            book.Description = (string) entity["Description"];
+            book.CreatedById = (string) entity["CreatedById"];
             return book;
         }
     }
@@ -161,15 +154,13 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query()
+            var query = new Query("Book")
             {
-                // Why do see a squiggly red line under "Book", but not in your snippet?
-                Kind = { "Book" },
                 Limit = pageSize,
             };
 
             if (!string.IsNullOrWhiteSpace(nextPageToken))
-                query.StartCursor = nextPageToken;
+                query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
 
             var response = _foo.RunQuery(query);
 
@@ -182,7 +173,7 @@ namespace GoogleCloudSamples.Models
                 // More string vs proto byte string warnings below.  Why?
                 NextPageToken = books.Count() == pageSize
                     && response.Batch.MoreResults == QueryResultBatch.Types.MoreResultsType.MoreResultsAfterCursor
-                    ? response.Batch.EndCursor : null,
+                    ? response.Batch.EndCursor.ToStringUtf8() : null,
             };
 
             // List() ends up being still more code than I want to write.
