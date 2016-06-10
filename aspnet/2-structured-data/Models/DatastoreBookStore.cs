@@ -100,7 +100,7 @@ namespace GoogleCloudSamples.Models
             book.Title = (string) entity["Title"];
             book.Author = (string) entity["Author"];
             // P2 TimestampValue doesn't seem very useful.
-            book.PublishedDate = (DateTime) entity["PublishedDate"];
+            book.PublishedDate = (DateTime?) entity["PublishedDate"];
             book.ImageUrl = (string) entity["ImageUrl"];
             book.Description = (string) entity["Description"];
             book.CreatedById = (string) entity["CreatedById"];
