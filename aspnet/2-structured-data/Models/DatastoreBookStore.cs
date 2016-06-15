@@ -156,22 +156,18 @@ namespace GoogleCloudSamples.Models
         {
             var query = new Query("Book")
             {
-                Limit = pageSize,
+                Limit = pageSize
             };
-
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
-
-            var results = _db.RunQuery(query);
-            var books = results.Select(result => result.ToBook());
-
+            FixedSizePage<Entity> firstPage = _db.RunQuery(query).AsPages().WithFixedSize(pageSize).First();
+            var books = firstPage.Select(result => result.ToBook());
             return new BookList()
             {
                 Books = books,
                 // More string vs proto byte string warnings below.  Why?
-                NextPageToken = books.Count() == pageSize
-                    && response.Batch.MoreResults == QueryResultBatch.Types.MoreResultsType.MoreResultsAfterCursor
-                    ? response.Batch.EndCursor.ToStringUtf8() : null,
+                NextPageToken = books.Count() == pageSize                   
+                    ? firstPage.NextPageToken : null,
             };
 
             // List() ends up being still more code than I want to write.
