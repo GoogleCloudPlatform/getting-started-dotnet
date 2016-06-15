@@ -112,7 +112,7 @@ namespace GoogleCloudSamples.Models
     {
         private readonly string _projectId;
         private readonly DatastoreClient _datastore;
-        private readonly DatastoreFoo _foo;
+        private readonly DatastoreDb _db;
 
         /// <summary>
         /// Create a new datastore-backed bookstore.
@@ -124,7 +124,7 @@ namespace GoogleCloudSamples.Models
             // Use Application Default Credentials.
             _datastore = DatastoreClient.Create();
             // I like this better.
-            _foo = DatastoreFoo.Create(_projectId);
+            _db = DatastoreDb.Create(_projectId);
         }
 
         // [START create]
@@ -145,8 +145,8 @@ namespace GoogleCloudSamples.Models
         public void Delete(long id)
         {
             // Pretty good.
-            _foo.Delete(id.ToKey());
-            var trans = _foo.BeginTransaction();
+            _db.Delete(id.ToKey());
+            var trans = _db.BeginTransaction();
             trans.Delete(id.ToKey());
             trans.Commit();
         }
@@ -162,10 +162,8 @@ namespace GoogleCloudSamples.Models
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
 
-            var response = _foo.RunQuery(query);
-
-            var results = response.Batch.EntityResults;
-            var books = results.Select(result => result.Entity.ToBook());
+            var results = _db.RunQuery(query);
+            var books = results.Select(result => result.ToBook());
 
             return new BookList()
             {
@@ -188,13 +186,13 @@ namespace GoogleCloudSamples.Models
         public Book Read(long id)
         {
             // Nice!
-            return _foo.Lookup(id.ToKey())?.ToBook();
+            return _db.Lookup(id.ToKey())?.ToBook();
         }
 
         public void Update(Book book)
         {
             // Very nice!
-            _foo.Update(book.ToEntity());
+            _db.Update(book.ToEntity());
         }
     }
 }

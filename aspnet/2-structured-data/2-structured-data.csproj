@@ -58,7 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Api.Gax, Version=0.1.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
-      <HintPath>packages\Google.Api.Gax.0.1.0-CI00049\lib\net45\Google.Api.Gax.dll</HintPath>
+      <HintPath>packages\Google.Api.Gax.0.1.0-CI00055\lib\net45\Google.Api.Gax.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Apis, Version=1.11.0.17797, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
@@ -86,7 +86,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Datastore.V1Beta3, Version=0.1.0.0, Culture=neutral, PublicKeyToken=185c282632e132a0, processorArchitecture=MSIL">
-      <HintPath>packages\Google.Datastore.V1Beta3.0.1.0-datastorefoo\lib\net45\Google.Datastore.V1Beta3.dll</HintPath>
+      <HintPath>packages\Google.Datastore.V1Beta3.0.1.0-CI00126\lib\net45\Google.Datastore.V1Beta3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
