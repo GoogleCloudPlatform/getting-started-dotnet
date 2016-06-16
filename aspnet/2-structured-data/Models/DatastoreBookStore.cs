@@ -68,7 +68,7 @@ namespace GoogleCloudSamples.Models
             entity.Key = book.Id.ToKey();
             entity["Title"] = book.Title;
             entity["Author"] = book.Author;
-            entity["PublishedDate"] = book.PublishedDate;
+            entity["PublishedDate"] = book.PublishedDate?.ToUniversalTime();
             entity["ImageUrl"] = book.ImageUrl;
             entity["Description"] = book.Description;
             entity["CreateById"] = book.CreatedById;
@@ -154,10 +154,7 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query("Book")
-            {
-                Limit = pageSize
-            };
+            var query = new Query("Book");
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
             FixedSizePage<Entity> firstPage = _db.RunQuery(query).AsPages().WithFixedSize(pageSize).First();
