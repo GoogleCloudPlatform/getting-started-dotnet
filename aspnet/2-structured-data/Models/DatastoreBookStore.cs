@@ -12,11 +12,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Apis.Datastore.v1beta2;
-using Google.Apis.Datastore.v1beta2.Data;
+using Google.Datastore.V1Beta3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf;
+using Google.Api.Gax;
+
+using static Google.Datastore.V1Beta3.CommitRequest.Types;
+using static Google.Datastore.V1Beta3.PropertyFilter.Types;
+using static Google.Datastore.V1Beta3.PropertyOrder.Types;
+using static Google.Datastore.V1Beta3.ReadOptions.Types;
+using System.Diagnostics;
+// using Google.Apis.Datastore.v1beta2.Data;
 
 namespace GoogleCloudSamples.Models
 {
@@ -29,13 +37,7 @@ namespace GoogleCloudSamples.Models
         /// <returns>A datastore key.</returns>
         public static Key ToKey(this long id)
         {
-            return new Key()
-            {
-                Path = new KeyPathElement[]
-                {
-                    new KeyPathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
-                }
-            };
+            return new Key().WithElement("Book", id);
         }
 
         /// <summary>
@@ -48,34 +50,11 @@ namespace GoogleCloudSamples.Models
             return (long)key.Path.First().Id;
         }
 
-        /// <summary>
-        /// Get the property from the dict and return null if it isn't there.
-        /// </summary>
-        /// <param name="properties"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static Property GetValue(this IDictionary<string, Property> properties, string key)
-        {
-            Property value;
-            bool found = properties.TryGetValue(key, out value);
-            return found ? value : null;
-        }
+        // P2 What I really want is an ORM-like solution so that I don't
+        // have to implement ToEntity() and ToBook().  It should observe
+        // the System.ComponentModel.DataAnnotations annotations and act
+        // accordingly.
 
-        /// <summary>
-        /// Creates a new property iff value is not null.
-        /// </summary>
-        public static Property NewProperty(string value)
-        {
-            return null == value ? null : new Property() { StringValue = value };
-        }
-
-        public static Property NewProperty(DateTime? value)
-        {
-            return null == value ? null : new Property() { DateTimeValue = value };
-        }
-
-        // TODO: Use reflection so we don't have to modify the code every time we add or drop
-        // a property from Book.
         /// <summary>
         /// Create a datastore entity with the same values as book.
         /// </summary>
@@ -84,16 +63,16 @@ namespace GoogleCloudSamples.Models
         /// [START toentity]
         public static Entity ToEntity(this Book book)
         {
+            // Other than the aforementioned ToKey() issues, this is really
+            // nice.  About as nice as it can be.
             var entity = new Entity();
-            entity.Properties =
-                new Dictionary<string, Property>();
             entity.Key = book.Id.ToKey();
-            entity.Properties["Title"] = NewProperty(book.Title);
-            entity.Properties["Author"] = NewProperty(book.Author);
-            entity.Properties["PublishedDate"] = NewProperty(book.PublishedDate);
-            entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
-            entity.Properties["Description"] = NewProperty(book.Description);
-            entity.Properties["CreateById"] = NewProperty(book.CreatedById);
+            entity["Title"] = book.Title;
+            entity["Author"] = book.Author;
+            entity["PublishedDate"] = book.PublishedDate?.ToUniversalTime();
+            entity["ImageUrl"] = book.ImageUrl;
+            entity["Description"] = book.Description;
+            entity["CreateById"] = book.CreatedById;
             return entity;
         }
         // [END toentity]
@@ -105,16 +84,27 @@ namespace GoogleCloudSamples.Models
         /// <returns>A book.</returns>
         public static Book ToBook(this Entity entity)
         {
-            // TODO: Use reflection so we don't have to modify the code every time we add or drop
-            // a property from Book.
             Book book = new Book();
             book.Id = (long)entity.Key.Path.First().Id;
-            book.Title = entity.Properties.GetValue("Title")?.StringValue;
-            book.Author = entity.Properties.GetValue("Author")?.StringValue;
-            book.PublishedDate = entity.Properties.GetValue("PublishedDate")?.DateTimeValue;
-            book.ImageUrl = entity.Properties.GetValue("ImageUrl")?.StringValue;
-            book.Description = entity.Properties.GetValue("Description")?.StringValue;
-            book.CreatedById = entity.Properties.GetValue("CreatedById")?.StringValue;
+            // P1 Having to call ?.StringValue is annoying.  In C++, the Value type would
+            // be automatically castable to these other types:
+            // class Value {
+            //   operator string()();
+            // Not sure if that's possible in C#.
+            // An alternative might be:
+            //   book.Title = entity<String>["Title"];
+            // or
+            //   book.Title = entity.Get<String>("Title");
+            // or
+            //   book.Title = entity.GetString("Title");
+            // Not sure I like it better.
+            book.Title = (string) entity["Title"];
+            book.Author = (string) entity["Author"];
+            // P2 TimestampValue doesn't seem very useful.
+            book.PublishedDate = (DateTime?) entity["PublishedDate"];
+            book.ImageUrl = (string) entity["ImageUrl"];
+            book.Description = (string) entity["Description"];
+            book.CreatedById = (string) entity["CreatedById"];
             return book;
         }
     }
@@ -122,8 +112,15 @@ namespace GoogleCloudSamples.Models
     public class DatastoreBookStore : IBookStore
     {
         private readonly string _projectId;
-        private readonly DatastoreService _datastore;
+        private readonly DatastoreClient _datastore;
+        private readonly DatastoreDb _db;
 
+        static DatastoreBookStore()
+        {
+            Debug.WriteLine("Hello forest.");
+            Grpc.Core.GrpcEnvironment.SetLogger(new DebugLogger());
+        }
+        
         /// <summary>
         /// Create a new datastore-backed bookstore.
         /// </summary>
@@ -132,112 +129,70 @@ namespace GoogleCloudSamples.Models
         {
             _projectId = projectId;
             // Use Application Default Credentials.
-            var credentials = Google.Apis.Auth.OAuth2.GoogleCredential
-                .GetApplicationDefaultAsync().Result;
-            if (credentials.IsCreateScopedRequired)
-            {
-                credentials = credentials.CreateScoped(new[] {
-                    DatastoreService.Scope.Datastore,
-                    DatastoreService.Scope.UserinfoEmail,
-                });
-            }
-            // Create our connection to datastore.
-            _datastore = new DatastoreService(new Google.Apis.Services
-                .BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credentials,
-                ApplicationName = "Bookshelf.NET-Step2"
-            });
+            _datastore = DatastoreClient.Create();
+            // I like this better.
+            _db = DatastoreDb.Create(_projectId);
         }
-
-        /// <summary>
-        /// A convenience function which commits a mutation to datastore.
-        /// Use this function to avoid a lot of boilerplate.
-        /// </summary>
-        /// <param name="mutation">The change to make to datastore.</param>
-        /// <returns>The result of commiting the change.</returns>
-        // [START commitmutation]
-        private CommitResponse CommitMutation(Mutation mutation)
-        {
-            var commitRequest = new CommitRequest()
-            {
-                Mode = "NON_TRANSACTIONAL",
-                Mutation = mutation
-            };
-            return _datastore.Datasets.Commit(commitRequest, _projectId)
-                .Execute();
-        }
-        // [END commitmutation]
 
         // [START create]
         public void Create(Book book)
         {
-            var result = CommitMutation(new Mutation()
-            {
-                InsertAutoId = new Entity[] { book.ToEntity() }
-            });
-            book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
+            // P0 Calling .ToInsert() is very weird.
+            // Having two very different ways to insert, update, etc. depending on whether or not
+            // I'm in a transaction is annoying.  I want one *interface* to do it.
+            // How about a NullTransaction where all operations are immediately committed, and the
+            // final .Commit() is a no-op?  Or, make DatastoreFoo and Transaction implement the
+            // same interface?
+            CommitResponse response = _datastore.Commit(_projectId, Mode.NonTransactional, new[] { book.ToEntity().ToInsert() });
+            Key key = response.MutationResults[0].Key;
+            book.Id = key.Path.First().Id;
         }
         // [END create]
 
         public void Delete(long id)
         {
-            CommitMutation(new Mutation()
-            {
-                Delete = new Key[] { id.ToKey() }
-            });
+            // Pretty good.
+            _db.Delete(id.ToKey());
+            var trans = _db.BeginTransaction();
+            trans.Delete(id.ToKey());
+            trans.Commit();
         }
 
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query()
-            {
-                Limit = pageSize,
-                Kinds = new[] { new KindExpression() { Name = "Book" } },
-            };
-
+            var query = new Query("Book");
             if (!string.IsNullOrWhiteSpace(nextPageToken))
-                query.StartCursor = nextPageToken;
-
-            var datastoreRequest = _datastore.Datasets.RunQuery(
-                datasetId: _projectId,
-                body: new RunQueryRequest() { Query = query }
-            );
-
-            var response = datastoreRequest.Execute();
-            var results = response.Batch.EntityResults;
-            var books = results.Select(result => result.Entity.ToBook());
-
+                query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
+            FixedSizePage<Entity> firstPage = _db.RunQuery(query).AsPages().WithFixedSize(pageSize).First();
+            var books = firstPage.Select(result => result.ToBook());
             return new BookList()
             {
                 Books = books,
-                NextPageToken = books.Count() == pageSize
-                    && response.Batch.MoreResults == "MORE_RESULTS_AFTER_LIMIT"
-                    ? response.Batch.EndCursor : null,
+                // More string vs proto byte string warnings below.  Why?
+                NextPageToken = books.Count() == pageSize                   
+                    ? firstPage.NextPageToken : null,
             };
+
+            // List() ends up being still more code than I want to write.
+            // Wondering off into the realm of ponies and ORMs, I'd ideally
+            // like to write:
+            // var query = new Query<Book>() {
+            //   ...
+            // And have it take care of the entity to Book translations.
         }
         // [END list]
 
         public Book Read(long id)
         {
-            var found = _datastore.Datasets.Lookup(new LookupRequest()
-            {
-                Keys = new Key[] { id.ToKey() }
-            }, _projectId).Execute().Found;
-            if (found == null || found.Count == 0)
-            {
-                return null;
-            }
-            return found[0].Entity.ToBook();
+            // Nice!
+            return _db.Lookup(id.ToKey())?.ToBook();
         }
 
         public void Update(Book book)
         {
-            CommitMutation(new Mutation()
-            {
-                Update = new Entity[] { book.ToEntity() }
-            });
+            // Very nice!
+            _db.Update(book.ToEntity());
         }
     }
 }
