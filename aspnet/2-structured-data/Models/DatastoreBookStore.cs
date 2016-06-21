@@ -23,6 +23,7 @@ using static Google.Datastore.V1Beta3.CommitRequest.Types;
 using static Google.Datastore.V1Beta3.PropertyFilter.Types;
 using static Google.Datastore.V1Beta3.PropertyOrder.Types;
 using static Google.Datastore.V1Beta3.ReadOptions.Types;
+using System.Diagnostics;
 // using Google.Apis.Datastore.v1beta2.Data;
 
 namespace GoogleCloudSamples.Models
@@ -114,6 +115,12 @@ namespace GoogleCloudSamples.Models
         private readonly DatastoreClient _datastore;
         private readonly DatastoreDb _db;
 
+        static DatastoreBookStore()
+        {
+            Debug.WriteLine("Hello forest.");
+            Grpc.Core.GrpcEnvironment.SetLogger(new DebugLogger());
+        }
+        
         /// <summary>
         /// Create a new datastore-backed bookstore.
         /// </summary>

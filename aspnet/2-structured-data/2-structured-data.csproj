@@ -259,6 +259,7 @@
     <Compile Include="Models\DbBookStore.cs" />
     <Compile Include="Models\IBookStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DebugLogger.cs" />
     <Compile Include="ViewModels\Books\Form.cs" />
     <Compile Include="ViewModels\Books\Index.cs" />
   </ItemGroup>
