@@ -117,6 +117,7 @@ namespace GoogleCloudSamples.Models
 
         static DatastoreBookStore()
         {
+            Environment.SetEnvironmentVariable("GRPC_TRACE", "api");
             Debug.WriteLine("Hello forest.");
             Grpc.Core.GrpcEnvironment.SetLogger(new DebugLogger());
         }
@@ -161,6 +162,7 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
+            _db.BeginTransaction();
             var query = new Query("Book");
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = Google.Protobuf.ByteString.CopyFromUtf8(nextPageToken);
