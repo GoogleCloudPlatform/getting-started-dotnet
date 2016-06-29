@@ -16,11 +16,22 @@ using System.Web.Mvc;
 
 namespace GoogleCloudSamples
 {
+    internal class CustomHandleErrorAttribute : HandleErrorAttribute
+    {
+        public override void OnException(ExceptionContext filterContext)
+        {
+            ViewDataDictionary viewData = new ViewDataDictionary(filterContext);
+            filterContext.Result = new ViewResult() { ViewName = "Error", ViewData = viewData };
+            filterContext.HttpContext.Response.StatusCode = 500;
+            filterContext.ExceptionHandled = true;
+        }
+    }
+
     public class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new CustomHandleErrorAttribute());
         }
     }
 }
