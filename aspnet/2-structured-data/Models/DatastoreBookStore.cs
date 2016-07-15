@@ -61,7 +61,6 @@ namespace GoogleCloudSamples.Models
             entity["CreateById"] = book.CreatedById;
             return entity;
         }
-
         // [END toentity]
 
         /// <summary>
@@ -111,7 +110,6 @@ namespace GoogleCloudSamples.Models
 
         public void Delete(long id)
         {
-            // Pretty good.
             _db.Delete(id.ToKey());
         }
 
