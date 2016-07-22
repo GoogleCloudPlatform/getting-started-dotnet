@@ -15,6 +15,20 @@
     //
     ViewData["Title"] = "Error";
 }
+@model System.Web.Mvc.ExceptionContext
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h1 class="text-danger">Uncaught Exception</h1>
+<h2 class="text-danger">
+    Before running this sample, complete all the
+    <a href="https://cloud.google.com/dotnet/getting-started/tutorial-app#before-you-begin">
+    set up steps</a>.
+</h2>
+
+<pre>
+Exception in @Model.Controller.ToString():
+
+<span id="message">@Model.Exception.Message</span>
+
+Stack Trace:
+@Model.Exception.StackTrace
+</pre>
