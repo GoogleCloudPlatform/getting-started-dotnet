@@ -23,6 +23,11 @@ namespace GoogleCloudSamples.Controllers
             return Redirect("/Books");
         }
 
+        public ActionResult Throw()
+        {
+            throw new System.Exception("For testing purposes only.");
+        }
+
         public ActionResult Error()
         {
             return View();
