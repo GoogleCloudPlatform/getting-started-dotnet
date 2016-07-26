@@ -121,17 +121,13 @@ namespace GoogleCloudSamples.Models
             var query = new Query("Book") { Limit = pageSize };
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = Google.Protobuf.ByteString.FromBase64(nextPageToken);
-            foreach (var batch in _db.RunQuery(query).AsBatches())
+            var results = _db.RunQuery(query).AsEntityResults();
+            return new BookList()
             {
-                var books = batch.EntityResults.Select(entity => entity.Entity.ToBook());
-                return new BookList()
-                {
-                    Books = books,
-                    NextPageToken = books.Count() == pageSize ? 
-                        batch.EndCursor.ToBase64() : null
-                };
-            }
-            return new BookList() { Books = new Book[] { } };
+                Books = results.Select(entity => entity.Entity.ToBook()),
+                NextPageToken = results.Count() == query.Limit ? 
+                    results.Last().Cursor.ToBase64() : null
+            };
         }
         // [END list]
 
