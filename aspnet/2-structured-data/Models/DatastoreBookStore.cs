@@ -15,6 +15,8 @@
 using Google.Api.Gax;
 using Google.Datastore.V1Beta3;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GoogleCloudSamples.Models
@@ -101,7 +103,7 @@ namespace GoogleCloudSamples.Models
         public void Create(Book book)
         {
             var entity = book.ToEntity();
-            entity.Key = _db.CreateKeyFactory("Book").CreateInsertionKey();
+            entity.Key = _db.CreateKeyFactory("Book").CreateIncompleteKey();
             var keys = _db.Insert(new[] { entity });
             book.Id = keys.First().Path.First().Id;
         }
@@ -116,19 +118,20 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query("Book");
+            var query = new Query("Book") { Limit = pageSize };
             if (!string.IsNullOrWhiteSpace(nextPageToken))
-                query.StartCursor = Google.Protobuf.ByteString
-                    .CopyFromUtf8(nextPageToken);
-            FixedSizePage<Entity> firstPage = _db.RunQuery(query).AsPages()
-                .WithFixedSize(pageSize).First();
-            var books = firstPage.Select(result => result.ToBook());
-            return new BookList()
+                query.StartCursor = Google.Protobuf.ByteString.FromBase64(nextPageToken);
+            foreach (var batch in _db.RunQuery(query).AsBatches())
             {
-                Books = books,
-                NextPageToken = books.Count() == pageSize
-                    ? firstPage.NextPageToken : null,
-            };
+                var books = batch.EntityResults.Select(entity => entity.Entity.ToBook());
+                return new BookList()
+                {
+                    Books = books,
+                    NextPageToken = books.Count() == pageSize ? 
+                        batch.EndCursor.ToBase64() : null
+                };
+            }
+            return new BookList() { Books = new Book[] { } };
         }
         // [END list]
 
