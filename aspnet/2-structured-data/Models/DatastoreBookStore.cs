@@ -14,6 +14,7 @@
 
 using Google.Api.Gax;
 using Google.Datastore.V1Beta3;
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -118,15 +119,16 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query("Book") { Limit = pageSize };
+            var query = new Query("Book") { Limit = pageSize + 1};
             if (!string.IsNullOrWhiteSpace(nextPageToken))
-                query.StartCursor = Google.Protobuf.ByteString.FromBase64(nextPageToken);
+                query.StartCursor = ByteString.FromBase64(nextPageToken);
             var results = _db.RunQuery(query).AsEntityResults();
             return new BookList()
             {
-                Books = results.Select(entity => entity.Entity.ToBook()),
+                Books = results.Take(pageSize)
+                    .Select(entity => entity.Entity.ToBook()),
                 NextPageToken = results.Count() == query.Limit ? 
-                    results.Last().Cursor.ToBase64() : null
+                    results.ElementAt(pageSize - 1).Cursor.ToBase64() : null
             };
         }
         // [END list]
