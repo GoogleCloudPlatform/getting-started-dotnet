@@ -51,15 +51,16 @@ namespace GoogleCloudSamples.Models
         {
             // Other than the aforementioned ToKey() issues, this is really
             // nice.  About as nice as it can be.
-            var entity = new Entity();
-            entity.Key = book.Id.ToKey();
-            entity["Title"] = book.Title;
-            entity["Author"] = book.Author;
-            entity["PublishedDate"] = book.PublishedDate?.ToUniversalTime();
-            entity["ImageUrl"] = book.ImageUrl;
-            entity["Description"] = book.Description;
-            entity["CreateById"] = book.CreatedById;
-            return entity;
+            return new Entity()
+            {
+                Key = book.Id.ToKey(),
+                ["Title"] = book.Title,
+                ["Author"] = book.Author,
+                ["PublishedDate"] = book.PublishedDate?.ToUniversalTime(),
+                ["ImageUrl"] = book.ImageUrl,
+                ["Description"] = book.Description,
+                ["CreateById"] = book.CreatedById
+            };
         }
         // [END toentity]
 
@@ -70,15 +71,16 @@ namespace GoogleCloudSamples.Models
         /// <returns>A book.</returns>
         public static Book ToBook(this Entity entity)
         {
-            Book book = new Book();
-            book.Id = (long)entity.Key.Path.First().Id;
-            book.Title = (string)entity["Title"];
-            book.Author = (string)entity["Author"];
-            book.PublishedDate = (DateTime?)entity["PublishedDate"];
-            book.ImageUrl = (string)entity["ImageUrl"];
-            book.Description = (string)entity["Description"];
-            book.CreatedById = (string)entity["CreatedById"];
-            return book;
+            return new Book()
+            {
+                Id = entity.Key.Path.First().Id,
+                Title = (string)entity["Title"],
+                Author = (string)entity["Author"],
+                PublishedDate = (DateTime?)entity["PublishedDate"],
+                ImageUrl = (string)entity["ImageUrl"],
+                Description = (string)entity["Description"],
+                CreatedById = (string)entity["CreatedById"]
+            };
         }
     }
 
