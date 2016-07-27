@@ -480,7 +480,7 @@ function Get-PortNumber($SiteName, $ApplicationhostConfig) {
 # The path to applicationhost.config.
 #
 #.OUTPUTS
-# The process object
+# The job object
 ##############################################################################
 function Run-IISExpress($SiteName, $ApplicationhostConfig) {
     if (!$SiteName) {
@@ -492,9 +492,14 @@ function Run-IISExpress($SiteName, $ApplicationhostConfig) {
     # Applicationhost.config expects the environment variable
     # GETTING_STARTED_DOTNET to point to the same directory containing
     # applicationhost.config.
-    $env:GETTING_STARTED_DOTNET = (Get-Item $ApplicationhostConfig).DirectoryName
-    $argList = ('/config:"' + $ApplicationhostConfig + '"'), "/site:$SiteName", "/apppool:Clr4IntegratedAppPool"
-    Start-Process iisexpress.exe  -ArgumentList $argList -PassThru
+    $env:GETTING_STARTED_DOTNET = `
+        (Get-Item $ApplicationhostConfig).DirectoryName
+    $argList = (Get-Location), ('/config:"' + $ApplicationhostConfig + '"'), `
+        "/site:$SiteName", "/apppool:Clr4IntegratedAppPool", "/trace:warning"
+    Start-Job { 
+        Set-Location $args[0]
+        iisexpress.exe  $args[1..$args.Length]
+    } -ArgumentList $argList
 }
 
 ##############################################################################
@@ -522,7 +527,7 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
     }
 
     $port = Get-PortNumber $SiteName $ApplicationhostConfig
-    $webProcess = Run-IISExpress $SiteName $ApplicationhostConfig
+    $webJob = Run-IISExpress $SiteName $ApplicationhostConfig
     Try
     {
         Start-Sleep -Seconds 4  # Wait for web process to start up.
@@ -534,7 +539,10 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
     Finally
     {
         if (!$LeaveRunning) {
-            Stop-Process $webProcess
+            Stop-Job $webJob
+            Wait-Job $webJob
+            Receive-Job $webJob
+            Remove-Job $webJob
         }
     }
 }
