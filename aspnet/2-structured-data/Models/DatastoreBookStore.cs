@@ -12,12 +12,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Api.Gax;
 using Google.Datastore.V1Beta3;
 using Google.Protobuf;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace GoogleCloudSamples.Models
@@ -108,7 +105,6 @@ namespace GoogleCloudSamples.Models
             var keys = _db.Insert(new[] { entity });
             book.Id = keys.First().Path.First().Id;
         }
-
         // [END create]
 
         public void Delete(long id)
@@ -131,7 +127,7 @@ namespace GoogleCloudSamples.Models
             return new BookList()
             {
                 Books = resultsPage.Select(entity => entity.Entity.ToBook()),
-                NextPageToken = results.Count == query.Limit ? 
+                NextPageToken = results.Count == query.Limit ?
                     resultsPage.Last().Cursor.ToBase64() : null
             };
         }
