@@ -119,17 +119,19 @@ namespace GoogleCloudSamples.Models
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            // Get one more result than we show to decide whether to show
+            // Get one more result than we need to decide whether to show
             // the more button.
             var query = new Query("Book") { Limit = pageSize + 1 };
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = ByteString.FromBase64(nextPageToken);
-            var results = _db.RunQuery(query).AsEntityResults();
+            // Call .ToList() to prevent the underlying logic from issuing a
+            // new query every time I iterate over the results.
+            var results = _db.RunQuery(query).AsEntityResults().ToList();
             var resultsPage = results.Take(pageSize);
             return new BookList()
             {
                 Books = resultsPage.Select(entity => entity.Entity.ToBook()),
-                NextPageToken = results.Count() == query.Limit ? 
+                NextPageToken = results.Count == query.Limit ? 
                     resultsPage.Last().Cursor.ToBase64() : null
             };
         }
