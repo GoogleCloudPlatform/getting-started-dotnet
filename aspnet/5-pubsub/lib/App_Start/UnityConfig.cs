@@ -44,13 +44,12 @@ namespace GoogleCloudSamples
     public class LibUnityConfig
     {
         /// <summary>
-        /// Looks for variable in environment and app settings.
+        /// Looks for variable in app settings.
         /// Throws an exception of the key is not in the configuration.
         /// </summary>
         public static string GetConfigVariable(string key)
         {
-            string value = Environment.GetEnvironmentVariable(key) ??
-                ConfigurationManager.AppSettings[key];
+            string value = ConfigurationManager.AppSettings[key];
             if (value == null)
                 throw new ConfigurationException($"You must set the configuration variable {key}.");
             return value;
