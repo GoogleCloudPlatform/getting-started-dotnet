@@ -49,6 +49,12 @@ casper.thenClick('button', function (response) {
     this.test.assertEquals(response.status, 200);
 });
 
+casper.thenOpen(host + '/Home/Throw', function (response) {
+    this.test.assertEquals(response.status, 500);
+    this.test.assertEquals(this.fetchText('#message'),
+        'For testing purposes only.');
+});
+
 casper.run(function () {
     this.test.done();
     this.test.renderResults(true);

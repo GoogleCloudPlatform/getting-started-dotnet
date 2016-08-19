@@ -1,4 +1,4 @@
-﻿// Copyright(c) 2016 Google Inc.
+// Copyright(c) 2016 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
@@ -29,19 +29,30 @@ namespace GoogleCloudSamples.Models
         /// <returns></returns>
         public ApplicationDbContext Create()
         {
-            string envConnectionString = Environment.GetEnvironmentVariable(
-                "Data:MySql:ConnectionString");
-            if (envConnectionString == null)
+            if (LibUnityConfig.ChooseBookStoreFromConfig() == BookStoreFlag.MySql)
             {
-                // Pulls connection string from Web.config.
-                return new ApplicationDbContext();
+                string envConnectionString = Environment.GetEnvironmentVariable(
+                    "GoogleCloudSamples:ConnectionStringCloudSql");
+                if (envConnectionString != null)
+                {
+                    // Pull the connection string from the environment variable.
+                    return new ApplicationDbContext(
+                        new MySql.Data.MySqlClient.MySqlConnection(envConnectionString));
+                }
             }
-            else
+            else if (LibUnityConfig.ChooseBookStoreFromConfig() == BookStoreFlag.SqlServer)
             {
-                // Pull the connection string from the environment variable.
-                return new ApplicationDbContext(
-                    new MySql.Data.MySqlClient.MySqlConnection(envConnectionString));
+                string envConnectionString = Environment.GetEnvironmentVariable(
+                    "GoogleCloudSamples:ConnectionStringSqlServer");
+                if (envConnectionString != null)
+                {
+                    // Pull the connection string from the environment variable.
+                    return new ApplicationDbContext(
+                        new System.Data.SqlClient.SqlConnection(envConnectionString));
+                }
             }
+            // Pulls connection string from Web.config.
+            return new ApplicationDbContext();
         }
     }
 }
