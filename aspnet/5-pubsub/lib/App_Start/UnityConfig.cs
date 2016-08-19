@@ -35,6 +35,7 @@ namespace GoogleCloudSamples
     public enum BookStoreFlag
     {
         MySql,
+        SqlServer,
         Datastore
     }
 
@@ -44,13 +45,12 @@ namespace GoogleCloudSamples
     public class LibUnityConfig
     {
         /// <summary>
-        /// Looks for variable in environment and app settings.
+        /// Looks for variable in app settings.
         /// Throws an exception of the key is not in the configuration.
         /// </summary>
         public static string GetConfigVariable(string key)
         {
-            string value = Environment.GetEnvironmentVariable(key) ??
-                ConfigurationManager.AppSettings[key];
+            string value = ConfigurationManager.AppSettings[key];
             if (value == null)
                 throw new ConfigurationException($"You must set the configuration variable {key}.");
             return value;
@@ -70,10 +70,13 @@ namespace GoogleCloudSamples
                     DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
                     return BookStoreFlag.MySql;
 
+                case "sqlserver":
+                    return BookStoreFlag.SqlServer;
+
                 default:
                     throw new ConfigurationException(
                          "Set the configuration variable GoogleCloudSamples:BookStore " +
-                         "to datastore or mysql.");
+                         "to datastore, mysql, or sqlserver.");
             }
         }
 
@@ -90,6 +93,13 @@ namespace GoogleCloudSamples
                     break;
 
                 case BookStoreFlag.MySql:
+                    factory = new ApplicationDbContextFactory();
+                    container.RegisterType<ApplicationDbContext>(
+                        new InjectionFactory((x) => factory.Create()));
+                    container.RegisterType<IBookStore, DbBookStore>();
+                    break;
+
+                case BookStoreFlag.SqlServer:
                     factory = new ApplicationDbContextFactory();
                     container.RegisterType<ApplicationDbContext>(
                         new InjectionFactory((x) => factory.Create()));
