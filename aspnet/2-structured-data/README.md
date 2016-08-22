@@ -1,7 +1,7 @@
 # Structured Data 
 
 This folder contains an ASP.NET end-to-end sample application written in C# that
-demonstrates how to store structured data in Google Cloud SQL and Google Cloud Datastore.
+demonstrates how to store structured data in Google Cloud SQL, Google Cloud Datastore, and Microsoft SQL Server.
  
 ## Tutorial
 See https://cloud.google.com/dotnet/getting-started/using-structured-data for instructions on how to build, run, and deploy this sample.
