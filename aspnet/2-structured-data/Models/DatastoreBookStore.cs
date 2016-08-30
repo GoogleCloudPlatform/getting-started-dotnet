@@ -12,8 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Apis.Datastore.v1beta2;
-using Google.Apis.Datastore.v1beta2.Data;
+using Google.Apis.Datastore.v1;
+using Google.Apis.Datastore.v1.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +31,9 @@ namespace GoogleCloudSamples.Models
         {
             return new Key()
             {
-                Path = new KeyPathElement[]
+                Path = new PathElement[]
                 {
-                    new KeyPathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
+                    new PathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
                 }
             };
         }
@@ -54,9 +54,9 @@ namespace GoogleCloudSamples.Models
         /// <param name="properties"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static Property GetValue(this IDictionary<string, Property> properties, string key)
+        public static Value GetValue(this IDictionary<string, Value> properties, string key)
         {
-            Property value;
+            Value value;
             bool found = properties.TryGetValue(key, out value);
             return found ? value : null;
         }
@@ -64,18 +64,16 @@ namespace GoogleCloudSamples.Models
         /// <summary>
         /// Creates a new property iff value is not null.
         /// </summary>
-        public static Property NewProperty(string value)
+        public static Value NewProperty(string value)
         {
-            return null == value ? null : new Property() { StringValue = value };
+            return null == value ? null : new Value() { StringValue = value };
         }
 
-        public static Property NewProperty(DateTime? value)
+        public static Value NewProperty(DateTime? value)
         {
-            return null == value ? null : new Property() { DateTimeValue = value };
+            return null == value ? null : new Value() { TimestampValue = value };
         }
 
-        // TODO: Use reflection so we don't have to modify the code every time we add or drop
-        // a property from Book.
         /// <summary>
         /// Create a datastore entity with the same values as book.
         /// </summary>
@@ -86,7 +84,7 @@ namespace GoogleCloudSamples.Models
         {
             var entity = new Entity();
             entity.Properties =
-                new Dictionary<string, Property>();
+                new Dictionary<string, Value>();
             entity.Key = book.Id.ToKey();
             entity.Properties["Title"] = NewProperty(book.Title);
             entity.Properties["Author"] = NewProperty(book.Author);
@@ -111,7 +109,7 @@ namespace GoogleCloudSamples.Models
             book.Id = (long)entity.Key.Path.First().Id;
             book.Title = entity.Properties.GetValue("Title")?.StringValue;
             book.Author = entity.Properties.GetValue("Author")?.StringValue;
-            book.PublishedDate = entity.Properties.GetValue("PublishedDate")?.DateTimeValue;
+            book.PublishedDate = (DateTime?)entity.Properties.GetValue("PublishedDate")?.TimestampValue;
             book.ImageUrl = entity.Properties.GetValue("ImageUrl")?.StringValue;
             book.Description = entity.Properties.GetValue("Description")?.StringValue;
             book.CreatedById = entity.Properties.GetValue("CreatedById")?.StringValue;
@@ -138,7 +136,6 @@ namespace GoogleCloudSamples.Models
             {
                 credentials = credentials.CreateScoped(new[] {
                     DatastoreService.Scope.Datastore,
-                    DatastoreService.Scope.UserinfoEmail,
                 });
             }
             // Create our connection to datastore.
@@ -162,9 +159,9 @@ namespace GoogleCloudSamples.Models
             var commitRequest = new CommitRequest()
             {
                 Mode = "NON_TRANSACTIONAL",
-                Mutation = mutation
+                Mutations = new[] { mutation },
             };
-            return _datastore.Datasets.Commit(commitRequest, _projectId)
+            return _datastore.Projects.Commit(commitRequest, _projectId)
                 .Execute();
         }
         // [END commitmutation]
@@ -174,9 +171,9 @@ namespace GoogleCloudSamples.Models
         {
             var result = CommitMutation(new Mutation()
             {
-                InsertAutoId = new Entity[] { book.ToEntity() }
+                Insert = book.ToEntity()
             });
-            book.Id = result.MutationResult.InsertAutoIdKeys.First().Path.First().Id.Value;
+            book.Id = (long)result.MutationResults.First().Key.Path.First().Id;
         }
         // [END create]
 
@@ -184,7 +181,7 @@ namespace GoogleCloudSamples.Models
         {
             CommitMutation(new Mutation()
             {
-                Delete = new Key[] { id.ToKey() }
+                Delete = id.ToKey()
             });
         }
 
@@ -194,14 +191,14 @@ namespace GoogleCloudSamples.Models
             var query = new Query()
             {
                 Limit = pageSize,
-                Kinds = new[] { new KindExpression() { Name = "Book" } },
+                Kind = new[] { new KindExpression() { Name = "Book" } },
             };
 
             if (!string.IsNullOrWhiteSpace(nextPageToken))
                 query.StartCursor = nextPageToken;
 
-            var datastoreRequest = _datastore.Datasets.RunQuery(
-                datasetId: _projectId,
+            var datastoreRequest = _datastore.Projects.RunQuery(
+                projectId: _projectId,
                 body: new RunQueryRequest() { Query = query }
             );
 
@@ -221,7 +218,7 @@ namespace GoogleCloudSamples.Models
 
         public Book Read(long id)
         {
-            var found = _datastore.Datasets.Lookup(new LookupRequest()
+            var found = _datastore.Projects.Lookup(new LookupRequest()
             {
                 Keys = new Key[] { id.ToKey() }
             }, _projectId).Execute().Found;
@@ -236,7 +233,7 @@ namespace GoogleCloudSamples.Models
         {
             CommitMutation(new Mutation()
             {
-                Update = new Entity[] { book.ToEntity() }
+                Update = book.ToEntity()
             });
         }
     }
