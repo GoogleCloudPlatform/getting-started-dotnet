@@ -1,4 +1,4 @@
-﻿// Copyright(c) 2016 Google Inc.
+// Copyright(c) 2016 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
@@ -20,14 +20,21 @@ namespace GoogleCloudSamples.Models
     // [START dbset]
     public class ApplicationDbContext : DbContext
     {
+        // [START_EXCLUDE]
+        private static readonly string s_mySqlServerBaseName = "LocalMySqlServer";
+        private static readonly string s_sqlServerBaseName = "LocalSqlServer";
+        // [END_EXCLUDE]
         public DbSet<Book> Books { get; set; }
         // [END dbset]
 
         /// <summary>
         /// Pulls connection string from Web.config.
         /// </summary>
-        public ApplicationDbContext() : base("name=LocalMySqlServer")
+        public ApplicationDbContext() : base("name=" +
+            ((UnityConfig.ChooseBookStoreFromConfig() == BookStoreFlag.MySql)
+            ? s_mySqlServerBaseName : s_sqlServerBaseName))
         {
         }
     }
 }
+

@@ -13,7 +13,7 @@ namespace GoogleCloudSamples.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201603222229199_Init"; }
+            get { return "201608091748038_Init"; }
         }
         
         string IMigrationMetadata.Source

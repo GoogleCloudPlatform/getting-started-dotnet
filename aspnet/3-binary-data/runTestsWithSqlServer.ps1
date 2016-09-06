@@ -1,4 +1,4 @@
-﻿# Copyright(c) 2016 Google Inc.
+# Copyright(c) 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
@@ -13,9 +13,9 @@
 # the License.
 Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
 
-Set-BookStore mysql
+Set-BookStore sqlserver
 Remove-Item Migrations\* -Exclude Configuration.cs
-Copy-Item MigrationsCloudSql\* Migrations
+Copy-Item MigrationsSqlServer\* Migrations
 Build-Solution
 Migrate-Database
 Run-IISExpressTest
