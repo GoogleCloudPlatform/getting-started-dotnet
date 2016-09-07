@@ -62,16 +62,22 @@ namespace GoogleCloudSamples.Models
         }
 
         /// <summary>
-        /// Creates a new property iff value is not null.
+        /// Sets the property or clears the proty if value is null.
         /// </summary>
-        public static Value NewProperty(string value)
+        public static void SetProperty(Entity entity, string name, string value)
         {
-            return null == value ? null : new Value() { StringValue = value };
+            if (null == value)
+                entity.Properties.Remove(name);
+            else
+                entity.Properties[name] = new Value() { StringValue = value };
         }
 
-        public static Value NewProperty(DateTime? value)
+        public static void SetProperty(Entity entity, string name, DateTime? value)
         {
-            return null == value ? null : new Value() { TimestampValue = value };
+            if (null == value)
+                entity.Properties.Remove(name);
+            else
+                entity.Properties[name] = new Value() { TimestampValue = value };
         }
 
         /// <summary>
@@ -86,12 +92,12 @@ namespace GoogleCloudSamples.Models
             entity.Properties =
                 new Dictionary<string, Value>();
             entity.Key = book.Id.ToKey();
-            entity.Properties["Title"] = NewProperty(book.Title);
-            entity.Properties["Author"] = NewProperty(book.Author);
-            entity.Properties["PublishedDate"] = NewProperty(book.PublishedDate);
-            entity.Properties["ImageUrl"] = NewProperty(book.ImageUrl);
-            entity.Properties["Description"] = NewProperty(book.Description);
-            entity.Properties["CreateById"] = NewProperty(book.CreatedById);
+            SetProperty(entity, "Title", book.Title);
+            SetProperty(entity, "Author", book.Author);
+            SetProperty(entity, "PublishedDate", book.PublishedDate);
+            SetProperty(entity, "ImageUrl", book.ImageUrl);
+            SetProperty(entity, "Description", book.Description);
+            SetProperty(entity, "CreateById", book.CreatedById);
             return entity;
         }
         // [END toentity]
