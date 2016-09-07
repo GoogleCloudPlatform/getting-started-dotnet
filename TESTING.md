@@ -41,7 +41,8 @@
  - GoogleCloudSamples:ApplicationName = the name for your application.
  - GoogleCloudSamples:AuthClientId = the service account id of the service account you created.
  - GoogleCloudSamples:AuthClientSecret = the local path to the JSON file containing the service account's private key.
- - GoogleCloudSamples:ConnectionString= the connection string for the Cloud SQL database you created, in the format of "Server=1.2.3.4;Database=bookshelf;Uid=dotnetapp;Pwd=password".
+ - GoogleCloudSamples:ConnectionStringCloudSql= the connection string for the Cloud SQL database you created, in the format of "Server=1.2.3.4;Database=bookshelf;Uid=dotnetapp;Pwd=password".
+ - GoogleCloudSamples:ConnectionStringSqlServer= the connection string for the SQL Server database you created, in the format of "Data Source=ServerName;Initial Catalog=DatabaseName;Integrated Security=False;User Id=userid;Password=password".
 
 7.  Add the following tools to your path:
  - MSBuild

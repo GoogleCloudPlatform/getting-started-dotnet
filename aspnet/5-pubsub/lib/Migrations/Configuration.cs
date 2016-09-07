@@ -26,6 +26,11 @@ namespace GoogleCloudSamples.Migrations
                 SetSqlGenerator("MySql.Data.MySqlClient",
                     new MySql.Data.Entity.MySqlMigrationSqlGenerator());
             }
+            else if (LibUnityConfig.ChooseBookStoreFromConfig() == BookStoreFlag.SqlServer)
+            {
+                SetSqlGenerator("System.Data.SqlClient",
+                    new System.Data.Entity.SqlServer.SqlServerMigrationSqlGenerator());
+            }
         }
     }
 }
