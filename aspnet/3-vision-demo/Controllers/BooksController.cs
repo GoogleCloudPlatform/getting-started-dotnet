@@ -12,8 +12,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Vision.v1;
+using Google.Apis.Vision.v1.Data;
 using GoogleCloudSamples.Models;
 using GoogleCloudSamples.Services;
+using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -29,11 +34,27 @@ namespace GoogleCloudSamples.Controllers
 
         private readonly IBookStore _store;
         private readonly ImageUploader _imageUploader;
+        private readonly VisionService _vision;
 
         public BooksController(IBookStore store, ImageUploader imageUploader)
         {
             _store = store;
             _imageUploader = imageUploader;
+            GoogleCredential credential =
+                GoogleCredential.GetApplicationDefaultAsync().Result;
+            // Inject the Cloud Vision scopes
+            if (credential.IsCreateScopedRequired)
+            {
+                credential = credential.CreateScoped(new[]
+                {
+                    VisionService.Scope.CloudPlatform
+                });
+            }
+            _vision = new VisionService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                GZipEnabled = false
+            });
         }
 
         // GET: Books
@@ -60,6 +81,46 @@ namespace GoogleCloudSamples.Controllers
             }
 
             return View(book);
+        }
+
+        // GET: Books/Details/5
+        public ActionResult Image(long? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Book book = _store.Read((long)id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (string.IsNullOrEmpty(book.ImageUrl))
+            {
+                return HttpNotFound();
+            }
+            string imageUrl = string.IsNullOrEmpty(book.ImageUrl) ?
+                "http://placekitten.com/g/128/192" : book.ImageUrl;
+            byte[] content = new System.Net.WebClient().DownloadData(imageUrl);
+            BatchAnnotateImagesResponse response =
+                _vision.Images.Annotate(new BatchAnnotateImagesRequest()
+                {
+                    Requests = new[]
+                {
+                    new AnnotateImageRequest()
+                    {
+                        Features = new [] { new Feature() { Type = "TEXT_DETECTION"} },
+                        Image = new Image() { Content = Convert.ToBase64String(content) }
+                    }
+                }
+                }).Execute();
+            return View(new ImageResponse()
+            {
+                Response = response.Responses.Count > 0 ? response.Responses[0] : null,
+                Url = imageUrl
+            });
         }
 
         // GET: Books/Create

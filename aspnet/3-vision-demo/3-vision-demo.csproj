@@ -14,7 +14,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GoogleCloudSamples</RootNamespace>
-    <AssemblyName>3-binary-data</AssemblyName>
+    <AssemblyName>3-vision-demo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -90,6 +90,10 @@
     </Reference>
     <Reference Include="Google.Apis.Storage.v1, Version=1.16.0.609, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>packages\Google.Apis.Storage.v1.1.16.0.609\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.Storage.v1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Vision.v1, Version=1.16.0.599, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>packages\Google.Apis.Vision.v1.1.16.0.599\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.Vision.v1.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Storage.V1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=185c282632e132a0, processorArchitecture=MSIL">
@@ -246,6 +250,7 @@
     <Compile Include="Models\DatastoreBookStore.cs" />
     <Compile Include="Models\DbBookStore.cs" />
     <Compile Include="Models\IBookStore.cs" />
+    <Compile Include="Models\ImageResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ImageUploader.cs" />
     <Compile Include="ViewModels\Books\Form.cs" />
@@ -286,6 +291,9 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Books\Image.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
