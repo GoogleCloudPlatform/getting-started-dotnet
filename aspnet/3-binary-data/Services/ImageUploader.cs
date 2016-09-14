@@ -36,8 +36,7 @@ namespace GoogleCloudSamples.Services
         // [START uploadimage]
         public async Task<String> UploadImage(HttpPostedFileBase image, long id)
         {
-            var imageAcl = ObjectsResource
-                .InsertMediaUpload.PredefinedAclEnum.PublicRead;
+            var imageAcl = PredefinedObjectAcl.PublicRead;
 
             var imageObject = await _storageClient.UploadObjectAsync(
                 bucket: _bucketName,
