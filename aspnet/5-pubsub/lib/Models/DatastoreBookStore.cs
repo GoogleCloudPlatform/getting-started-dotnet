@@ -12,10 +12,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Apis.Datastore.v1;
-using Google.Apis.Datastore.v1.Data;
+using Google.Datastore.V1;
+using Google.Protobuf;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GoogleCloudSamples.Models
@@ -27,58 +26,15 @@ namespace GoogleCloudSamples.Models
         /// </summary>
         /// <param name="id">A book's id.</param>
         /// <returns>A datastore key.</returns>
-        public static Key ToKey(this long id)
-        {
-            return new Key()
-            {
-                Path = new PathElement[]
-                {
-                    new PathElement() { Kind = "Book", Id = (id == 0 ? (long?)null : id) }
-                }
-            };
-        }
+        public static Key ToKey(this long id) =>
+            new Key().WithElement("Book", id);
 
         /// <summary>
         /// Make a book id given a datastore key.
         /// </summary>
         /// <param name="key">A datastore key</param>
         /// <returns>A book id.</returns>
-        public static long ToId(this Key key)
-        {
-            return (long)key.Path.First().Id;
-        }
-
-        /// <summary>
-        /// Get the property from the dict and return null if it isn't there.
-        /// </summary>
-        /// <param name="properties"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static Value GetValue(this IDictionary<string, Value> properties, string key)
-        {
-            Value value;
-            bool found = properties.TryGetValue(key, out value);
-            return found ? value : null;
-        }
-
-        /// <summary>
-        /// Sets the property or clears the proty if value is null.
-        /// </summary>
-        public static void SetProperty(Entity entity, string name, string value)
-        {
-            if (null == value)
-                entity.Properties.Remove(name);
-            else
-                entity.Properties[name] = new Value() { StringValue = value };
-        }
-
-        public static void SetProperty(Entity entity, string name, DateTime? value)
-        {
-            if (null == value)
-                entity.Properties.Remove(name);
-            else
-                entity.Properties[name] = new Value() { TimestampValue = value };
-        }
+        public static long ToId(this Key key) => key.Path.First().Id;
 
         /// <summary>
         /// Create a datastore entity with the same values as book.
@@ -86,20 +42,16 @@ namespace GoogleCloudSamples.Models
         /// <param name="book">The book to store in datastore.</param>
         /// <returns>A datastore entity.</returns>
         /// [START toentity]
-        public static Entity ToEntity(this Book book)
+        public static Entity ToEntity(this Book book) => new Entity()
         {
-            var entity = new Entity();
-            entity.Properties =
-                new Dictionary<string, Value>();
-            entity.Key = book.Id.ToKey();
-            SetProperty(entity, "Title", book.Title);
-            SetProperty(entity, "Author", book.Author);
-            SetProperty(entity, "PublishedDate", book.PublishedDate);
-            SetProperty(entity, "ImageUrl", book.ImageUrl);
-            SetProperty(entity, "Description", book.Description);
-            SetProperty(entity, "CreateById", book.CreatedById);
-            return entity;
-        }
+            Key = book.Id.ToKey(),
+            ["Title"] = book.Title,
+            ["Author"] = book.Author,
+            ["PublishedDate"] = book.PublishedDate?.ToUniversalTime(),
+            ["ImageUrl"] = book.ImageUrl,
+            ["Description"] = book.Description,
+            ["CreateById"] = book.CreatedById
+        };
         // [END toentity]
 
         /// <summary>
@@ -107,26 +59,22 @@ namespace GoogleCloudSamples.Models
         /// </summary>
         /// <param name="entity">An entity retrieved from datastore.</param>
         /// <returns>A book.</returns>
-        public static Book ToBook(this Entity entity)
+        public static Book ToBook(this Entity entity) => new Book()
         {
-            // TODO: Use reflection so we don't have to modify the code every time we add or drop
-            // a property from Book.
-            Book book = new Book();
-            book.Id = (long)entity.Key.Path.First().Id;
-            book.Title = entity.Properties.GetValue("Title")?.StringValue;
-            book.Author = entity.Properties.GetValue("Author")?.StringValue;
-            book.PublishedDate = (DateTime?)entity.Properties.GetValue("PublishedDate")?.TimestampValue;
-            book.ImageUrl = entity.Properties.GetValue("ImageUrl")?.StringValue;
-            book.Description = entity.Properties.GetValue("Description")?.StringValue;
-            book.CreatedById = entity.Properties.GetValue("CreatedById")?.StringValue;
-            return book;
-        }
+            Id = entity.Key.Path.First().Id,
+            Title = (string)entity["Title"],
+            Author = (string)entity["Author"],
+            PublishedDate = (DateTime?)entity["PublishedDate"],
+            ImageUrl = (string)entity["ImageUrl"],
+            Description = (string)entity["Description"],
+            CreatedById = (string)entity["CreatedById"]
+        };
     }
 
     public class DatastoreBookStore : IBookStore
     {
         private readonly string _projectId;
-        private readonly DatastoreService _datastore;
+        private readonly DatastoreDb _db;
 
         /// <summary>
         /// Create a new datastore-backed bookstore.
@@ -135,112 +83,48 @@ namespace GoogleCloudSamples.Models
         public DatastoreBookStore(string projectId)
         {
             _projectId = projectId;
-            // Use Application Default Credentials.
-            var credentials = Google.Apis.Auth.OAuth2.GoogleCredential
-                .GetApplicationDefaultAsync().Result;
-            if (credentials.IsCreateScopedRequired)
-            {
-                credentials = credentials.CreateScoped(new[] {
-                    DatastoreService.Scope.Datastore,
-                });
-            }
-            // Create our connection to datastore.
-            _datastore = new DatastoreService(new Google.Apis.Services
-                .BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credentials,
-                ApplicationName = "Bookshelf.NET-Step5"
-            });
+            _db = DatastoreDb.Create(_projectId);
         }
-
-        /// <summary>
-        /// A convenience function which commits a mutation to datastore.
-        /// Use this function to avoid a lot of boilerplate.
-        /// </summary>
-        /// <param name="mutation">The change to make to datastore.</param>
-        /// <returns>The result of commiting the change.</returns>
-        // [START commitmutation]
-        private CommitResponse CommitMutation(Mutation mutation)
-        {
-            var commitRequest = new CommitRequest()
-            {
-                Mode = "NON_TRANSACTIONAL",
-                Mutations = new[] { mutation },
-            };
-            return _datastore.Projects.Commit(commitRequest, _projectId)
-                .Execute();
-        }
-        // [END commitmutation]
 
         // [START create]
         public void Create(Book book)
         {
-            var result = CommitMutation(new Mutation()
-            {
-                Insert = book.ToEntity()
-            });
-            book.Id = (long)result.MutationResults.First().Key.Path.First().Id;
+            var entity = book.ToEntity();
+            entity.Key = _db.CreateKeyFactory("Book").CreateIncompleteKey();
+            var keys = _db.Insert(new[] { entity });
+            book.Id = keys.First().Path.First().Id;
         }
         // [END create]
 
         public void Delete(long id)
         {
-            CommitMutation(new Mutation()
-            {
-                Delete = id.ToKey()
-            });
+            _db.Delete(id.ToKey());
         }
 
         // [START list]
         public BookList List(int pageSize, string nextPageToken)
         {
-            var query = new Query()
-            {
-                Limit = pageSize,
-                Kind = new[] { new KindExpression() { Name = "Book" } },
-            };
-
+            var query = new Query("Book") { Limit = pageSize };
             if (!string.IsNullOrWhiteSpace(nextPageToken))
-                query.StartCursor = nextPageToken;
-
-            var datastoreRequest = _datastore.Projects.RunQuery(
-                projectId: _projectId,
-                body: new RunQueryRequest() { Query = query }
-            );
-
-            var response = datastoreRequest.Execute();
-            var results = response.Batch.EntityResults;
-            var books = results.Select(result => result.Entity.ToBook());
-
+                query.StartCursor = ByteString.FromBase64(nextPageToken);
+            var results = _db.RunQuery(query);
             return new BookList()
             {
-                Books = books,
-                NextPageToken = books.Count() == pageSize
-                    && response.Batch.MoreResults == "MORE_RESULTS_AFTER_LIMIT"
-                    ? response.Batch.EndCursor : null,
+                Books = results.Entities.Select(entity => entity.ToBook()),
+                NextPageToken = results.Entities.Count == query.Limit ?
+                    results.EndCursor.ToBase64() : null
             };
         }
         // [END list]
 
         public Book Read(long id)
         {
-            var found = _datastore.Projects.Lookup(new LookupRequest()
-            {
-                Keys = new Key[] { id.ToKey() }
-            }, _projectId).Execute().Found;
-            if (found == null || found.Count == 0)
-            {
-                return null;
-            }
-            return found[0].Entity.ToBook();
+            return _db.Lookup(id.ToKey())?.ToBook();
         }
 
         public void Update(Book book)
         {
-            CommitMutation(new Mutation()
-            {
-                Update = book.ToEntity()
-            });
+            _db.Update(book.ToEntity());
         }
     }
 }
