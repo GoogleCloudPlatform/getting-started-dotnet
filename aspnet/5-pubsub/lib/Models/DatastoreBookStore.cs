@@ -50,7 +50,7 @@ namespace GoogleCloudSamples.Models
             ["PublishedDate"] = book.PublishedDate?.ToUniversalTime(),
             ["ImageUrl"] = book.ImageUrl,
             ["Description"] = book.Description,
-            ["CreateById"] = book.CreatedById
+            ["CreatedById"] = book.CreatedById
         };
         // [END toentity]
 
