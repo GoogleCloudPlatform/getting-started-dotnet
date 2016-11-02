@@ -82,8 +82,8 @@ namespace GoogleCloudSamples
         private BookDetailLookup NewBookDetailLookup()
         {
             var options = new BookDetailLookup.Options();
-            options.SubscriptionName += "-test";
-            options.TopicName += "-test";
+            options.SubscriptionId += "-test";
+            options.TopicId += "-test";
             return new BookDetailLookup(s_projectId, options);
         }
 
