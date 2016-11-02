@@ -36,8 +36,8 @@ namespace GoogleCloudSamples.Services
     {
         private readonly PublisherClient _pub;
         private readonly SubscriberClient _sub;
-        private readonly string _topicPath;
-        private readonly string _subscriptionPath;
+        private readonly string _topicName;
+        private readonly string _subscriptionName;
         private readonly ISimpleLogger _logger;
 
         /// <summary>
@@ -52,8 +52,8 @@ namespace GoogleCloudSamples.Services
 
         public class Options
         {
-            public string TopicName = "book-process-queue";
-            public string SubscriptionName = "shared-worker-subscription";
+            public string TopicId = "book-process-queue";
+            public string SubscriptionId = "shared-worker-subscription";
         };
 
         public BookDetailLookup(string projectId, Options options = null, ISimpleLogger logger = null)
@@ -62,8 +62,8 @@ namespace GoogleCloudSamples.Services
 
             _logger = logger ?? new DebugLogger();
             // [START pubsubpaths]
-            _topicPath = $"projects/{projectId}/topics/{options.TopicName}";
-            _subscriptionPath = $"projects/{projectId}/subscriptions/{options.SubscriptionName}";
+            _topicName = $"projects/{projectId}/topics/{options.TopicId}";
+            _subscriptionName = $"projects/{projectId}/subscriptions/{options.SubscriptionId}";
             // [END pubsubpaths]
             _pub = PublisherClient.Create();
             _sub = SubscriberClient.Create();
@@ -86,8 +86,8 @@ namespace GoogleCloudSamples.Services
         {
             try
             {
-                _pub.CreateTopic(_topicPath);
-                _logger.LogVerbose("Created topic " + _topicPath);
+                _pub.CreateTopic(_topicName);
+                _logger.LogVerbose("Created topic " + _topicName);
             }
             catch (Grpc.Core.RpcException e)
             when (e.Status.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
@@ -96,8 +96,8 @@ namespace GoogleCloudSamples.Services
             }
             try
             {
-                _sub.CreateSubscription(_subscriptionPath, _topicPath, null, 0);
-                _logger.LogVerbose("Created subscription " + _subscriptionPath);
+                _sub.CreateSubscription(_subscriptionName, _topicName, null, 0);
+                _logger.LogVerbose("Created subscription " + _subscriptionName);
             }
             catch (Grpc.Core.RpcException e)
             when (e.Status.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
@@ -147,7 +147,7 @@ namespace GoogleCloudSamples.Services
             _logger.LogVerbose("Pulling messages from subscription...");
             // Pull some messages from the subscription.
 
-            var response = _sub.Pull(_subscriptionPath, false, 3, new CallSettings()
+            var response = _sub.Pull(_subscriptionName, false, 3, new CallSettings()
             {
                 Timing = CallTiming.FromExpiration(Expiration.FromTimeout(TimeSpan.FromSeconds(90)))
             });
@@ -178,7 +178,7 @@ namespace GoogleCloudSamples.Services
             var ackIds = new string[response.ReceivedMessages.Count];
             for (int i = 0; i < response.ReceivedMessages.Count; ++i)
                 ackIds[i] = response.ReceivedMessages[i].AckId;
-            _sub.Acknowledge(_subscriptionPath, ackIds);
+            _sub.Acknowledge(_subscriptionName, ackIds);
         }
         // [END pullonce]
 
@@ -190,7 +190,7 @@ namespace GoogleCloudSamples.Services
         {
             var message = new QueueMessage() { BookId = bookId };
             var json = JsonConvert.SerializeObject(message);
-            _pub.Publish(_topicPath, new[] { new PubsubMessage()
+            _pub.Publish(_topicName, new[] { new PubsubMessage()
             {
                 Data = Google.Protobuf.ByteString.CopyFromUtf8(json)
             } });
