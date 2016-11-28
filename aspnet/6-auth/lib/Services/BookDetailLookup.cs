@@ -148,7 +148,7 @@ namespace GoogleCloudSamples.Services
             _logger.LogVerbose("Pulling messages from subscription...");
             // Pull some messages from the subscription.
 
-            var response = _sub.Pull(_subscriptionName, false, 3, 
+            var response = _sub.Pull(_subscriptionName, false, 3,
                 CallSettings.FromCallTiming(
                     CallTiming.FromExpiration(
                         Expiration.FromTimeout(
