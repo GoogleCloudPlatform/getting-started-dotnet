@@ -524,7 +524,7 @@ function Run-IISExpress($SiteName, $ApplicationhostConfig) {
 #
 ##############################################################################
 function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '', 
-    $TestJs = 'test.js', [switch]$LeaveRunning = $false) {
+    $TestJs = 'test.js', [switch]$LeaveRunning = $false, [int]$TryCount=3) {
     if (!$SiteName) {
         $SiteName = (get-item -Path ".\").Name
     }
@@ -536,10 +536,16 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
     $webJob = Run-IISExpress $SiteName $ApplicationhostConfig
     Try
     {
-        Start-Sleep -Seconds 4  # Wait for web process to start up.
-        casperjs $TestJs http://localhost:$port
-        if ($LASTEXITCODE) {
-            throw "Casperjs failed with error code $LASTEXITCODE"
+        $try = 0
+        while ($true) {
+            Start-Sleep -Seconds 4  # Wait for web process to start up.
+            casperjs $TestJs http://localhost:$port
+            if (0 -eq $LASTEXITCODE) {
+                break;
+            }
+            if (++$try -eq $TryCount) {
+                throw "Casperjs failed with error code $LASTEXITCODE"
+            }
         }
     }
     Finally
