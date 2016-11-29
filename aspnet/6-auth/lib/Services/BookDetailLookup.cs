@@ -13,6 +13,7 @@
 // the License.
 
 using Google.Api.Gax;
+using Google.Api.Gax.Grpc;
 using Google.Pubsub.V1;
 using GoogleCloudSamples.Models;
 using Newtonsoft.Json;
@@ -147,10 +148,12 @@ namespace GoogleCloudSamples.Services
             _logger.LogVerbose("Pulling messages from subscription...");
             // Pull some messages from the subscription.
 
-            var response = _sub.Pull(_subscriptionName, false, 3, new CallSettings()
-            {
-                Timing = CallTiming.FromExpiration(Expiration.FromTimeout(TimeSpan.FromSeconds(90)))
-            });
+            var response = _sub.Pull(_subscriptionName, false, 3,
+                CallSettings.FromCallTiming(
+                    CallTiming.FromExpiration(
+                        Expiration.FromTimeout(
+                            TimeSpan.FromSeconds(90)))
+            ));
             if (response.ReceivedMessages == null)
             {
                 // HTTP Request expired because the queue was empty.  Ok.
