@@ -61,7 +61,7 @@ namespace GoogleCloudSamples
 
         public void LogError(string message, Exception e)
         {
-            Clients.All.logError(message, e.ToString());
+            Clients.All.logError(message, e.Message);
         }
 
         /// <summary>

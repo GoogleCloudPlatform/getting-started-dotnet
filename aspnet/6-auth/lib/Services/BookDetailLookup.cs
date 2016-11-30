@@ -75,7 +75,11 @@ namespace GoogleCloudSamples.Services
         {
             public void LogVerbose(string message) => Debug.WriteLine(message);
 
-            public void LogError(string message, Exception e) => Debug.WriteLine(message);
+            public void LogError(string message, Exception e)
+            {
+                Debug.WriteLine(message);
+                Debug.WriteLine(e.Message);
+            }
         };
 
         /// <summary>
@@ -94,6 +98,7 @@ namespace GoogleCloudSamples.Services
             when (e.Status.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
             {
                 // The topic already exists.  Ok.
+                _logger.LogError(_topicName + " already exists", e);
             }
             try
             {
@@ -104,6 +109,7 @@ namespace GoogleCloudSamples.Services
             when (e.Status.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
             {
                 // The subscription already exists.  Ok.
+                _logger.LogError(_subscriptionName + " already exists", e);
             }
         }
         // [END createtopicandsubscription]
@@ -145,15 +151,14 @@ namespace GoogleCloudSamples.Services
         // [START pullonce]
         private void PullOnce(Action<long> callback, CancellationToken cancellationToken)
         {
-            _logger.LogVerbose("Pulling messages from subscription...");
+            _logger.LogVerbose($"Pulling messages from {_subscriptionName}...");
             // Pull some messages from the subscription.
 
             var response = _sub.Pull(_subscriptionName, false, 3,
                 CallSettings.FromCallTiming(
                     CallTiming.FromExpiration(
                         Expiration.FromTimeout(
-                            TimeSpan.FromSeconds(90)))
-            ));
+                            TimeSpan.FromSeconds(90)))));
             if (response.ReceivedMessages == null)
             {
                 // HTTP Request expired because the queue was empty.  Ok.
