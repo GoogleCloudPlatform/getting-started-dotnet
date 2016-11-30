@@ -25,7 +25,7 @@
             log.client.logError = function (message, error) {
                 // Add the message to the page.
                 $('#discussion').append('<p><strong>' + htmlEncode(message)
-                    + '</strong>:<pre>' + htmlEncode(message) + '</pre></p>');
+                    + '</strong>:<pre>' + htmlEncode(error) + '</pre></p>');
             };
             // Start the connection.
             $.connection.hub.start().done(function () {
