@@ -14,7 +14,7 @@
 
 using Google.Api.Gax;
 using Google.Api.Gax.Grpc;
-using Google.Pubsub.V1;
+using Google.Cloud.PubSub.V1;
 using GoogleCloudSamples.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -37,8 +37,8 @@ namespace GoogleCloudSamples.Services
     {
         private readonly PublisherClient _pub;
         private readonly SubscriberClient _sub;
-        private readonly string _topicName;
-        private readonly string _subscriptionName;
+        private readonly TopicName _topicName;
+        private readonly SubscriptionName _subscriptionName;
         private readonly ISimpleLogger _logger;
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace GoogleCloudSamples.Services
 
             _logger = logger ?? new DebugLogger();
             // [START pubsubpaths]
-            _topicName = $"projects/{projectId}/topics/{options.TopicId}";
-            _subscriptionName = $"projects/{projectId}/subscriptions/{options.SubscriptionId}";
+            _topicName = new TopicName(projectId, options.TopicId);
+            _subscriptionName = new SubscriptionName(projectId, options.SubscriptionId);
             // [END pubsubpaths]
             _pub = PublisherClient.Create();
             _sub = SubscriberClient.Create();
