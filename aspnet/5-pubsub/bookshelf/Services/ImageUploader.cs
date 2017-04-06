@@ -12,8 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Apis.Storage.v1;
-using Google.Storage.V1;
+using Google.Cloud.Storage.V1;
 using System;
 using System.Threading.Tasks;
 using System.Web;

@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using Google.Storage.V1;
+using Google.Cloud.Storage.V1;
 using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Mvc;
