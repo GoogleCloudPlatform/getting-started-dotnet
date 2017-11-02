@@ -14,7 +14,7 @@
 Import-Module ..\..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore sqlserver
-Remove-Item ..\lib\Migrations\* -Exclude Configuration.cs
+Remove-Item ..\lib\Migrations\* -Exclude Configuration.cs,.gitignore
 Copy-Item ..\lib\MigrationsSqlServer\* ..\lib\Migrations
 Build-Solution ..\6-auth.sln
 Set-Location ..\lib
