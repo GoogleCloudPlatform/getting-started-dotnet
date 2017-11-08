@@ -522,7 +522,7 @@ function Run-IISExpress($SiteName, $ApplicationhostConfig) {
 # The path to applicationhost.config.  If not
 # specified, searches parent directories for the file.
 #
-##############################################################################
+#############################################################################
 function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '', 
     $TestJs = 'test.js', [switch]$LeaveRunning = $false, [int]$TryCount=3) {
     if (!$SiteName) {
@@ -544,6 +544,18 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
                 break;
             }
             if (++$try -eq $TryCount) {
+                # Try no more.  Fetch a web page and dump its contents to the
+                # log.  Hopefully, it will contain error information that helps
+                # us debug.
+                try {
+                    Invoke-WebRequest http://localhost:$port/ | Write-Error
+                } catch {
+                    $responseStream = $_.Exception.Response.GetResponseStream()
+                    $reader = New-Object System.IO.StreamReader($responseStream)
+                    $reader.BaseStream.Position = 0
+                    $reader.DiscardBufferedData()
+                    $reader.ReadToEnd() | Write-Error
+                }
                 throw "Casperjs failed with error code $LASTEXITCODE"
             }
         }
@@ -631,5 +643,30 @@ filter Update-Packages ([string] $Mask) {
         if ($packageIds) {
             nuget update -Prerelease $solution ($packageIds | ForEach-Object {"-Id", $_})
         }
+    }
+}
+
+##############################################################################
+#.SYNOPSIS
+# Given a path to a runTests.ps1 script, find the git timestamp of changes in
+# the same directory. 
+##############################################################################
+function Get-GitTimeStampForScript($script) {
+    Push-Location
+    try {
+        Set-Location (Split-Path $script)
+        $dateText = git log -n 1 --format=%cd --date=iso .
+        $newestDate = @(($dateText | Get-Date).ToUniversalTime().ToString("o"))
+        # Search for dependencies too.
+        $references = dotnet list reference | Where-Object {Test-Path $_ }
+        # Look up the timestamp for each dependency.
+        foreach ($ref in $references) {
+            $dateText = git log -n 1 --format=%cd --date=iso (Split-Path $ref)
+            $newestDate += @(($dateText | Get-Date).ToUniversalTime().ToString("o"))
+        }
+        # Return a string combining all the timestamps in descending order.
+        return ($newestDate | Sort-Object -Descending) -join "+"
+    } finally {
+        Pop-Location
     }
 }
