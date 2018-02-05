@@ -166,6 +166,10 @@ namespace GoogleCloudSamples.Services
                 return;
             }
             _logger.LogVerbose($"Pulled {response.ReceivedMessages.Count} messages.");
+            if (response.ReceivedMessages.Count == 0)
+            {
+                return;
+            }
             foreach (var message in response.ReceivedMessages)
             {
                 try
