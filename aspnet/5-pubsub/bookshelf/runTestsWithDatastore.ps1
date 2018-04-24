@@ -15,4 +15,4 @@ Import-Module ..\..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore datastore
 Build-Solution ..\5-pubsub.sln
-Run-IISExpressTest 5-pubsub-bookshelf
+Run-IISExpressTest 5-pubsub-bookshelf -OutputDir Datastore

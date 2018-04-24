@@ -20,4 +20,4 @@ Build-Solution ..\6-auth.sln
 Set-Location ..\lib
 Migrate-Database lib.dll bin\Debug ..\..\..\bookshelf\Web.config
 Set-Location ..\bookshelf
-Run-IISExpressTest 6-auth-bookshelf
+Run-IISExpressTest 6-auth-bookshelf -OutputDir Sql

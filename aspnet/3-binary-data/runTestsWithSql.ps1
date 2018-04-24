@@ -14,8 +14,8 @@
 Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore mysql
-Remove-Item Migrations\* -Exclude Configuration.cs,.gitignore
+Remove-Item Migrations\* -Exclude Configuration.cs
 Copy-Item MigrationsCloudSql\* Migrations
 Build-Solution
 Migrate-Database
-Run-IISExpressTest
+Run-IISExpressTest -OutputDir Sql

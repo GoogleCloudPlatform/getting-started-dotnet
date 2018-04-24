@@ -20,4 +20,4 @@ Build-Solution ..\5-pubsub.sln
 Set-Location ..\lib
 Migrate-Database lib.dll bin\Debug ..\..\..\bookshelf\Web.config
 Set-Location ..\bookshelf
-Run-IISExpressTest 5-pubsub-bookshelf
+Run-IISExpressTest 5-pubsub-bookshelf -OutputDir Sql

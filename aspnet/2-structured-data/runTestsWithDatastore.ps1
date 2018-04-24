@@ -15,4 +15,4 @@ Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore datastore
 Build-Solution
-Run-IISExpressTest
+Run-IISExpressTest -OutputDir Datastore

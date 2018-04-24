@@ -15,4 +15,4 @@ Import-Module ..\..\..\BuildTools.psm1 -DisableNameChecking
 
 Set-BookStore sqlserver
 Build-Solution ..\5-pubsub.sln
-Run-IISExpressTest 5-pubsub-worker
+Run-IISExpressTest 5-pubsub-worker -OutputDir SqlServer

@@ -18,4 +18,4 @@ Remove-Item Migrations\* -Exclude Configuration.cs
 Copy-Item MigrationsCloudSql\* Migrations
 Build-Solution
 Migrate-Database
-Run-IISExpressTest
+Run-IISExpressTest -OutputDir Sql
