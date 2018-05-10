@@ -12,50 +12,43 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// 1.0 style test script not using the `casperjs test` subcommand
-var casper = require('casper').create();
-var host = casper.cli.args[0];
+var system = require('system');
+var host = system.env['CASPERJS11_URL'];
 
-casper.start(host + '/', function (response) {
-    console.log('Starting ' + host + '/');
-    this.test.assertEquals(response.status, 302);
-});
+casper.test.begin('Stuff', 5, function suite(test) {
+    casper.start(host + '/Books', function (response) {
+        test.assertEquals(response.status, 200);
+    });
 
-casper.thenOpen(host + '/Books', function (response) {
-    this.test.assertEquals(response.status, 200);
-});
+    casper.thenClick('#add-book', function () {
+        console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
+        this.fill('form#book-form', {
+            'Book.Title': 'test.js',
+            'Book.Author': 'test.js',
+            'Book.PublishedDate': '2000-01-01',
+            'Book.Description': 'Automatically added by test.js'
+        }, false);
+        console.log('Filled form.');
+    });
 
-casper.thenClick('#add-book', function () {
-    console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
-    this.test.assertExists({ type: 'xpath', path: '//input[@type="file"]' },
-    'The Form element "image" exists for uploading book cover images .');
-    this.fill('form#book-form', {
-        'Book.Title': 'test.js',
-        'Book.Author': 'test.js',
-        'Book.PublishedDate': '2000-01-01',
-        'Book.Description': 'Automatically added by test.js'
-    }, false);
-    console.log('Filled form.');
-});
+    casper.thenClick('button', function () {
+        console.log('Submitted.  New location is ' + this.getCurrentUrl());
+        test.assertEquals(this.fetchText('.book-description'),
+            'Automatically added by test.js');
+    });
 
-casper.thenClick('button', function () {
-    console.log('Submitted.  New location is ' + this.getCurrentUrl());
-    this.test.assertEquals(this.fetchText('.book-description'),
-        'Automatically added by test.js');
-});
+    casper.thenClick('button', function (response) {
+        console.log('Deleted new book.  New location is ' + this.getCurrentUrl());
+        test.assertEquals(response.status, 200);
+    });
 
-casper.thenClick('button', function (response) {
-    console.log('Deleted new book.  New location is ' + this.getCurrentUrl());
-    this.test.assertEquals(response.status, 200);
-});
+    casper.thenOpen(host + '/Home/Throw', function (response) {
+        test.assertEquals(response.status, 500);
+        test.assertEquals(this.fetchText('#message'),
+            'For testing purposes only.');
+    });
 
-casper.thenOpen(host + '/Home/Throw', function (response) {
-    this.test.assertEquals(response.status, 500);
-    this.test.assertEquals(this.fetchText('#message'),
-        'For testing purposes only.');
-});
-
-casper.run(function () {
-    this.test.done();
-    this.test.renderResults(true);
+    casper.run(function () {
+        test.done();
+    });
 });

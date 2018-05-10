@@ -43,12 +43,9 @@ Unzip $env:KOKORO_GFILE_DIR\phantomjs-2.1.1-windows.zip \
 $env:PATH = "$env:PATH;$(Resolve-Path \phantomjs-2.1.1-windows)\bin"
 
 # Install casperjs
-Unzip $env:KOKORO_GFILE_DIR\n1k0-casperjs-1.0.3-0-g76fc831.zip \
-$casperJsInstallPath = Resolve-Path \n1k0-casperjs-76fc831
-$env:PATH = "$env:PATH;$casperJsInstallPath\batchbin"
-# Patch casperjs
-Copy-Item -Force github\getting-started-dotnet\.kokoro-windows\casper-bootstrap.js `
-    $casperJsInstallPath\bin\bootstrap.js
+Unzip $env:KOKORO_GFILE_DIR\casperjs-1.1.4-1.zip \
+$casperJsInstallPath = Resolve-Path \casperjs-1.1.4-1
+$env:PATH = "$env:PATH;$casperJsInstallPath\bin"
 
 # Install nuget command line.
 choco install nuget.commandline

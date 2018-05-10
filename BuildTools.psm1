@@ -524,7 +524,8 @@ function Run-IISExpress($SiteName, $ApplicationhostConfig) {
 #
 #############################################################################
 function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '', 
-    $TestJs = 'test.js', [switch]$LeaveRunning = $false, [int]$TryCount=3) {
+    $TestJs = 'test.js', [switch]$LeaveRunning = $false, [int]$TryCount=3,
+    $OutputDir) {
     if (!$SiteName) {
         $SiteName = (get-item -Path ".\").Name
     }
@@ -539,7 +540,14 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
         $try = 0
         while ($true) {
             Start-Sleep -Seconds 4  # Wait for web process to start up.
-            casperjs $TestJs http://localhost:$port
+            $env:CASPERJS11_URL = "http://localhost:$port"
+            casperjs test $TestJs --xunit=sponge_log.xml
+            # Casper 1.1 always returns 0, so inspect the xml output
+            # to see if a test failed.
+            [xml]$x = Get-Content sponge_log.xml         
+            foreach ($suite in $x.testsuites.testsuite) {
+                $LASTEXITCODE += [int] $suite.failures 
+            }
             if (0 -eq $LASTEXITCODE) {
                 break;
             }
@@ -562,6 +570,10 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
     }
     Finally
     {
+        if ((Test-Path sponge_log.xml) -and $OutputDir) {
+            mkdir -ErrorAction SilentlyContinue $OutputDir | Out-Null
+            Move-Item -Force sponge_log.xml $OutputDir
+        }
         if (!$LeaveRunning) {
             Stop-Job $webJob
             Wait-Job $webJob
