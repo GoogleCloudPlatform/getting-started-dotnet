@@ -109,8 +109,7 @@ namespace GoogleCloudSamples
             BookDetailLookup bookDetailLookup = NewBookDetailLookup();
             bookDetailLookup.ProcessBook(bookStore, 3);
             Assert.Equal(3, bookStore.UpdatedBook.Id);
-            Assert.Equal("Test-Driven JavaScript Development", bookStore.UpdatedBook.Title);
-            Assert.Equal("Christian Johansen", bookStore.UpdatedBook.Author);
+            Assert.Contains("JavaScript", bookStore.UpdatedBook.Title);
         }
 
         [Fact]
