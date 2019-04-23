@@ -23,7 +23,7 @@ namespace Bookshelf.Models
     {
         [Key]
         [BindNever]
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Title { get; set; }

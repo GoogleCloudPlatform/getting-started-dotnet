@@ -26,11 +26,11 @@ namespace Bookshelf.Models
         /// </summary>
         void Create(Book book);
 
-        Book Read(long id);
+        Book Read(string id);
 
         void Update(Book book);
 
-        void Delete(long id);
+        void Delete(string id);
 
         BookList List(int pageSize, string nextPageToken);
     }

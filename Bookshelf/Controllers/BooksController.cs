@@ -47,14 +47,14 @@ namespace Bookshelf.Controllers
         }
 
         // GET: Books/Details/5
-        public IActionResult Details(long? id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Book book = _store.Read((long)id);
+            Book book = _store.Read(id);
             if (book == null)
             {
                 return NotFound();
@@ -109,14 +109,14 @@ namespace Bookshelf.Controllers
         }
 
         // GET: Books/Edit/5
-        public IActionResult Edit(long? id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Book book = _store.Read((long)id);
+            Book book = _store.Read(id);
             if (book == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace Bookshelf.Controllers
 
         // POST: Books/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(Book book, long id, IFormFile image)
+        public async Task<IActionResult> Edit(Book book, string id, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -143,10 +143,10 @@ namespace Bookshelf.Controllers
 
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> Delete(long id)
+        public async Task<IActionResult> Delete(string id)
         {
             // Delete book cover image from Cloud Storage if ImageUrl exists
-            string imageUrlToDelete = _store.Read((long)id).ImageUrl;
+            string imageUrlToDelete = _store.Read(id).ImageUrl;
             if (imageUrlToDelete != null)
             {
                 await _imageUploader.DeleteUploadedImage(id);

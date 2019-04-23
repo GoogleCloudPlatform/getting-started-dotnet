@@ -13,30 +13,28 @@
 // the License.
 
 using System;
+using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.Logging;
 
 namespace Bookshelf.Models
 {
-    class FakeBookStore : IBookStore
+#if false
+    class FirestoreBookStore : IBookStore
     {
-        private static Book s_fakeBook = new Book() 
-        {
-            Author = "Herman Melville",
-            Title = "Moby Dick",
-            Id = "1",
-            PublishedDate = DateTime.Parse("1851-01-01"),
-            Description = "It's about a whale.",
-        };
+        private readonly ILogger<FirestoreBookStore> _logger;
+        private FirestoreClient _firestore;
 
-        private readonly ILogger<FakeBookStore> _logger;
-
-        public FakeBookStore(ILogger<FakeBookStore> logger)
+        public FirestoreBookStore(ILogger<FirestoreBookStore> logger)
         {
             this._logger = logger;
+            _firestore = FirestoreClient.Create();
         }
 
         public void Create(Book book)
         {
+            _firestore.CreateDocument(new CreateDocumentRequest() {
+                
+            });
             _logger.LogTrace($"Create {book.Title}");
         }
 
@@ -65,4 +63,5 @@ namespace Bookshelf.Models
              _logger.LogTrace($"Update {book.Title}");
        }
     }
+#endif
 }

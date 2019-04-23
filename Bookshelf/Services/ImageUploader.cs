@@ -34,7 +34,7 @@ namespace Bookshelf.Services
         }
 
         // [START uploadimage]
-        public async Task<String> UploadImage(IFormFile image, long id)
+        public async Task<String> UploadImage(IFormFile image, string id)
         {
             var imageAcl = PredefinedObjectAcl.PublicRead;
 
@@ -50,7 +50,7 @@ namespace Bookshelf.Services
         }
         // [END uploadimage]
 
-        public async Task DeleteUploadedImage(long id)
+        public async Task DeleteUploadedImage(string id)
         {
             try
             {
