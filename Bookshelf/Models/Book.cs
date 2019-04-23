@@ -25,7 +25,7 @@ namespace Bookshelf.Models
         [BindNever]
         public long Id { get; set; }
 
-        [BindRequired]
+        [Required]
         public string Title { get; set; }
 
         public string Author { get; set; }
