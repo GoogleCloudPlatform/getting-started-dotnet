@@ -14,7 +14,7 @@
 
 using Bookshelf.Models;
 
-namespace GoogleCloudSamples.ViewModels.Books
+namespace Bookshelf.ViewModels.Books
 {
     public class Index
     {

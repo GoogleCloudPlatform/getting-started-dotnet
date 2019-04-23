@@ -12,12 +12,12 @@ namespace Bookshelf.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return Redirect("/Books");
         }
 
-        public IActionResult Privacy()
+        public IActionResult Throw()
         {
-            return View();
+            throw new System.Exception("For testing purposes only.");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
