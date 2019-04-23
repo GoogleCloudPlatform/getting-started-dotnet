@@ -38,9 +38,6 @@ namespace Bookshelf.Models
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
-
-        [BindNever]
-        public string CreatedById { get; set; }
     }
     // [END book]
 }

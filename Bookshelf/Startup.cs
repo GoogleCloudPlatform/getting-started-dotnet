@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bookshelf.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,7 @@ namespace Bookshelf
         {
             services.AddSingleton<Services.ImageUploader>(provider  => 
                 new Services.ImageUploader(Configuration["Bucket"]));
+            services.AddSingleton<IBookStore, FakeBookStore>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
