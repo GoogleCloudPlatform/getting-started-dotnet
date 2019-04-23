@@ -7,6 +7,15 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.media-left {
+  padding-right: 1em;
+  padding-top: 1em;
+}
+
+.media-body {
+  padding-top: 1em;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

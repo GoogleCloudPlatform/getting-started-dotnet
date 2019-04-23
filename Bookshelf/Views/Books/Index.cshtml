@@ -18,8 +18,7 @@
 
 <h3>Books</h3>
 <a href="/Books/Create" class="btn btn-success btn-sm" id="add-book">
-    <i class="glyphicon glyphicon-plus"></i>
-    Add book
+    <b>+</b> Add book
 </a>
 
 @foreach (var book in Model.BookList.Books)
@@ -31,7 +30,8 @@
                 {
                     <img src="@book.ImageUrl">
                 }
-                else {
+                else 
+                {
                     <img src="http://placekitten.com/g/128/192">
                 }
             </div>
