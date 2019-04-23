@@ -17,12 +17,11 @@
 @model Bookshelf.Models.Book
 
 <h3>Book</h3>
-<form method="post" action="/Books/Delete/@Model.Id"
-      id="deleteForm">
-    @Html.AntiForgeryToken()
+<form method="post" asp-controller="Books" asp-action="Delete"
+    asp-route-id="@Model.Id" id="deleteForm">
     <div class="btn-group">
-        <a href="/Books/Edit/@Model.Id"
-           class="btn btn-primary btn-sm">
+        <a asp-controller="Books" asp-action="Edit"
+            asp-route-id="@Model.Id" class="btn btn-primary btn-sm">
             <i class="glyphicon glyphicon-edit"></i>
             Edit book
         </a>

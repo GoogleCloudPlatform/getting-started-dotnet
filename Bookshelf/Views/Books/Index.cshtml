@@ -25,7 +25,7 @@
 @foreach (var book in Model.BookList.Books)
 {
     <div class="media">
-        <a href="/Books/Details/@book.Id">
+        <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
             <div class="media-left">
                 @if (!String.IsNullOrEmpty(book.ImageUrl))
                 {
