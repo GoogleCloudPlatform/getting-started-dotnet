@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,10 +26,29 @@ namespace Bookshelf
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string creds = Configuration["GOOGLE_APPLICATION_CREDENTIALS"];
             services.AddSingleton<Services.ImageUploader>(provider  => 
                 new Services.ImageUploader(Configuration["Bucket"]));
-            services.AddSingleton<IBookStore, FirestoreBookStore>();
+            // Choose a BookStoreBackend.
+            BookStoreBackend backend = Enum.Parse<BookStoreBackend>(
+                Configuration["BookStore"], ignoreCase: true);
+            switch (backend)
+            {
+                case BookStoreBackend.Fake:
+                    services.AddSingleton<IBookStore, FakeBookStore>();
+                    break;
+                case BookStoreBackend.Firestore:
+                    services.AddSingleton<IBookStore, FirestoreBookStore>();
+                    break;
+                case BookStoreBackend.SqlServer:
+                    services.AddEntityFrameworkSqlServer()
+                        .AddDbContext<BookStoreDbContext>(options =>
+                            options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                    services.AddSingleton<IBookStore, DbBookStore>();
+                    break;
+                default:
+                    throw new NotImplementedException(backend.ToString());
+            }
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

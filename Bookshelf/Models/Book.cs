@@ -14,6 +14,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -23,6 +24,7 @@ namespace Bookshelf.Models
     [FirestoreData]
     public class Book
     {
+        [Key]
         [BindNever]
         public string Id { get; set; }
 
