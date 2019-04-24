@@ -38,23 +38,23 @@ namespace Bookshelf.Controllers
         }
 
         // GET: Books
-        public IActionResult Index(string nextPageToken)
+        public async Task<IActionResult> Index(string nextPageToken)
         {
             return View(new ViewModels.Books.Index()
             {
-                BookList = _store.List(_pageSize, nextPageToken)
+                BookList = await _store.ListAsync(_pageSize, nextPageToken)
             });
         }
 
         // GET: Books/Details/5
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Book book = _store.Read(id);
+            Book book = await _store.ReadAsync(id);
             if (book == null)
             {
                 return NotFound();
@@ -76,13 +76,13 @@ namespace Bookshelf.Controllers
         {
             if (ModelState.IsValid)
             {
-                _store.Create(book);
+                await _store.CreateAsync(book);
                 // If book cover image submitted, save image to Cloud Storage
                 if (image != null)
                 {
                     var imageUrl = await _imageUploader.UploadImage(image, book.Id);
                     book.ImageUrl = imageUrl;
-                    _store.Update(book);
+                    await _store.UpdateAsync(book);
                 }
                 return RedirectToAction("Details", new { id = book.Id });
             }
@@ -109,14 +109,14 @@ namespace Bookshelf.Controllers
         }
 
         // GET: Books/Edit/5
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Book book = _store.Read(id);
+            Book book = await _store.ReadAsync(id);
             if (book == null)
             {
                 return NotFound();
@@ -135,7 +135,7 @@ namespace Bookshelf.Controllers
                 {
                     book.ImageUrl = await _imageUploader.UploadImage(image, book.Id);
                 }
-                _store.Update(book);
+                await _store.UpdateAsync(book);
                 return RedirectToAction("Details", new { id = book.Id });
             }
             return ViewForm("Edit", "Edit", book);
@@ -146,12 +146,12 @@ namespace Bookshelf.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             // Delete book cover image from Cloud Storage if ImageUrl exists
-            string imageUrlToDelete = _store.Read(id).ImageUrl;
+            string imageUrlToDelete = (await _store.ReadAsync(id)).ImageUrl;
             if (imageUrlToDelete != null)
             {
                 await _imageUploader.DeleteUploadedImage(id);
             }
-            _store.Delete(id);
+            await _store.DeleteAsync(id);
             return RedirectToAction("Index");
         }
     }

@@ -27,7 +27,7 @@ namespace Bookshelf
         {
             services.AddSingleton<Services.ImageUploader>(provider  => 
                 new Services.ImageUploader(Configuration["Bucket"]));
-            services.AddSingleton<IBookStore, FakeBookStore>();
+            services.AddSingleton<IBookStore, FirestoreBookStore>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

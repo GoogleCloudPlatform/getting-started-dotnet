@@ -12,6 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+using System.Threading.Tasks;
+
 namespace Bookshelf.Models
 {
     /// <summary>
@@ -24,14 +26,14 @@ namespace Bookshelf.Models
         /// Creates a new book.  The Id of the book will be filled when the
         /// function returns.
         /// </summary>
-        void Create(Book book);
+        Task CreateAsync(Book book);
 
-        Book Read(string id);
+        Task<Book> ReadAsync(string id);
 
-        void Update(Book book);
+        Task UpdateAsync(Book book);
 
-        void Delete(string id);
+        Task DeleteAsync(string id);
 
-        BookList List(int pageSize, string nextPageToken);
+        Task<BookList> ListAsync(int pageSize, string nextPageToken);
     }
 }

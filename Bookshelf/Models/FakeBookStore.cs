@@ -13,6 +13,7 @@
 // the License.
 
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Bookshelf.Models
@@ -35,34 +36,38 @@ namespace Bookshelf.Models
             this._logger = logger;
         }
 
-        public void Create(Book book)
+        public Task CreateAsync(Book book)
         {
             _logger.LogTrace($"Create {book.Title}");
+            return Task.CompletedTask;
         }
 
-        public void Delete(string id)
+        public Task DeleteAsync(string id)
         {
             _logger.LogTrace($"Delete {id}");
+            return Task.CompletedTask;
         }
 
-        public BookList List(int pageSize, string nextPageToken)
+        public Task<BookList> ListAsync(int pageSize, string nextPageToken)
         {
             _logger.LogTrace($"List {pageSize}, {nextPageToken}");
-            return new BookList()
+            var bookList = new BookList()
             {
                 Books = new [] {s_fakeBook}
             };
+            return Task.FromResult(bookList);
         }
 
-        public Book Read(string id)
+        public Task<Book> ReadAsync(string id)
         {
             _logger.LogTrace($"Read {id}");
-            return s_fakeBook;
+            return Task.FromResult(s_fakeBook);
         }
 
-        public void Update(Book book)
+        public Task UpdateAsync(Book book)
         {
              _logger.LogTrace($"Update {book.Title}");
-       }
+             return Task.CompletedTask;
+        }
     }
 }

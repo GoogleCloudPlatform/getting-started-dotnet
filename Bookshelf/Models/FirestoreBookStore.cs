@@ -12,9 +12,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-using System;
 using Google.Cloud.Firestore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bookshelf.Models
 {
@@ -31,46 +34,58 @@ namespace Bookshelf.Models
             _books = _firestore.Collection("Books");
         }
 
-        public void Create(Book book)
+        public async Task CreateAsync(Book book)
         {
             _logger.LogTrace($"Create {book.Title}");
-            DocumentReference docRef = _books.AddAsync(book).Result;
+            DocumentReference docRef = await _books.AddAsync(book);
             book.Id = docRef.Id;
         }
 
-        public void Delete(string id)
+        public Task DeleteAsync(string id)
         {
             _logger.LogTrace($"Delete {id}");
-            _books.Document(id).DeleteAsync().Wait();
+            return _books.Document(id).DeleteAsync();
         }
 
-        public BookList List(int pageSize, string nextPageToken)
+        public async Task<BookList> ListAsync(int pageSize, string nextPageToken)
         {
             _logger.LogTrace($"List {pageSize}, {nextPageToken}");
+            int nextPageStart;
+            int.TryParse(nextPageToken, out nextPageStart);
+            List<Book> bookList = new List<Book>();
+            var snapshot = await _books.Offset(nextPageStart).Limit(pageSize)
+                .GetSnapshotAsync();
+            foreach (DocumentSnapshot docSnapshot in snapshot.Documents) 
+            {
+                var book = docSnapshot.ConvertTo<Book>();
+                book.Id = docSnapshot.Id;
+                bookList.Add(book);
+            }
             return new BookList()
             {
-                Books = _books.GetSnapshotAsync().Result.`
+                Books = bookList,
+                NextPageToken = bookList.Count == pageSize ? 
+                    (nextPageStart + pageSize).ToString() : null
             };
         }
 
-        public Book Read(string id)
+        public async Task<Book> ReadAsync(string id)
         {
             _logger.LogTrace($"Read {id}");
-            return s_fakeBook;
-        }
-
-        public void Update(Book book)
-        {
-             _logger.LogTrace($"Update {book.Title}");
-        }
-
-        Document BookToDoc(Book book)
-        {
-            Document doc = new Document() 
+            var snapshot = await _books.Document(id).GetSnapshotAsync();
+            if (!snapshot.Exists)
             {
-                Fields = {"a": Value.}
+                return null;
             }
+            Book book = snapshot.ConvertTo<Book>();
+            book.Id = snapshot.Id;
+            return book;            
+        }
 
+        public Task UpdateAsync(Book book)
+        {
+            _logger.LogTrace($"Update {book.Title}");
+            return _books.Document(book.Id).SetAsync(book);
         }
     }
-}
+} 
