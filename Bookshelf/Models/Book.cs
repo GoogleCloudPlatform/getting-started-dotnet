@@ -14,29 +14,35 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Bookshelf.Models
 {
     // [START book]
+    [FirestoreData]
     public class Book
     {
-        [Key]
         [BindNever]
         public string Id { get; set; }
 
         [Required]
+        [FirestoreProperty]
         public string Title { get; set; }
 
+        [FirestoreProperty]
         public string Author { get; set; }
 
         [Display(Name = "Date Published")]
         [DataType(DataType.Date)]
+        [FirestoreProperty]
         public DateTime? PublishedDate { get; set; }
 
+        [FirestoreProperty]
         public string ImageUrl { get; set; }
 
         [DataType(DataType.MultilineText)]
+        [FirestoreProperty]
         public string Description { get; set; }
     }
     // [END book]

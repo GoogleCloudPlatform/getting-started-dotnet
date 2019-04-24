@@ -13,34 +13,35 @@
 // the License.
 
 using System;
-using Google.Cloud.Firestore.V1;
+using Google.Cloud.Firestore;
 using Microsoft.Extensions.Logging;
 
 namespace Bookshelf.Models
 {
-#if false
     class FirestoreBookStore : IBookStore
     {
         private readonly ILogger<FirestoreBookStore> _logger;
-        private FirestoreClient _firestore;
+        private FirestoreDb _firestore;
+        private CollectionReference _books;
 
         public FirestoreBookStore(ILogger<FirestoreBookStore> logger)
         {
             this._logger = logger;
-            _firestore = FirestoreClient.Create();
+            _firestore = FirestoreDb.Create();
+            _books = _firestore.Collection("Books");
         }
 
         public void Create(Book book)
         {
-            _firestore.CreateDocument(new CreateDocumentRequest() {
-                
-            });
             _logger.LogTrace($"Create {book.Title}");
+            DocumentReference docRef = _books.AddAsync(book).Result;
+            book.Id = docRef.Id;
         }
 
         public void Delete(string id)
         {
             _logger.LogTrace($"Delete {id}");
+            _books.Document(id).DeleteAsync().Wait();
         }
 
         public BookList List(int pageSize, string nextPageToken)
@@ -48,7 +49,7 @@ namespace Bookshelf.Models
             _logger.LogTrace($"List {pageSize}, {nextPageToken}");
             return new BookList()
             {
-                Books = new [] {s_fakeBook}
+                Books = _books.GetSnapshotAsync().Result.`
             };
         }
 
@@ -61,7 +62,15 @@ namespace Bookshelf.Models
         public void Update(Book book)
         {
              _logger.LogTrace($"Update {book.Title}");
-       }
+        }
+
+        Document BookToDoc(Book book)
+        {
+            Document doc = new Document() 
+            {
+                Fields = {"a": Value.}
+            }
+
+        }
     }
-#endif
 }
