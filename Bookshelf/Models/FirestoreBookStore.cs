@@ -30,13 +30,15 @@ namespace Bookshelf.Models
         public FirestoreBookStore(ILogger<FirestoreBookStore> logger)
         {
             this._logger = logger;
-            _firestore = FirestoreDb.Create();
+            _firestore = FirestoreDb.Create("surferjeff-firestore");
             _books = _firestore.Collection("Books");
         }
 
         public async Task CreateAsync(Book book)
         {
             _logger.LogTrace($"Create {book.Title}");
+            // Firestore expects all times to be UTC.
+            book.PublishedDate = book.PublishedDate?.ToUniversalTime();
             DocumentReference docRef = await _books.AddAsync(book);
             book.Id = docRef.Id;
         }
@@ -84,6 +86,8 @@ namespace Bookshelf.Models
 
         public Task UpdateAsync(Book book)
         {
+            // Firestore expects all times to be UTC.
+            book.PublishedDate = book.PublishedDate?.ToUniversalTime();
             _logger.LogTrace($"Update {book.Title}");
             return _books.Document(book.Id).SetAsync(book);
         }

@@ -25,6 +25,7 @@ namespace Bookshelf
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string creds = Configuration["GOOGLE_APPLICATION_CREDENTIALS"];
             services.AddSingleton<Services.ImageUploader>(provider  => 
                 new Services.ImageUploader(Configuration["Bucket"]));
             services.AddSingleton<IBookStore, FirestoreBookStore>();
