@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bookshelf.Models;
 using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Diagnostics.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -69,6 +70,7 @@ namespace Bookshelf
             }
             else
             {
+                app.UseGoogleExceptionLogging();
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
