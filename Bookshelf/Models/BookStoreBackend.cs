@@ -4,6 +4,7 @@ namespace Bookshelf.Models
         Firestore,
         Fake,
         SqlServer,
-        Postgresql
+        Postgresql,
+        InMemory
     }
 }

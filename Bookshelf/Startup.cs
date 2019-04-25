@@ -34,7 +34,13 @@ namespace Bookshelf
             switch (backend)
             {
                 case BookStoreBackend.Fake:
-                    services.AddSingleton<IBookStore, FakeBookStore>();
+                    services.AddTransient<IBookStore, FakeBookStore>();
+                    break;
+                case BookStoreBackend.InMemory:
+                    services.AddEntityFrameworkInMemoryDatabase()
+                        .AddDbContext<BookStoreDbContext>(options =>
+                        options.UseInMemoryDatabase("InMemory"));
+                    services.AddTransient<IBookStore, DbBookStore>();
                     break;
                 case BookStoreBackend.Firestore:
                     services.AddSingleton<IBookStore, FirestoreBookStore>();
@@ -43,7 +49,7 @@ namespace Bookshelf
                     services.AddEntityFrameworkSqlServer()
                         .AddDbContext<BookStoreDbContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-                    services.AddSingleton<IBookStore, DbBookStore>();
+                    services.AddTransient<IBookStore, DbBookStore>();
                     break;
                 default:
                     throw new NotImplementedException(backend.ToString());
