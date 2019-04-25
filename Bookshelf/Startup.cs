@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bookshelf.Models;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,7 +44,8 @@ namespace Bookshelf
                     services.AddTransient<IBookStore, DbBookStore>();
                     break;
                 case BookStoreBackend.Firestore:
-                    services.AddSingleton<IBookStore, FirestoreBookStore>();
+                    services.AddSingleton<IBookStore>(provider => 
+                        new FirestoreBookStore(GetProjectId()));
                     break;
                 case BookStoreBackend.SqlServer:
                     services.AddEntityFrameworkSqlServer()
@@ -82,6 +84,23 @@ namespace Bookshelf
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public static string GetProjectId()
+        {
+            GoogleCredential googleCredential = Google.Apis.Auth.OAuth2
+                .GoogleCredential.GetApplicationDefault();
+            if (googleCredential != null)
+            {
+                ICredential credential = googleCredential.UnderlyingCredential;
+                ServiceAccountCredential serviceAccountCredential =
+                    credential as ServiceAccountCredential;
+                if (serviceAccountCredential != null)
+                {
+                    return serviceAccountCredential.ProjectId;
+                }
+            }
+            return Google.Api.Gax.Platform.Instance().ProjectId;
         }
     }
 }

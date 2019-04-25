@@ -23,20 +23,17 @@ namespace Bookshelf.Models
 {
     class FirestoreBookStore : IBookStore
     {
-        private readonly ILogger<FirestoreBookStore> _logger;
         private FirestoreDb _firestore;
         private CollectionReference _books;
 
-        public FirestoreBookStore(ILogger<FirestoreBookStore> logger)
+        public FirestoreBookStore(string projectId)
         {
-            this._logger = logger;
-            _firestore = FirestoreDb.Create("surferjeff-firestore");
+            _firestore = FirestoreDb.Create(projectId);
             _books = _firestore.Collection("Books");
         }
 
         public async Task CreateAsync(Book book)
         {
-            _logger.LogTrace($"Create {book.Title}");
             // Firestore expects all times to be UTC.
             book.PublishedDate = book.PublishedDate?.ToUniversalTime();
             DocumentReference docRef = await _books.AddAsync(book);
@@ -45,13 +42,11 @@ namespace Bookshelf.Models
 
         public Task DeleteAsync(string id)
         {
-            _logger.LogTrace($"Delete {id}");
             return _books.Document(id).DeleteAsync();
         }
 
         public async Task<BookList> ListAsync(int pageSize, string nextPageToken)
         {
-            _logger.LogTrace($"List {pageSize}, {nextPageToken}");
             int nextPageStart;
             int.TryParse(nextPageToken, out nextPageStart);
             List<Book> bookList = new List<Book>();
@@ -73,7 +68,6 @@ namespace Bookshelf.Models
 
         public async Task<Book> ReadAsync(string id)
         {
-            _logger.LogTrace($"Read {id}");
             var snapshot = await _books.Document(id).GetSnapshotAsync();
             if (!snapshot.Exists)
             {
@@ -88,7 +82,6 @@ namespace Bookshelf.Models
         {
             // Firestore expects all times to be UTC.
             book.PublishedDate = book.PublishedDate?.ToUniversalTime();
-            _logger.LogTrace($"Update {book.Title}");
             return _books.Document(book.Id).SetAsync(book);
         }
     }
