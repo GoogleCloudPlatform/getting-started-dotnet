@@ -43,8 +43,8 @@ namespace Bookshelf.Models
 
         public Task DeleteAsync(string id)
         {
-            Book book = new Book { Id = id };
-            _dbcontext.Books.Attach(book);
+            Book book = _dbcontext.Books.Local.First(b => b.Id == id) 
+                ?? new Book { Id = id };
             _dbcontext.Books.Remove(book);
             return _dbcontext.SaveChangesAsync();
         }
