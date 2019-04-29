@@ -36,9 +36,6 @@ namespace Bookshelf
                 Configuration["BookStore"], ignoreCase: true);
             switch (backend)
             {
-                case BookStoreBackend.Fake:
-                    services.AddScoped<IBookStore, FakeBookStore>();
-                    break;
                 case BookStoreBackend.InMemory:
                     services.AddEntityFrameworkInMemoryDatabase()
                         .AddDbContext<BookStoreDbContext>(options =>
