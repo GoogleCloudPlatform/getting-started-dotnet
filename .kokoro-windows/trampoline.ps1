@@ -54,5 +54,8 @@ choco install nuget.commandline
 choco install -y iisexpress
 $env:PATH = "$env:PATH;${env:ProgramFiles(x86)}\IIS Express\"
 
+# Install dotnet command line.
+choco install -y --sxs dotnetcore-sdk --version 2.2.203
+
 # Run the tests.
 github\getting-started-dotnet\.kokoro-windows\main.ps1
