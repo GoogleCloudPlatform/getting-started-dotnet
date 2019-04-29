@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Bookshelf
 {
@@ -36,13 +37,13 @@ namespace Bookshelf
             switch (backend)
             {
                 case BookStoreBackend.Fake:
-                    services.AddTransient<IBookStore, FakeBookStore>();
+                    services.AddScoped<IBookStore, FakeBookStore>();
                     break;
                 case BookStoreBackend.InMemory:
                     services.AddEntityFrameworkInMemoryDatabase()
                         .AddDbContext<BookStoreDbContext>(options =>
                         options.UseInMemoryDatabase("InMemory"));
-                    services.AddTransient<IBookStore, DbBookStore>();
+                    services.AddScoped<IBookStore, DbBookStore>();
                     break;
                 case BookStoreBackend.Firestore:
                     services.AddSingleton<IBookStore>(provider => 
@@ -52,8 +53,14 @@ namespace Bookshelf
                     services.AddEntityFrameworkSqlServer()
                         .AddDbContext<BookStoreDbContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-                    services.AddTransient<IBookStore, DbBookStore>();
+                    services.AddScoped<IBookStore, DbBookStore>();
                     break;
+                case BookStoreBackend.Npgsql:
+                    services.AddEntityFrameworkNpgsql()
+                        .AddDbContext<BookStoreDbContext>(options =>
+                            options.UseNpgsql(Configuration.GetConnectionString("Npgsql")));
+                    services.AddScoped<IBookStore, DbBookStore>();
+                    break;                    
                 default:
                     throw new NotImplementedException(backend.ToString());
             }
