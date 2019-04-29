@@ -17,5 +17,5 @@ Backup-File appsettings.json {
     $appsettings = Get-Content -Raw appsettings.json | ConvertFrom-Json
     $appsettings.BookStore = "InMemory"
     ConvertTo-Json $appsettings | Out-File -Encoding utf8 -FilePath appsettings.json     
-    Run-KestrelTest 5512 -CasperJs11
+    Run-KestrelTest 5512
 }
