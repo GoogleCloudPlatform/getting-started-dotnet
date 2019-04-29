@@ -16,6 +16,7 @@ Import-Module ..\BuildTools.psm1 -DisableNameChecking
 Backup-File appsettings.json {
     $appsettings = Get-Content -Raw appsettings.json | ConvertFrom-Json
     $appsettings.BookStore = "InMemory"
+    $appsettings.Bucket = $env:GoogleCloudSamples:BucketName
     ConvertTo-Json $appsettings | Out-File -Encoding utf8 -FilePath appsettings.json     
-    Run-KestrelTest 5512
+    Run-KestrelTest 5000
 }
