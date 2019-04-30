@@ -18,5 +18,5 @@ Backup-File appsettings.json {
     $appsettings.BookStore = "InMemory"
     $appsettings.Bucket = $env:GoogleCloudSamples:BucketName
     ConvertTo-Json $appsettings | Out-File -Encoding utf8 -FilePath appsettings.json     
-    Run-KestrelTest 5000
+    Run-KestrelTest 5000 -CasperJs11
 }

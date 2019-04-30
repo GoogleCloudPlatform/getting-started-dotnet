@@ -776,8 +776,7 @@ function Run-CasperJs($TestJs='test.js', $Url, [switch]$v11 = $false,
         # Casperjs.exe creates a new terminal window, from which we
         # cannot capture output.  So we use python to invoke it and
         # capture output.
-        $casperOut = python (Join-Path $env:CASPERJS11_BIN "casperjs") `
-            -- test --xunit=TestResults.xml $TestJs
+        $casperOut = casperjs test $TestJs --xunit=TestResults.xml
         # Casper 1.1 always returns 0, so inspect the xml output
         # to see if a test failed.
         [xml]$x = Get-Content TestResults.xml         
