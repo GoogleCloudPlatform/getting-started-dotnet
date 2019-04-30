@@ -776,10 +776,10 @@ function Run-CasperJs($TestJs='test.js', $Url, [switch]$v11 = $false,
         # Casperjs.exe creates a new terminal window, from which we
         # cannot capture output.  So we use python to invoke it and
         # capture output.
-        $casperOut = casperjs test $TestJs --xunit=TestResults.xml
+        $casperOut = casperjs test $TestJs --xunit=sponge_log.xml
         # Casper 1.1 always returns 0, so inspect the xml output
         # to see if a test failed.
-        [xml]$x = Get-Content TestResults.xml         
+        [xml]$x = Get-Content sponge_log.xml         
         $LASTEXITCODE = 0      
         foreach ($suite in $x.testsuites.testsuite) {
             $LASTEXITCODE += [int] $suite.failures 
