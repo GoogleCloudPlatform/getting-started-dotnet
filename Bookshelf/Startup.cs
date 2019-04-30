@@ -59,7 +59,7 @@ namespace Bookshelf
                 case BookStoreBackend.Firestore:
                     services.AddSingleton<IBookStore>(provider =>
                         new FirestoreBookStore(
-                            Configuration["FIRESTORE_PROJECT_ID"] 
+                            Configuration["FIRESTORE_PROJECT_ID"]
                             ?? GetProjectId()));
                     break;
                 case BookStoreBackend.SqlServer:
