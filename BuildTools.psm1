@@ -698,7 +698,8 @@ function Run-Kestrel([Parameter(mandatory=$true)][string]$url)
 #
 ##############################################################################
 function Run-KestrelTest([Parameter(mandatory=$true)]$PortNumber, $TestJs = 'test.js', 
-    [switch]$LeaveRunning = $false, [switch]$CasperJs11 = $false) {
+    [switch]$LeaveRunning = $false, [switch]$CasperJs11 = $false,
+    $OutputDir) {
     $url = "http://localhost:$PortNumber"
     $job = Run-Kestrel $url
     Try
@@ -707,6 +708,10 @@ function Run-KestrelTest([Parameter(mandatory=$true)]$PortNumber, $TestJs = 'tes
     }
     Finally
     {
+        if ((Test-Path sponge_log.xml) -and $OutputDir) {
+            mkdir -ErrorAction SilentlyContinue $OutputDir | Out-Null
+            Move-Item -Force sponge_log.xml $OutputDir
+        }
         if (!$LeaveRunning) {
             Stop-Job $job
             Receive-Job $job
