@@ -45,15 +45,14 @@ namespace Bookshelf.Models
             return _books.Document(id).DeleteAsync();
         }
 
-        public async Task<BookList> ListAsync(int pageSize, string nextPageToken)
+        public async Task<BookList> ListAsync(int pageSize, string previousBookId)
         {
             List<Book> bookList = new List<Book>();
-            string previousBookId = nextPageToken;
             var query = _books.OrderBy("Title");
             if (!string.IsNullOrEmpty(previousBookId))
             {
-                DocumentReference prevDocRef = _books.Document(previousBookId);
-                var prevDocSnapshot = await prevDocRef.GetSnapshotAsync();
+                DocumentSnapshot prevDocSnapshot = await
+                    _books.Document(previousBookId).GetSnapshotAsync();
                 if (prevDocSnapshot.Exists)
                 {
                     query = query.StartAfter(prevDocSnapshot);
