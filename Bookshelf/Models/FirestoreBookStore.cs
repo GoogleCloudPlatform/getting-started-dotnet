@@ -47,10 +47,19 @@ namespace Bookshelf.Models
 
         public async Task<BookList> ListAsync(int pageSize, string nextPageToken)
         {
-            int nextPageStart;
-            int.TryParse(nextPageToken, out nextPageStart);
             List<Book> bookList = new List<Book>();
-            var snapshot = await _books.Offset(nextPageStart).Limit(pageSize)
+            string previousBookId = nextPageToken;
+            var query = _books.OrderBy("Title");
+            if (!string.IsNullOrEmpty(previousBookId))
+            {
+                DocumentReference prevDocRef = _books.Document(previousBookId);
+                var prevDocSnapshot = await prevDocRef.GetSnapshotAsync();
+                if (prevDocSnapshot.Exists)
+                {
+                    query = query.StartAfter(prevDocSnapshot);
+                }
+            }
+            QuerySnapshot snapshot = await query.Limit(pageSize)
                 .GetSnapshotAsync();
             foreach (DocumentSnapshot docSnapshot in snapshot.Documents) 
             {
@@ -62,7 +71,7 @@ namespace Bookshelf.Models
             {
                 Books = bookList,
                 NextPageToken = bookList.Count == pageSize ? 
-                    (nextPageStart + pageSize).ToString() : null
+                    (bookList.Last().Id).ToString() : null
             };
         }
 
