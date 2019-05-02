@@ -1,0 +1,57 @@
+@{
+// Copyright 2015 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+}
+@model Bookshelf.ViewModels.Books.Form
+
+<h3>@Model.Action book</h3>
+<!-- [START form] -->
+<form id="book-form" method="post" enctype="multipart/form-data" asp-controller="Books" asp-action="@Model.FormAction/@Model.Book.Id"> 
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Book.Title"></label>
+        <input asp-for="Book.Title" class="form-control" />
+        <span asp-validation-for="Book.Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Author"></label>
+        <input asp-for="Book.Author" class="form-control" />
+        <span asp-validation-for="Book.Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.PublishedDate"></label>
+        <input asp-for="Book.PublishedDate" class="form-control" />
+        <span asp-validation-for="Book.PublishedDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Description"></label>
+        <input asp-for="Book.Description" class="form-control" />
+        <span asp-validation-for="Book.Description" class="text-danger"></span>
+    </div>
+    <!-- [START image] -->
+    <div class="form-group">
+        <label for=image>Cover Image</label>
+        <input type="file" id="image" name="image" value="@Model.Book.ImageUrl" class="form-control">
+        <input asp-for="Book.ImageUrl" type="hidden">
+    </div>
+    <!-- [END image] -->
+
+    <button type="submit" class="btn btn-success" id="submit-button">Save</button>
+</form>
+<!-- [END form] -->

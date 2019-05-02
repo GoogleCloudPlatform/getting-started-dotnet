@@ -25,3 +25,4 @@ node_modules/
 *.pubxml
 *.pubxml.user
 *sponge_log.xml
+.vscode/

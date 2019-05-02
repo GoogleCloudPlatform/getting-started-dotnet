@@ -118,7 +118,10 @@ function When-Empty($Target, $ArgList, [ScriptBlock]$ScriptBlock) {
 #
 ##############################################################################
 filter Get-Config ($Target, $ArgList, $Mask="Web.config") {
-    When-Empty $Target $ArgList {Find-Files -Masks $Mask} | Resolve-Path -Relative
+    $paths = When-Empty $Target $ArgList {Find-Files -Masks $Mask}
+    if ($paths) {
+        $paths | Resolve-Path -Relative
+    }
 }
 
 ##############################################################################
@@ -154,6 +157,9 @@ filter Update-Config ([switch]$Yes) {
             if ("a" -eq $reply) { $Yes = $true }
         }
         $config = Select-Xml -Path $configPath -XPath configuration
+        if (-not $config) {
+            continue;
+        }
         Add-Setting $config 'GoogleCloudSamples:BookStore' $env:GoogleCloudSamples:BookStore
         Add-Setting $config 'GoogleCloudSamples:ProjectId' $env:GoogleCloudSamples:ProjectId
         Add-Setting $config 'GoogleCloudSamples:BucketName' $env:GoogleCloudSamples:BucketName
@@ -401,11 +407,70 @@ function BuildAndRun-CoreTest($TestJs = "test.js") {
 filter Format-Code {
     $projects = When-Empty $_ $args { Find-Files -Masks *.csproj }
     foreach ($project in $projects) {
-        codeformatter.exe /rule:BraceNewLine /rule:ExplicitThis /rule:ExplicitVisibility /rule:FieldNames /rule:FormatDocument /rule:ReadonlyFields /rule:UsingLocation /nocopyright $project
-        if ($LASTEXITCODE) {
-            $project.FullName
-            throw "codeformatter failed with exit code $LASTEXITCODE."
+        Backup-File -Files $project -ScriptBlock {
+            Convert-2003ProjectToCore $project
+            "codeformatter.exe $project" | Write-Host
+            codeformatter.exe /rule:BraceNewLine /rule:ExplicitThis `
+                /rule-:ExplicitVisibility /rule:FieldNames `
+                /rule:FormatDocument /rule:ReadonlyFields /rule:UsingLocation `
+                /nocopyright $project
+            if ($LASTEXITCODE) {
+                $project.FullName
+                throw "codeformatter failed with exit code $LASTEXITCODE."
+            }
         }
+    }
+}
+
+$coreProjectText = @"
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <Compile Include="Program.cs" />
+    </ItemGroup>
+</Project>
+"@
+
+##############################################################################
+#.SYNOPSIS
+# Converts .NET Core csproj to MSBuild 2003.
+#
+#.DESCRIPTION
+# Creates the bare minimal project for code-formatter to work.
+# If you open the project with Visual Studio everything will be broken.
+#
+#.PARAMETER csproj
+# A project to convert.
+#
+#.EXAMPLE
+# Convert-2003ProjectToCore AuthSample.csproj
+##############################################################################
+function Convert-2003ProjectToCore($csproj) {
+    $cspath = (Resolve-Path $csproj).Path
+    $xml = [xml](Get-Content $csproj)
+    if (-not $xml.Project.xmlns -eq "http://schemas.microsoft.com/developer/msbuild/2003") {
+        Write-Host "Converting .NET core $cspath to msbuild/2003..."
+        $doc = [xml]$coreProjectText
+        $group = $doc.Project.ItemGroup
+        $compileTemplate = $group.Compile
+        $sourceFiles = (Get-ChildItem -Path (Split-Path $cspath) -Filter "*.cs")
+        foreach ($sourceFile in $sourceFiles) {
+            $compile = $compileTemplate.Clone()
+            $compile.Include = $sourceFile.FullName
+            $group.AppendChild($compile) | Out-Null
+        }
+        $group.RemoveChild($compileTemplate) | Out-Null
+        $doc.save($cspath)
+    } else {
+        Write-Host "$cspath looks like a 2003 .csproj to me!"
+        $doc = [xml] (Get-Content $cspath)
+        # This one import causes codeformatter to choke.  Turn it off.
+        foreach ($import in $doc.Project.Import | Where-Object `
+            {$_.Project -like '*\Microsoft.WebApplication.targets'})
+        {
+            $import.Condition = 'false'
+        }
+        $doc.save($cspath)
     }
 }
 
@@ -585,6 +650,78 @@ function Run-IISExpressTest($SiteName = '', $ApplicationhostConfig = '',
 
 ##############################################################################
 #.SYNOPSIS
+# Run the website.
+#
+#.PARAMTER url
+# The partial url to serve.  It should contain the scheme and host.  For
+# example: https://localhost:2342
+#
+#.RETURNS
+# The job running kestrel.
+##############################################################################
+function Run-Kestrel([Parameter(mandatory=$true)][string]$url)
+{
+    $kestrelJob = Start-Job -ArgumentList (Get-Location), $url -ScriptBlock {
+        Set-Location $args[0]
+        $env:ASPNETCORE_URLS = $args[1]
+        dotnet run
+    }
+    # Wait for Kestrel to come up.
+    while(-not $started) {
+        Start-Sleep -Seconds 1
+        $lines = Receive-Job $kestrelJob
+        $lines | Write-Host
+        if (($kestrelJob | Get-Job).State -ne 'Running') {
+            throw "Kestrel failed to start."
+        }
+        foreach ($line in $lines) {
+            if ($line -like 'Application started.*') {
+                return $kestrelJob
+            }
+        }
+        $seconds++
+        if ($seconds -gt 120) {
+            throw "Kestrel took > 120 seconds to start up."
+        }
+    }
+}
+
+##############################################################################
+#.SYNOPSIS
+# Run the website, then run the test javascript file with casper.
+#
+#.PARAMETER PortNumber
+# The port number to run the kestrel server on.
+#
+#.DESCRIPTION
+# Throws an exception if the test fails.
+#
+##############################################################################
+function Run-KestrelTest([Parameter(mandatory=$true)]$PortNumber, $TestJs = 'test.js', 
+    [switch]$LeaveRunning = $false, [switch]$CasperJs11 = $false,
+    $OutputDir) {
+    $url = "http://localhost:$PortNumber"
+    $job = Run-Kestrel $url
+    Try
+    {
+        Run-CasperJs $TestJs $Url -v11:$CasperJs11
+    }
+    Finally
+    {
+        if ((Test-Path sponge_log.xml) -and $OutputDir) {
+            mkdir -ErrorAction SilentlyContinue $OutputDir | Out-Null
+            Move-Item -Force sponge_log.xml $OutputDir
+        }
+        if (!$LeaveRunning) {
+            Stop-Job $job
+            Receive-Job $job
+            Remove-Job $job
+        }
+    }
+}
+
+##############################################################################
+#.SYNOPSIS
 # Migrate the database.
 #
 #.DESCRIPTION
@@ -624,6 +761,45 @@ function Migrate-Database($DllName = '', $DllDir = 'bin', $Config = '..\Web.conf
     }
 }
 
+##############################
+#.SYNOPSIS
+# Runs CasperJs
+#
+#.PARAMETER TestJs
+# The Javascript file to run.
+#
+#.PARAMETER Url
+# The url to pass to the test.  Usually points to running website to test.
+#
+#.PARAMETER v11
+# Use CasperJs version 1.1 instead of 1.0.
+##############################
+function Run-CasperJs($TestJs='test.js', $Url, [switch]$v11 = $false,
+    [string]$OutDir) {
+    if ($v11) {
+        $env:CASPERJS11_URL = $Url
+        # Casperjs.exe creates a new terminal window, from which we
+        # cannot capture output.  So we use python to invoke it and
+        # capture output.
+        $casperOut = casperjs test $TestJs --xunit=sponge_log.xml
+        # Casper 1.1 always returns 0, so inspect the xml output
+        # to see if a test failed.
+        [xml]$x = Get-Content sponge_log.xml         
+        $LASTEXITCODE = 0      
+        foreach ($suite in $x.testsuites.testsuite) {
+            $LASTEXITCODE += [int] $suite.failures 
+        }
+    } else {
+        $casperOut = casperjs $TestJs $Url
+    }
+    if ($LASTEXITCODE -eq 0) {
+        $casperOut | Write-Host
+        return
+    }
+    $casperOut | Write-Host
+    throw "Casperjs failed with error code $LASTEXITCODE"
+}
+
 ##############################################################################
 #.SYNOPSIS
 # Calls nuget update on all the packages that match the mask.
@@ -660,6 +836,39 @@ filter Update-Packages ([string] $Mask) {
 
 ##############################################################################
 #.SYNOPSIS
+# Make a backup copy of a file, run the script, and restore the file.
+#
+#.PARAMETER Files
+# A list of files to back up.
+#
+#.PARAMETER ScriptBlock
+# The script to execute.
+#
+#.EXAMPLE
+# Backup-File Program.cs { Build }
+##############################################################################
+function Backup-File(
+    [string[]][Parameter(Mandatory=$true,ValueFromPipeline=$true)] $Files,
+    [scriptblock][Parameter(Mandatory=$true)] $ScriptBlock)
+{
+    $fileMap = @{}
+    try {
+        foreach ($file in $files) {
+            $tempCopy = [System.IO.Path]::GetTempFileName()
+            Copy-Item -Force $file $tempCopy
+            $fileMap[$file] = $tempCopy
+        }
+        . $ScriptBlock
+    }
+    finally {
+        foreach ($file in $files) {
+            Copy-Item -Force $fileMap[$file] $file
+        }
+    }
+}
+
+##############################################################################
+#.SYNOPSIS
 # Given a path to a runTests.ps1 script, find the git timestamp of changes in
 # the same directory. 
 ##############################################################################
@@ -682,3 +891,4 @@ function Get-GitTimeStampForScript($script) {
         Pop-Location
     }
 }
+
