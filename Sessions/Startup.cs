@@ -16,7 +16,7 @@ namespace Sessions
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFirestoreDistributedCache("surferjeff-firestore")
+            services.AddFirestoreDistributedCache()
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
             services.Configure<CookiePolicyOptions>(options =>
@@ -45,9 +45,11 @@ namespace Sessions
 
             app.Run(async (context) =>
             {
+                // Retreive the # of views from the session.
                 var views = context.Session.GetInt32("views").GetValueOrDefault();
                 views += 1;
                 context.Session.SetInt32("views" , views);
+                // Retrieve the randomly selected greeting from the session.
                 var greeting = context.Session.GetString("greeting");
                 if (greeting is null)
                 {
