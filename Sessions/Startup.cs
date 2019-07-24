@@ -1,4 +1,6 @@
-﻿using Google.Cloud.AspNetCore.Firestore.DistributedCache;
+﻿using Google.Cloud.AspNetCore.DataProtection.Kms;
+using Google.Cloud.AspNetCore.DataProtection.Storage;
+using Google.Cloud.AspNetCore.Firestore.DistributedCache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +9,35 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Sessions
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Antiforgery tokens require data protection.
+            services.AddDataProtection()
+                // Store keys in Cloud Storage so that multiple instances
+                // of the web application see the same keys.
+                .PersistKeysToGoogleCloudStorage(
+                    Configuration["DataProtection:Bucket"],
+                    Configuration["DataProtection:Object"])
+                // Protect the keys with Google KMS for encryption and fine-
+                // grained access control.
+                .ProtectKeysWithGoogleKms(
+                    Configuration["DataProtection:KmsKeyName"]);
             services.AddFirestoreDistributedCache()
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
