@@ -27,6 +27,12 @@ namespace Sessions
             });
         }
 
+        Random _random = new Random();
+
+        private static readonly string[] _greetings = 
+            {"Hello World", "Hallo Welt", "Hola mundo", 
+            "Salut le Monde", "Ciao Mondo"};
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -42,7 +48,12 @@ namespace Sessions
                 var views = context.Session.GetInt32("views").GetValueOrDefault();
                 views += 1;
                 context.Session.SetInt32("views" , views);
-                string greeting = "Hello World";
+                var greeting = context.Session.GetString("greeting");
+                if (greeting is null)
+                {
+                    greeting = _greetings[_random.Next(_greetings.Length)];
+                    context.Session.SetString("greeting", greeting);
+                }
                 await context.Response.WriteAsync($"{views} views for {greeting}.");
             });
         }
