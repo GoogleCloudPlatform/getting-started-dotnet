@@ -25,6 +25,6 @@ gcloud builds submit --tag gcr.io/$projectId/sessions `
     bin/Release/netcoreapp2.2/publish
 
 # Run the container with Google Cloud Run.
-gcloud beta run deploy sessions --region $region `
+gcloud beta run deploy sessions --region $region --platform managed `
     --image gcr.io/$projectId/sessions --allow-unauthenticated
 

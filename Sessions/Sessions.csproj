@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\google-cloud-dotnet-powerpack\Google.Cloud.AspNetCore\Google.Cloud.AspNetCore.Firestore.DistributedCache\Google.Cloud.AspNetCore.Firestore.DistributedCache.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Dockerfile" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
