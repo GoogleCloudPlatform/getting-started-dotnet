@@ -29,12 +29,13 @@
 # .\Set-Up.ps1
 ##############################################################################
 
+Param ([string]$keyRingId = 'dataprotectionprovider', [string]$keyId = 'masterkey',
+    [string]$bucketName, [string]$projectId)
+
 Import-Module .\SetUp.psm1
 
-$projectId = gcloud config get-value project
-$keyRingId = "dataprotectionprovider"
-$keyId = "masterkey"
-$bucketName = "$projectId-bucket"
+$projectId = if ($projectId) { $projectId } else { gcloud config get-value project }
+$bucketName = if ($bucketName) { $bucketName } else { "$projectId-bucket" }
 
 # Check to see if the key ring already exists.
 $matchingKeyRing = (gcloud kms keyrings list --format json --location global `
