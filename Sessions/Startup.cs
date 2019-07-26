@@ -60,6 +60,11 @@ namespace Sessions
 
             app.Run(async (context) =>
             {
+                if (context.Request.Path.Value != "/")
+                {
+                    context.Response.StatusCode = 404;
+                    return;
+                }
                 // Retreive the # of views from the session.
                 var views = context.Session.GetInt32("views").GetValueOrDefault();
                 views += 1;
