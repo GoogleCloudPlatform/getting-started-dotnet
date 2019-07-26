@@ -1,4 +1,18 @@
-﻿using Google.Cloud.AspNetCore.DataProtection.Kms;
+﻿// Copyright (c) 2019 Google LLC.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+using Google.Cloud.AspNetCore.DataProtection.Kms;
 using Google.Cloud.AspNetCore.DataProtection.Storage;
 using Google.Cloud.AspNetCore.Firestore.DistributedCache;
 using System;
@@ -42,11 +56,11 @@ namespace Sessions
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
         }
-
+readonly 
         Random _random = new Random();
 
-        private static readonly string[] _greetings = 
-            {"Hello World", "Hallo Welt", "Hola mundo", 
+        private static readonly string[] s_greetings =
+            {"Hello World", "Hallo Welt", "Hola mundo",
             "Salut le Monde", "Ciao Mondo"};
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,12 +82,12 @@ namespace Sessions
                 // Retreive the # of views from the session.
                 var views = context.Session.GetInt32("views").GetValueOrDefault();
                 views += 1;
-                context.Session.SetInt32("views" , views);
+                context.Session.SetInt32("views", views);
                 // Retrieve the randomly selected greeting from the session.
                 var greeting = context.Session.GetString("greeting");
                 if (greeting is null)
                 {
-                    greeting = _greetings[_random.Next(_greetings.Length)];
+                    greeting = s_greetings[_random.Next(s_greetings.Length)];
                     context.Session.SetString("greeting", greeting);
                 }
                 await context.Response.WriteAsync($"{views} views for {greeting}.");
