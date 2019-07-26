@@ -56,8 +56,8 @@ namespace Sessions
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
         }
-readonly 
-        Random _random = new Random();
+        readonly
+                Random _random = new Random();
 
         private static readonly string[] s_greetings =
             {"Hello World", "Hallo Welt", "Hola mundo",
