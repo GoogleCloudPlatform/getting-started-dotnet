@@ -22,7 +22,6 @@ TestResults/
 **/wwwroot/lib/
 node_modules/
 .vs/
-*.pubxml
 *.pubxml.user
 *sponge_log.xml
 .vscode/
