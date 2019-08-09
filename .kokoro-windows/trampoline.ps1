@@ -20,8 +20,9 @@ function Unzip([string]$zipfile, [string]$outpath)
 # Install dotnet command line.
 choco install -y --sxs dotnetcore-sdk --version 2.2.203
 
-# Install codeformatter
+# Install dotnet-format
 dotnet tool install -g dotnet-format
+$env:PATH = "$env:PATH;$env:HOMEDRIVE$env:HOMEPATH\.dotnet\tools"
 
 # Lint the code
 Push-Location
