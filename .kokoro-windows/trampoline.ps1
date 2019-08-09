@@ -35,6 +35,12 @@ try {
     Pop-Location
 }
 
+# Install msbuild 14 for all the .NET Framework samples in aspnet/
+choco install -y microsoft-build-tools --version 14.0.25420.1
+# The install fails to update PATH.  Do it ourselves.
+$env:PATH="$env:PATH;C:\Program Files (x86)\MSBuild\14.0\Bin"
+Get-Command MSBuild.exe
+
 # Install phantomjs
 Unzip $env:KOKORO_GFILE_DIR\phantomjs-2.1.1-windows.zip \
 $env:PATH = "$env:PATH;$(Resolve-Path \phantomjs-2.1.1-windows)\bin"
