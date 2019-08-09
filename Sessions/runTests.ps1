@@ -26,17 +26,20 @@ $keyName = "projects/$projectId/locations/global/keyRings/$keyRingId/cryptoKeys/
 $bucketName = "$projectId-test-bucket"
 
 Backup-File appsettings.json {
-    .\Set-Up.ps1 -keyRingId $keyRingId -keyId $keyId -bucketName $bucketName `
-        -projectId $projectId
-    # Add Permissions for App Engine to encrypt and decrypt secrets for
-    # Kms DataProtectionProvider.
-    $roles = @('roles/cloudkms.admin', 'roles/cloudkms.cryptoKeyEncrypterDecrypter')
-    foreach ($role in $roles) {
-        Write-Host "Adding role $role to $email for $keyRingId."
-        gcloud kms keyrings add-iam-policy-binding $keyRingId `
-            --project $projectId --location 'global' `
-            --member serviceAccount:$email --role $role
+    if ($SetUp) {
+        .\Set-Up.ps1 -keyRingId $keyRingId -keyId $keyId -bucketName $bucketName `
+            -projectId $projectId
+        # Add Permissions for App Engine to encrypt and decrypt secrets for
+        # Kms DataProtectionProvider.
+        $roles = @('roles/cloudkms.admin', 'roles/cloudkms.cryptoKeyEncrypterDecrypter')
+        foreach ($role in $roles) {
+            Write-Host "Adding role $role to $email for $keyRingId."
+            gcloud kms keyrings add-iam-policy-binding $keyRingId `
+                --project $projectId --location 'global' `
+                --member serviceAccount:$email --role $role
+        }
+    } else {
+        Update-Appsettings $keyName $bucketName
     }
-    Update-Appsettings $keyName $bucketName
     Run-KestrelTest 5000 -CasperJs11
 }

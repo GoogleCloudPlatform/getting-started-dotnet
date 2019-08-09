@@ -52,7 +52,8 @@ namespace Sessions
                 // grained access control.
                 .ProtectKeysWithGoogleKms(
                     Configuration["DataProtection:KmsKeyName"]);
-            services.AddFirestoreDistributedCache()
+            services.AddFirestoreDistributedCache(
+                    Configuration["FIRESTORE_PROJECT_ID"])
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
         }
