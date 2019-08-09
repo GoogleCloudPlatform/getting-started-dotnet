@@ -17,16 +17,11 @@ function Unzip([string]$zipfile, [string]$outpath)
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
 }
 
-# Install codeformatter
-Unzip $env:KOKORO_GFILE_DIR\codeformatter.zip \codeformatter
-$codeformatterInstallPath = Resolve-Path \codeformatter
-$env:PATH = "$env:PATH;$codeformatterInstallPath\bin"
+# Install dotnet command line.
+choco install -y --sxs dotnetcore-sdk --version 2.2.203
 
-# Install msbuild 14 for code-formatter
-choco install -y microsoft-build-tools --version 14.0.25420.1
-# The install fails to update PATH.  Do it ourselves.
-$env:PATH="$env:PATH;C:\Program Files (x86)\MSBuild\14.0\Bin"
-Get-Command MSBuild.exe
+# Install codeformatter
+dotnet tool install -g dotnet-format
 
 # Lint the code
 Push-Location
@@ -54,8 +49,6 @@ choco install nuget.commandline
 choco install -y iisexpress
 $env:PATH = "$env:PATH;${env:ProgramFiles(x86)}\IIS Express\"
 
-# Install dotnet command line.
-choco install -y --sxs dotnetcore-sdk --version 2.2.203
 
 # Run the tests.
 github\getting-started-dotnet\.kokoro-windows\main.ps1

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace Bookshelf.Services
-{    
+{
     public class ImageUploader
     {
         private readonly string _bucketName;

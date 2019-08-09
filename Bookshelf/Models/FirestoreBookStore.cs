@@ -60,7 +60,7 @@ namespace Bookshelf.Models
             }
             QuerySnapshot snapshot = await query.Limit(pageSize)
                 .GetSnapshotAsync();
-            foreach (DocumentSnapshot docSnapshot in snapshot.Documents) 
+            foreach (DocumentSnapshot docSnapshot in snapshot.Documents)
             {
                 var book = docSnapshot.ConvertTo<Book>();
                 book.Id = docSnapshot.Id;
@@ -69,7 +69,7 @@ namespace Bookshelf.Models
             return new BookList()
             {
                 Books = bookList,
-                NextPageToken = bookList.Count == pageSize ? 
+                NextPageToken = bookList.Count == pageSize ?
                     (bookList.Last().Id).ToString() : null
             };
         }
@@ -83,7 +83,7 @@ namespace Bookshelf.Models
             }
             Book book = snapshot.ConvertTo<Book>();
             book.Id = snapshot.Id;
-            return book;            
+            return book;
         }
 
         public Task UpdateAsync(Book book)
@@ -93,4 +93,4 @@ namespace Bookshelf.Models
             return _books.Document(book.Id).SetAsync(book);
         }
     }
-} 
+}
