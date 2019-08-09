@@ -87,9 +87,11 @@ namespace Sessions
                 var greeting = context.Session.GetString("greeting");
                 if (greeting is null)
                 {
+                    // Randomly choose a greeting.
                     greeting = s_greetings[_random.Next(s_greetings.Length)];
                     context.Session.SetString("greeting", greeting);
                 }
+                // Render the page.
                 await context.Response.WriteAsync($"{views} views for {greeting}.");
             });
         }
