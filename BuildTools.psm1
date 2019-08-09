@@ -407,7 +407,7 @@ function BuildAndRun-CoreTest($TestJs = "test.js") {
 filter Format-Code {
     $projects = When-Empty $_ $args { Find-Files -Masks *.csproj }
     foreach ($project in $projects) {
-        dotnet format -w $project
+        dotnet-format -w $project
         if ($LASTEXITCODE) {
             $project.FullName
             throw "dotnet format failed with exit code $LASTEXITCODE."
