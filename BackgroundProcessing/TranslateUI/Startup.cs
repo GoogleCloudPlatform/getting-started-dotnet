@@ -12,6 +12,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// [START getting_started_background_app_main]
+
+
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Google.Cloud.PubSub.V1;
@@ -71,7 +74,7 @@ namespace TranslateUI
             });
         }
 
-
+        // [END getting_started_background_app_main]
         public static string GetProjectId()
         {
             GoogleCredential googleCredential = Google.Apis.Auth.OAuth2
@@ -113,5 +116,8 @@ namespace TranslateUI
 
         public string GetTopicName() =>
             Configuration["TranslateRequestsTopicName"] ?? "translate-requests";
+
+        // [START getting_started_background_app_main]
     }
 }
+// [END getting_started_background_app_main]
