@@ -12,6 +12,17 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+##############################################################################
+#.SYNOPSIS
+# Cleans up GCP resources created by .\Setup.ps1 
+#
+#.OUTPUTS
+# Log of success and failure. 
+#
+#.EXAMPLE
+# .\Clean-Up.ps1
+##############################################################################
+
 Import-Module .\SetUp.psm1
 
 # Read the name of the bucket and key from appsettings.json.
