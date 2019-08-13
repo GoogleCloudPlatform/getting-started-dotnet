@@ -43,7 +43,7 @@ namespace Bookshelf.Models
 
         public Task DeleteAsync(string id)
         {
-            Book book = _dbcontext.Books.Local.First(b => b.Id == id)
+            Book book = _dbcontext.Books.Local.SingleOrDefault(b => b.Id == id)
                 ?? new Book { Id = id };
             _dbcontext.Books.Remove(book);
             return _dbcontext.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace Bookshelf.Models
 
         public async Task<Book> ReadAsync(string id)
         {
-            return await _dbcontext.Books.FirstAsync(m => m.Id == id);
+            return await _dbcontext.Books.SingleOrDefaultAsync(m => m.Id == id);
         }
 
 
