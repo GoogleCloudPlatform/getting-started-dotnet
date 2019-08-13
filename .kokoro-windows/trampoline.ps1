@@ -17,16 +17,13 @@ function Unzip([string]$zipfile, [string]$outpath)
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
 }
 
-# Install codeformatter
-Unzip $env:KOKORO_GFILE_DIR\codeformatter.zip \codeformatter
-$codeformatterInstallPath = Resolve-Path \codeformatter
-$env:PATH = "$env:PATH;$codeformatterInstallPath\bin"
+# Install dotnet command line.
+choco install -y --sxs dotnetcore-sdk --version 2.2.203
 
-# Install msbuild 14 for code-formatter
-choco install -y microsoft-build-tools --version 14.0.25420.1
-# The install fails to update PATH.  Do it ourselves.
-$env:PATH="$env:PATH;C:\Program Files (x86)\MSBuild\14.0\Bin"
-Get-Command MSBuild.exe
+# Install dotnet-format
+$dotnetToolsDir = "$env:USERPROFILE\.dotnet\tools"
+dotnet tool install -g dotnet-format --tool-path $dotnetToolsDir
+$env:PATH = "$env:PATH;$dotnetToolsDir"
 
 # Lint the code
 Push-Location
@@ -37,6 +34,12 @@ try {
 } finally {
     Pop-Location
 }
+
+# Install msbuild 14 for all the .NET Framework samples in aspnet/
+choco install -y microsoft-build-tools --version 14.0.25420.1
+# The install fails to update PATH.  Do it ourselves.
+$env:PATH="$env:PATH;C:\Program Files (x86)\MSBuild\14.0\Bin"
+Get-Command MSBuild.exe
 
 # Install phantomjs
 Unzip $env:KOKORO_GFILE_DIR\phantomjs-2.1.1-windows.zip \
@@ -54,8 +57,6 @@ choco install nuget.commandline
 choco install -y iisexpress
 $env:PATH = "$env:PATH;${env:ProgramFiles(x86)}\IIS Express\"
 
-# Install dotnet command line.
-choco install -y --sxs dotnetcore-sdk --version 2.2.203
 
 # Run the tests.
 github\getting-started-dotnet\.kokoro-windows\main.ps1

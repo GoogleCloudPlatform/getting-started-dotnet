@@ -14,7 +14,8 @@
 
 namespace Bookshelf.Models
 {
-    enum BookStoreBackend {
+    enum BookStoreBackend
+    {
         Firestore,
         SqlServer,
         Npgsql,

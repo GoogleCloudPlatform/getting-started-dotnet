@@ -43,14 +43,14 @@ namespace Bookshelf.Models
 
         public Task DeleteAsync(string id)
         {
-            Book book = _dbcontext.Books.Local.First(b => b.Id == id) 
+            Book book = _dbcontext.Books.Local.SingleOrDefault(b => b.Id == id)
                 ?? new Book { Id = id };
             _dbcontext.Books.Remove(book);
             return _dbcontext.SaveChangesAsync();
         }
 
         // [START list]
-        public async Task<BookList> ListAsync(int pageSize, 
+        public async Task<BookList> ListAsync(int pageSize,
             string nextPageToken)
         {
             IQueryable<Book> query = _dbcontext.Books.OrderBy(book => book.Id);
@@ -63,7 +63,7 @@ namespace Bookshelf.Models
             return new BookList()
             {
                 Books = books,
-                NextPageToken = books.Count() == pageSize ? 
+                NextPageToken = books.Count() == pageSize ?
                     books.Last().Id : null
             };
         }
@@ -71,7 +71,7 @@ namespace Bookshelf.Models
 
         public async Task<Book> ReadAsync(string id)
         {
-            return await _dbcontext.Books.FirstAsync(m => m.Id == id);
+            return await _dbcontext.Books.SingleOrDefaultAsync(m => m.Id == id);
         }
 
 
