@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// [START getting_started_background_translate]
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -56,9 +57,9 @@ namespace TranslateWorker.Controllers
             FirestoreDb firestore,
             Google.Cloud.Translation.V2.TranslationClient translator)
         {
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this._firestore = firestore ?? throw new ArgumentNullException(nameof(firestore));
-            this._translator = translator ?? throw new ArgumentNullException(nameof(translator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _firestore = firestore ?? throw new ArgumentNullException(nameof(firestore));
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _translations = _firestore.Collection("Translations");
         }
 
@@ -109,3 +110,5 @@ namespace TranslateWorker.Controllers
         }
     }
 }
+
+// [END getting_started_background_translate]

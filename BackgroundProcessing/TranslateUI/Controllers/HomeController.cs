@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// [START getting_started_background_app_list]
 using Google.Cloud.Firestore;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
@@ -47,11 +48,13 @@ namespace TranslateUI.Controllers
 
             if (!string.IsNullOrWhiteSpace(SourceText))
             {
+                // [START getting_started_background_app_request]
                 // Submit a new translation request.
                 await _publisher.PublishAsync(new PubsubMessage()
                 {
                     Data = ByteString.CopyFromUtf8(SourceText)
                 });
+                // [END getting_started_background_app_request]
             }
 
             // Render the page.
@@ -71,3 +74,4 @@ namespace TranslateUI.Controllers
         }
     }
 }
+// [END getting_started_background_app_list]
