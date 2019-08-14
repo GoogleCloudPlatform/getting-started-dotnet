@@ -31,7 +31,7 @@ gcloud builds submit --tag gcr.io/$projectId/translate-worker `
 # 3. Run the container with Google Cloud Run.
 gcloud beta run deploy translate-worker --region $region --platform managed `
     --image gcr.io/$projectId/translate-worker --no-allow-unauthenticated
-$url = gcloud beta run services describe translate-worker `
+$url = gcloud beta run services describe translate-worker --platform managed `
     --region $region --format="get(status.address.hostname)"
 
 # 4. Enable the project to create pubsub authentication tokens.
