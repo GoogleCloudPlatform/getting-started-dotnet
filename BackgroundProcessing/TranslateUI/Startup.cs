@@ -13,8 +13,6 @@
 // the License.
 
 // [START getting_started_background_app_main]
-
-
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Google.Cloud.PubSub.V1;
