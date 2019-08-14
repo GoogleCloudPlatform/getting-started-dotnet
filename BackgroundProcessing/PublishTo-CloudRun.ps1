@@ -12,31 +12,34 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-# Build the application locally.
+# [START getting_started_background_publish_worker_to_cloudrun]
+# [START getting_started_background_publish_ui_to_cloudrun]
+# 1. Build the application locally.
 dotnet publish -c Release
+# [END getting_started_background_publish_ui_to_cloudrun]
 
 # Collect some details about the project that we'll need later.
 $projectId = gcloud config get-value project
 $projectNumber = gcloud projects describe $projectId --format="get(projectNumber)"
 $region = "us-central1"
 
-# Use Google Cloud Build to build the worker's container and publish to Google
-# Container Registry. 
+# 2. Use Google Cloud Build to build the worker's container and publish to Google
+# Container Registry.
 gcloud builds submit --tag gcr.io/$projectId/translate-worker `
     TranslateWorker/bin/Release/netcoreapp2.2/publish
 
-# Run the container with Google Cloud Run.
-gcloud beta run deploy translate-worker --region $region `
+# 3. Run the container with Google Cloud Run.
+gcloud beta run deploy translate-worker --region $region --platform managed `
     --image gcr.io/$projectId/translate-worker --no-allow-unauthenticated
 $url = gcloud beta run services describe translate-worker `
     --region $region --format="get(status.address.hostname)"
 
-# Enable your project to create pubsub authentication tokens.
+# 4. Enable the project to create pubsub authentication tokens.
 gcloud projects add-iam-policy-binding $projectId `
      --member=serviceAccount:service-$projectNumber@gcp-sa-pubsub.iam.gserviceaccount.com `
      --role=roles/iam.serviceAccountTokenCreator
 
-# Create a service account to represent the Cloud Pub/Sub subscription identity.
+# 5. Create a service account to represent the Cloud Pub/Sub subscription identity.
 $serviceAccountExists = gcloud iam service-accounts describe `
     cloud-run-pubsub-invoker@$projectId.iam.gserviceaccount.com 2> $null
 if (-not $serviceAccountExists) {
@@ -44,13 +47,13 @@ if (-not $serviceAccountExists) {
         --display-name "Cloud Run Pub/Sub Invoker"
 }
 
-# For Cloud Run, give this service account permission to invoke your
+# 6. For Cloud Run, give this service account permission to invoke 
 # translate-worker service.
 gcloud beta run services add-iam-policy-binding translate-worker `
      --member=serviceAccount:cloud-run-pubsub-invoker@$projectId.iam.gserviceaccount.com `
      --role=roles/run.invoker
 
-# Create a pubsub topic and subscription, if they don't already exist.
+# 7. Create a pubsub topic and subscription, if they don't already exist.
 $topicExists = gcloud pubsub topics describe translate-requests 2> $null 
 if (-not $topicExists) {
     gcloud pubsub topics create translate-requests
@@ -66,11 +69,15 @@ if ($subscriptionExists) {
         --push-auth-service-account cloud-run-pubsub-invoker@$projectId.iam.gserviceaccount.com
 }
 
-# Use Google Cloud Build to build the UI's container and publish to Google
+# [END getting_started_background_publish_worker_to_cloudrun]
+# [START getting_started_background_publish_ui_to_cloudrun]
+# 2. Use Google Cloud Build to build the UI's container and publish to Google
 # Container Registry. 
 gcloud builds submit --tag gcr.io/$projectId/translate-ui `
     TranslateUI/bin/Release/netcoreapp2.2/publish
 
-# Run the container with Google Cloud Run.
-gcloud beta run deploy translate-ui --region $region `
+# 3. Run the container with Google Cloud Run.
+gcloud beta run deploy translate-ui --region $region --platform managed `
     --image gcr.io/$projectId/translate-ui --allow-unauthenticated
+
+# [END getting_started_background_publish_ui_to_cloudrun]

@@ -12,8 +12,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// [START getting_started_background_translate_setup]
-
 using System;
 using Google.Cloud.Firestore;
 
@@ -32,5 +30,3 @@ public class Translation
     [FirestoreProperty]
     public DateTime TimeStamp { get; set; }
 }
-
-// [END getting_started_background_translate_setup]

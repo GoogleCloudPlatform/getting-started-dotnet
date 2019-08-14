@@ -13,7 +13,10 @@
 // the License.
 
 using Google.Apis.Auth.OAuth2;
+// [START getting_started_background_translate_setup]
 using Google.Cloud.Firestore;
+using Google.Cloud.Translation.V2;
+// [END getting_started_background_translate_setup]
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -44,8 +47,8 @@ namespace TranslateWorker
         {
             services.AddSingleton<FirestoreDb>(provider =>
                 FirestoreDb.Create(GetFirestoreProjectId()));
-            services.AddSingleton<Google.Cloud.Translation.V2.TranslationClient>(
-                Google.Cloud.Translation.V2.TranslationClient.Create());
+            services.AddSingleton<TranslationClient>(
+                TranslationClient.Create());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
         // [END getting_started_background_translate_init]

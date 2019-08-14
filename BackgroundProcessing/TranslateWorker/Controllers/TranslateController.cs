@@ -14,6 +14,7 @@
 
 // [START getting_started_background_translate]
 using Google.Cloud.Firestore;
+using Google.Cloud.Translation.V2;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -49,17 +50,19 @@ namespace TranslateWorker.Controllers
     {
         private readonly ILogger<TranslateController> _logger;
         private readonly FirestoreDb _firestore;
-        private readonly Google.Cloud.Translation.V2.TranslationClient _translator;
+        private readonly TranslationClient _translator;
         // The Firestore collection where we store translations.
         private readonly CollectionReference _translations;
 
         public TranslateController(ILogger<TranslateController> logger,
             FirestoreDb firestore,
-            Google.Cloud.Translation.V2.TranslationClient translator)
+            TranslationClient translator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _firestore = firestore ?? throw new ArgumentNullException(nameof(firestore));
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+            _firestore = firestore ?? throw new ArgumentNullException(
+                nameof(firestore));
+            _translator = translator ?? throw new ArgumentNullException(
+                nameof(translator));
             _translations = _firestore.Collection("Translations");
         }
 
@@ -85,7 +88,9 @@ namespace TranslateWorker.Controllers
             }
             // Translate the source text.
             _logger.LogDebug(2, "Translating {0} to Spanish.", sourceText);
+            // [START getting_started_background_translate_string]
             var result = await _translator.TranslateTextAsync(sourceText, "es");
+            // [END getting_started_background_translate_string]
             // Store the result in Firestore.
             Translation translation = new Translation()
             {
@@ -95,7 +100,8 @@ namespace TranslateWorker.Controllers
             };
             _logger.LogDebug(3, "Saving translation {0} to {1}.",
                 translation.TranslatedText, _translations.Path);
-            await _translations.AddAsync(translation);
+            await _translations.Document(request.message.messageId)
+                .SetAsync(translation);
             // Return a success code.
             return NoContent();
         }
