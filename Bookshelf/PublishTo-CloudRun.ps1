@@ -25,6 +25,6 @@ gcloud builds submit --tag gcr.io/$projectId/bookshelf `
     bin/Release/netcoreapp2.2/publish
 
 # Run the container with Google Cloud Run.
-gcloud beta run deploy bookshelf --region $region `
+gcloud beta run deploy bookshelf --region $region --platform managed `
     --image gcr.io/$projectId/bookshelf --allow-unauthenticated
 
