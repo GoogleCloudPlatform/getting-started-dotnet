@@ -51,7 +51,7 @@ if (-not $serviceAccountExists) {
 # translate-worker service.
 gcloud beta run services add-iam-policy-binding translate-worker `
      --member=serviceAccount:cloud-run-pubsub-invoker@$projectId.iam.gserviceaccount.com `
-     --role=roles/run.invoker
+     --role=roles/run.invoker --region=$region
 
 # 7. Create a pubsub topic and subscription, if they don't already exist.
 $topicExists = gcloud pubsub topics describe translate-requests 2> $null 
