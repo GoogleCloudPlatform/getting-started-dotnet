@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// [START bookshelf_firestore_client]
 using Google.Cloud.Firestore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,6 +32,7 @@ namespace Bookshelf.Models
             _firestore = FirestoreDb.Create(projectId);
             _books = _firestore.Collection("Books");
         }
+        // [END bookshelf_firestore_client]
 
         public async Task CreateAsync(Book book)
         {
@@ -74,6 +76,7 @@ namespace Bookshelf.Models
             };
         }
 
+        // [START bookshelf_firestore_client_get_book]
         public async Task<Book> ReadAsync(string id)
         {
             var snapshot = await _books.Document(id).GetSnapshotAsync();
@@ -85,6 +88,7 @@ namespace Bookshelf.Models
             book.Id = snapshot.Id;
             return book;
         }
+        // [END bookshelf_firestore_client_get_book]
 
         public Task UpdateAsync(Book book)
         {
