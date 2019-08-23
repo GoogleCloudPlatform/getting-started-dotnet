@@ -17,6 +17,7 @@ Backup-File appsettings.json {
     $appsettings = Get-Content -Raw appsettings.json | ConvertFrom-Json
     $appsettings.BookStore = "Firestore"
     $appsettings.Bucket = $env:GoogleCloudSamples:BucketName
-    ConvertTo-Json $appsettings | Out-File -Encoding utf8 -FilePath appsettings.json     
+    ConvertTo-Json $appsettings | Out-File -Encoding utf8 -FilePath appsettings.json
+    $env:PORT='5000'
     Run-KestrelTest 5000 -CasperJs11 -OutputDir Firestore
 }
