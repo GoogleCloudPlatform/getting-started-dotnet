@@ -44,8 +44,10 @@ namespace Bookshelf
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string bucketName = Configuration["Bucket"] ??
+                GetProjectId() + "_bucket";
             services.AddSingleton<Services.ImageUploader>(provider =>
-                new Services.ImageUploader(Configuration["Bucket"]));
+                new Services.ImageUploader(bucketName));
             // Choose a BookStoreBackend.
             BookStoreBackend backend = Enum.Parse<BookStoreBackend>(
                 Configuration["BookStore"], ignoreCase: true);
@@ -79,7 +81,7 @@ namespace Bookshelf
                     throw new NotImplementedException(backend.ToString());
             }
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,6 +112,11 @@ namespace Bookshelf
 
         public static string GetProjectId()
         {
+            var envVar = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
+            if (envVar != null)
+            {
+                return envVar;
+            }
             // Use the service account credentials, if present.
             GoogleCredential googleCredential = Google.Apis.Auth.OAuth2
                 .GoogleCredential.GetApplicationDefault();

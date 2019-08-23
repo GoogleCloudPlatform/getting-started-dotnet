@@ -41,5 +41,5 @@ Backup-File appsettings.json {
     } else {
         Update-Appsettings $keyName $bucketName
     }
-    Run-KestrelTest 5000 -CasperJs11
+    Run-KestrelTest 6106 -CasperJs11
 }

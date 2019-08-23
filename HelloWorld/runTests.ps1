@@ -14,4 +14,4 @@
 
 Import-Module -DisableNameChecking ..\BuildTools.psm1
 
-Run-KestrelTest 5000 -CasperJs11
+Run-KestrelTest 6105 -CasperJs11
