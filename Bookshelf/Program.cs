@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+// [START bookshelf_program_main]
 using Google.Cloud.Diagnostics.AspNetCore;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -48,3 +49,4 @@ namespace Bookshelf
         }
     }
 }
+// [END bookshelf_program_main]
