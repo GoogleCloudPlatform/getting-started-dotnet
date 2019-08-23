@@ -19,7 +19,7 @@
 <h3>@Model.Action book</h3>
 <!-- [START form] -->
 <form id="book-form" method="post" enctype="multipart/form-data" asp-controller="Books" 
-        asp-action="@Model.FormAction" asp-route_id="@Model.Book.Id"> 
+        asp-action="@Model.FormAction" asp-route-id="@Model.Book.Id"> 
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
