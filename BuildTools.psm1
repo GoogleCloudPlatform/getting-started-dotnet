@@ -642,6 +642,7 @@ function Run-Kestrel([Parameter(mandatory=$true)][string]$url)
 function Run-KestrelTest([Parameter(mandatory=$true)]$PortNumber, $TestJs = 'test.js', 
     [switch]$LeaveRunning = $false, [switch]$CasperJs11 = $false,
     $OutputDir) {
+    $env:PORT="$PortNumber"
     $url = "http://localhost:$PortNumber"
     $job = Run-Kestrel $url
     Try
