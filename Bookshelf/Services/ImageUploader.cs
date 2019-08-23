@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Google Inc.
+﻿// Copyright 2019 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// [START bookshelf_cloud_storage_client]
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -28,12 +29,10 @@ namespace Bookshelf.Services
         public ImageUploader(string bucketName)
         {
             _bucketName = bucketName;
-            // [START storageclient]
             _storageClient = StorageClient.Create();
-            // [END storageclient]
         }
+        // [END bookshelf_cloud_storage_client]
 
-        // [START uploadimage]
         public async Task<String> UploadImage(IFormFile image, string id)
         {
             var imageAcl = PredefinedObjectAcl.PublicRead;
@@ -48,7 +47,6 @@ namespace Bookshelf.Services
 
             return imageObject.MediaLink;
         }
-        // [END uploadimage]
 
         public async Task DeleteUploadedImage(string id)
         {
