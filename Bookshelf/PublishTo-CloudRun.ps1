@@ -22,7 +22,7 @@ $region = 'us-central1'
 # Use Google Cloud Build to build a Docker container and publish to Google
 # Container Registry. 
 gcloud builds submit --tag gcr.io/$projectId/bookshelf `
-    bin/Release/netcoreapp2.2/publish
+    bin/Release/netcoreapp2.1/publish
 
 # Run the container with Google Cloud Run.
 gcloud beta run deploy bookshelf --region $region --platform managed `
