@@ -15,8 +15,30 @@
 var system = require('system');
 var host = system.env['CASPERJS11_URL'];
 
-casper.test.begin('Stuff', 2, function suite(test) {
+casper.test.begin('Stuff', 4, function suite(test) {
     casper.start(host + '/Books', function (response) {
+        test.assertEquals(response.status, 200);
+    });
+
+    casper.thenClick('#add-book', function () {
+        console.log('Clicked Add book.  New location is ' + this.getCurrentUrl());
+        this.fill('form#book-form', {
+            'Book.Title': 'test.js',
+            'Book.Author': 'test.js',
+            'Book.PublishedDate': '2000-01-01',
+            'Book.Description': 'Automatically added by test.js'
+        }, false);
+        console.log('Filled form.');
+    });
+
+    casper.thenClick('#submit-button', function () {
+        console.log('Submitted.  New location is ' + this.getCurrentUrl());
+        test.assertEquals(this.fetchText('.book-description'),
+            'Automatically added by test.js');
+    });
+
+    casper.thenClick('button', function (response) {
+        console.log('Deleted new book.  New location is ' + this.getCurrentUrl());
         test.assertEquals(response.status, 200);
     });
 
