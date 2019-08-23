@@ -110,6 +110,11 @@ namespace Bookshelf
 
         public static string GetProjectId()
         {
+            var envVar = Environment.GetEnvironmentVariable("GOOGLE_CLOUD_PROJECT");
+            if (envVar != null)
+            {
+                return envVar;
+            }
             // Use the service account credentials, if present.
             GoogleCredential googleCredential = Google.Apis.Auth.OAuth2
                 .GoogleCredential.GetApplicationDefault();
