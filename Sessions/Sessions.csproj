@@ -10,8 +10,8 @@
     <PackageReference Include="Google.Cloud.AspNetCore.DataProtection.Storage" Version="1.0.0-alpha02" />
     <PackageReference Include="Google.Cloud.AspNetCore.Firestore.DistributedCache" Version="1.0.0-alpha01" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
- </ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="Dockerfile" CopyToOutputDirectory="PreserveNewest" />
