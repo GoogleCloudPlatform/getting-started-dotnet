@@ -26,7 +26,7 @@ $region = "us-central1"
 # 2. Use Google Cloud Build to build the worker's container and publish to Google
 # Container Registry.
 gcloud builds submit --tag gcr.io/$projectId/translate-worker `
-    TranslateWorker/bin/Release/netcoreapp2.2/publish
+    TranslateWorker/bin/Release/netcoreapp2.1/publish
 
 # 3. Run the container with Google Cloud Run.
 gcloud beta run deploy translate-worker --region $region --platform managed `
@@ -74,7 +74,7 @@ if ($subscriptionExists) {
 # 2. Use Google Cloud Build to build the UI's container and publish to Google
 # Container Registry. 
 gcloud builds submit --tag gcr.io/$projectId/translate-ui `
-    TranslateUI/bin/Release/netcoreapp2.2/publish
+    TranslateUI/bin/Release/netcoreapp2.1/publish
 
 # 3. Run the container with Google Cloud Run.
 gcloud beta run deploy translate-ui --region $region --platform managed `

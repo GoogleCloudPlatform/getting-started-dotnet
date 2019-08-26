@@ -49,7 +49,7 @@ namespace TranslateWorker
                 FirestoreDb.Create(GetFirestoreProjectId()));
             services.AddSingleton<TranslationClient>(
                 TranslationClient.Create());
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
         // [END getting_started_background_translate_init]
 
