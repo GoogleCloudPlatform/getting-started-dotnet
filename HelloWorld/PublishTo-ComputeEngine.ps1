@@ -68,5 +68,7 @@ $credential = New-Object -TypeName System.Management.Automation.PSCredential -Ar
 $password = $credential.GetNetworkCredential().password
 # [START getting_started_dotnet_publish]
 # Publish it!
-dotnet publish -c Release /p:PublishProfile=Properties\PublishProfiles\ComputeEngine.pubxml "/p:Password=$password"
+dotnet publish -c Release `
+    /p:PublishProfile=Properties\PublishProfiles\ComputeEngine.pubxml `
+    "/p:Password=$password"
 # [END getting_started_dotnet_publish]
