@@ -66,6 +66,7 @@ $pubxml.Save($pubxmlPath)
 $securePassword = Read-Host -Prompt "Enter password for ${ip}\$username" -AsSecureString
 $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "$username", $securePassword
 $password = $credential.GetNetworkCredential().password
-
+# [START getting_started_dotnet_publish]
 # Publish it!
 dotnet publish -c Release /p:PublishProfile=Properties\PublishProfiles\ComputeEngine.pubxml "/p:Password=$password"
+# [END getting_started_dotnet_publish]
