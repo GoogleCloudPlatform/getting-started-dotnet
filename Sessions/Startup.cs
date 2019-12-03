@@ -39,6 +39,7 @@ namespace Sessions
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // [START getting_started_sessions_configure_services]
         public void ConfigureServices(IServiceCollection services)
         {
             // Antiforgery tokens require data protection.
@@ -57,8 +58,9 @@ namespace Sessions
                 .AddFirestoreDistributedCacheGarbageCollector();
             services.AddSession();
         }
-        readonly
-                Random _random = new Random();
+        // [END getting_started_sessions_configure_services]
+
+        readonly Random _random = new Random();
 
         private static readonly string[] s_greetings =
             {"Hello World", "Hallo Welt", "Hola mundo",
