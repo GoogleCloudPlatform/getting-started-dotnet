@@ -1,4 +1,4 @@
-# Pub/Sub 
+# Authentication 
 
 This folder contains an ASP.NET end-to-end sample application written in C# that
 demonstrates how to integrate Google Authentication with an ASP.NET application.
