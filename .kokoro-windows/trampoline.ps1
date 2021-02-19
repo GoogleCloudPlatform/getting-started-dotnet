@@ -17,8 +17,9 @@ function Unzip([string]$zipfile, [string]$outpath)
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
 }
 
-# Install dotnet command line.
-choco install -y --sxs dotnetcore-sdk --version 2.2.203
+# Install .NET Core SDK
+choco install -y --sxs dotnetcore-sdk --version 2.2.402
+choco install -y --sxs dotnetcore-sdk --version 3.1.406
 
 # Install dotnet-format
 $dotnetToolsDir = "$env:USERPROFILE\.dotnet\tools"
