@@ -11,8 +11,6 @@ The applications make use of two client libraries:
 
 ### Build Status
 
-![Windows][windows-badge]
-
 ## aspnet
 
 The [aspnet] directory contains ASP.NET samples that demonstrate how to access and use Google's APIs from C#. 
