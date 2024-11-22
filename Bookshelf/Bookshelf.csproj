@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore" Version="3.0.0-beta12" />
+    <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore" Version="4.4.0" />
     <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0-beta20" />
     <PackageReference Include="Google.Cloud.Storage.V1" Version="2.4.0-beta01" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
