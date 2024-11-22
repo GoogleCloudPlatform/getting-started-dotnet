@@ -9,8 +9,6 @@ The applications make use of two client libraries:
 * [.NET Cloud Client Library]
 * [Google API Client Library]
 
-### Build Status
-
 ## aspnet
 
 The [aspnet] directory contains ASP.NET samples that demonstrate how to access and use Google's APIs from C#. 
@@ -37,4 +35,3 @@ The sample bookshelf app provides examples of using the following Cloud APIs:
 [Cloud SQL API]: https://cloud.google.com/sql/docs/admin-api/
 [Cloud Storage API]: http://googlecloudplatform.github.io/gcloud-dotnet/index.html
 [Cloud Pub/Sub API]: https://developers.google.com/api-client-library/dotnet/apis/pubsub/v1
-[windows-badge]: https://www.googleapis.com/download/storage/v1/b/silver-python2-kokoro-badges/o/getting-started-dotnet%2Fsystem_tests-windows.png?alt=media
