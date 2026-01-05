@@ -30,7 +30,7 @@ $appsettings = Get-Content -Raw appsettings.json | ConvertFrom-Json
 
 # Delete the storage bucket
 $bucket = $appsettings.DataProtection.Bucket
-gsutil rm -r "gs://$bucket"
+gcloud storage rm --recursive "gs://$bucket"
 
 # Destroy all versions of the key.
 $chunks = Split-KmsKey $appsettings.DataProtection.KmsKeyName

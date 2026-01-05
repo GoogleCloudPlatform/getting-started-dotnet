@@ -61,13 +61,12 @@ if ($matchingKey) {
 }
 
 # Check to see if the bucket already exists.
-$matchingBucket = (gsutil ls -b gs://$bucketName) 2> $null
+$matchingBucket = (gcloud storage ls --buckets gs://$bucketName) 2> $null
 if ($matchingBucket) {
     Write-Host "The bucket $bucketName already exists."
 } else {
     # Create the bucket.
-    gsutil mb -p $projectId gs://$bucketName
+    gcloud storage buckets create --project $projectId gs://$bucketName
 }
 
 Update-Appsettings $keyName $bucketName
-
