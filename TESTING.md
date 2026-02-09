@@ -39,9 +39,9 @@
     ```
 
 6.  Set the environment variables:
- - `GoogleCloudSamples:ProjectId` = your project id displayed on the Google Cloud Console.
- - `GoogleCloudSamples:BucketName` = the name of the Google Cloud Storage bucket you created.
- - `GoogleCloudSamples:ConnectionStringCloudSql` = the connection string for the Cloud SQL database you created, in the format of "Server=1.2.3.4;Database=bookshelf;Uid=dotnetapp;Pwd=password".
+  * `GoogleCloudSamples:ProjectId` = your project id displayed on the Google Cloud Console.
+  * `GoogleCloudSamples:BucketName` = the name of the Google Cloud Storage bucket you created.
+  * `GoogleCloudSamples:ConnectionStringCloudSql` = the connection string for the Cloud SQL database you created, in the format of "Server=1.2.3.4;Database=bookshelf;Uid=dotnetapp;Pwd=password".
 
 7.  Ensure you have the following tools installed and in your PATH:
  - [.NET Core SDK](https://dotnet.microsoft.com/download)
