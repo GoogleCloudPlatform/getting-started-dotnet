@@ -44,8 +44,8 @@
   * `GoogleCloudSamples:ConnectionStringCloudSql` = the connection string for the Cloud SQL database you created, in the format of "Server=1.2.3.4;Database=bookshelf;Uid=dotnetapp;Pwd=password".
 
 7.  Ensure you have the following tools installed and in your PATH:
- - [.NET Core SDK](https://dotnet.microsoft.com/download)
- - PowerShell
+  * [.NET Core SDK](https://dotnet.microsoft.com/download)
+  * PowerShell
 
 8.  Run the test script from the root of the repository:
 
