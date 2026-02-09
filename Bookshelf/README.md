@@ -1,7 +1,7 @@
-# Binary Data 
+# Bookshelf Sample
 
-This folder contains an ASP.NET end-to-end sample application written in C# that
-uses Google Cloud services like Firestore and Cloud Storage.
+This folder contains an ASP.NET Core end-to-end sample application written in C# that
+uses Google Cloud services like Firestore, Cloud Storage, and Cloud SQL.
  
 ## Tutorial
 See https://cloud.google.com/dotnet/docs/getting-started/tutorial-app for 

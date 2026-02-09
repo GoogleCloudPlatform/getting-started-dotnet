@@ -1,37 +1,31 @@
-## Getting Started for .NET
+# Getting Started for .NET
 
-This repo contains sample applications written in C# that run on Google Cloud Platform.
+This repository contains sample applications written in C# and ASP.NET Core that run on Google Cloud.
 
-See [https://cloud.google.com/dotnet/getting-started/hello-world](https://cloud.google.com/dotnet/getting-started/hello-world) for instructions on how to build, run, and deploy the samples.
+See [the documentation](https://cloud.google.com/dotnet/getting-started/hello-world) for instructions on how to build, run, and deploy the samples.
 
-The applications make use of two client libraries:
+## Samples
 
-* [.NET Cloud Client Library]
-* [Google API Client Library]
+*   **[HelloWorld](./HelloWorld)**: A basic ASP.NET Core application that can be deployed to Cloud Run or Compute Engine.
+*   **[Bookshelf](./Bookshelf)**: An end-to-end sample application showing how to use Cloud Firestore, Cloud Storage, and Cloud SQL.
+*   **[BackgroundProcessing](./BackgroundProcessing)**: Demonstrates how to perform background tasks using Cloud Pub/Sub and the Cloud Translation API.
+*   **[Sessions](./Sessions)**: Shows how to manage user sessions using Cloud Firestore.
 
-## aspnet
+## Cloud APIs used
 
-The [aspnet] directory contains ASP.NET samples that demonstrate how to access and use Google's APIs from C#. 
-Review this section to learn how use Visual Studio to deploy an ASP.NET sample bookshelf app to the Google Cloud Platform. 
-The sample bookshelf app provides examples of using the following Cloud APIs:
- 
-* [Cloud Datastore API]
-* [Cloud SQL API]
-* [Cloud Storage API]
-* [Cloud Pub/Sub API]
+The samples demonstrate how to use several Google Cloud APIs:
+
+*   [Cloud Firestore](https://cloud.google.com/firestore/docs/)
+*   [Cloud SQL](https://cloud.google.com/sql/docs/)
+*   [Cloud Storage](https://cloud.google.com/storage/docs/)
+*   [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/)
+*   [Cloud Translation](https://cloud.google.com/translate/docs/)
+*   [Cloud Key Management Service (KMS)](https://cloud.google.com/kms/docs/)
 
 ## Contributing changes
 
-* See [CONTRIBUTING.md](CONTRIBUTING.md)
+*   See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Licensing
 
-* See [LICENSE](LICENSE)
-
-[.NET Cloud Client Library]: https://github.com/googlecloudplatform/gcloud-dotnet
-[Google API Client Library]: https://github.com/google/google-api-dotnet-client
-[aspnet]: ./aspnet
-[Cloud Datastore API]: https://developers.google.com/api-client-library/dotnet/apis/datastore/v1beta3
-[Cloud SQL API]: https://cloud.google.com/sql/docs/admin-api/
-[Cloud Storage API]: http://googlecloudplatform.github.io/gcloud-dotnet/index.html
-[Cloud Pub/Sub API]: https://developers.google.com/api-client-library/dotnet/apis/pubsub/v1
+*   See [LICENSE](LICENSE)
