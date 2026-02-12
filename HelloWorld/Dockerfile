@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 COPY . /app
 WORKDIR /app
 ENTRYPOINT ["dotnet", "HelloWorld.dll"]
